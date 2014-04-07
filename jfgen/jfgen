@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 # coding=utf-8
 #
-# TODO: 1. version apply.
-# TODO: 2. eclipse apply.
-#
 # Copyright 2014 by yfyang. All Rights Reserved.
 import os
 import getopt

@@ -9,7 +9,7 @@
     <name>{{group}} :: Application</name>
     <url>http://{{group}}.github.io</url>
     <properties>
-        <com.jfinal.version>0.0.8</com.jfinal.version>
+        <com.jfinal.version>0.0.9</com.jfinal.version>
     </properties>
     <dependencies>
         <dependency>
@@ -91,8 +91,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
