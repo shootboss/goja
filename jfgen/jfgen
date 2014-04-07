@@ -8,11 +8,13 @@
 # Copyright 2014 by yfyang. All Rights Reserved.
 import os
 import getopt
-import sys
 import os.path
+import re
 import shutil
-import errno
 import uuid
+
+import sys
+import errno
 
 reload(sys)
 # 解决：中文字符写入文件问题
@@ -29,21 +31,21 @@ def project_layout_gen(project_dir, project_name):
     # Maven layout project.
     _src = os.path.join(project_dir, project_name, 'src')
     if os.path.exists(_src):
-        print 'the %s is exist!' % os.path.jon(project_dir, project_name)
+        print 'the %s is exist!' % os.path.join(project_dir, project_name)
         sys.exit(1)
     os.makedirs(_src)
-    main_ = os.path.join(_src, "main")
+    main_ = os.path.join(_src, 'main')
     os.mkdir(main_)
     java_ = os.path.join(main_, 'java')
     os.mkdir(java_)
     app_path = os.path.join(java_, 'app')
     os.mkdir(app_path)
-    os.mkdir(os.path.join(app_path, "controllers"))
-    os.mkdir(os.path.join(app_path, "models"))
-    os.mkdir(os.path.join(app_path, "jobs"))
-    os.mkdir(os.path.join(app_path, "interceptors"))
-    os.mkdir(os.path.join(app_path, "validators"))
-    os.mkdir(os.path.join(app_path, "dtos"))
+    os.mkdir(os.path.join(app_path, 'controllers'))
+    os.mkdir(os.path.join(app_path, 'models'))
+    os.mkdir(os.path.join(app_path, 'jobs'))
+    os.mkdir(os.path.join(app_path, 'interceptors'))
+    os.mkdir(os.path.join(app_path, 'validators'))
+    os.mkdir(os.path.join(app_path, 'dtos'))
 
     webapp_ = os.path.join(main_, 'webapp')
     os.mkdir(webapp_)
@@ -72,23 +74,6 @@ def copy_deps_lib(proj_dir):
 
     storage_path = os.path.join(proj_dir, 'src', 'test', 'lib')
     copy_directory(os.path.join(gen_path, 'deps', 'test'), storage_path)
-
-
-def gen_idea(project_dir):
-    # 1. get project name with application.conf
-    application_name = read_app_name(project_dir)
-
-    idea_ipr = application_name + '.ipr'
-    idea_iws = application_name + '.iws'
-    idea_iml = application_name + '.iml'
-    params = {'appName': application_name, 'appSN': uuid.uuid4(), 'gen_path': gen_path}
-    file_content = render_config_file('idea/app.module', params)
-    _storage_file(project_dir, file_content, idea_iml)
-    file_content = render_config_file('idea/app.project', params)
-    _storage_file(project_dir, file_content, idea_ipr)
-    file_content = render_config_file('idea/app.workspace', params)
-    _storage_file(project_dir, file_content, idea_iws)
-    print 'Convert the idea project Success.'
 
 
 def gen_config(directory, application_name):
@@ -162,13 +147,20 @@ def init_default_code(directory, project_name):
     _storage_file(storage_path, file_content, 'index.ftl')
 
 
+def pom(project_dir):
+    application_name = _app_name(project_dir)
+    pf = os.path.join(project_dir, application_name)
+    create_maven(pf, application_name)
+    print 'generate maven pom file Success!'
+
+
 def pack_war(project_dir):
     import subprocess
 
-    application_name = read_app_name(project_dir)
+    application_name = _app_name(project_dir)
 
     # 2. render build.xml file into project dir.
-    build_xml_content = render_config_file('ci/build.xml', {'appName': application_name,'genPath': gen_path})
+    build_xml_content = render_config_file('ci/build.xml', {'appName': application_name, 'genPath': gen_path})
     build_xml_file = os.path.join(project_dir, 'build.xml')
     _storage_file(project_dir, build_xml_content, 'build.xml')
 
@@ -182,15 +174,110 @@ def pack_war(project_dir):
     os.remove(build_xml_file)
 
 
-def read_app_name(project_dir):
+def _app_name(project_dir):
+    """
+        读取项目名称
+    :param project_dir: 项目所在目录
+    :return: 读取项目名称
+    """
+    conf = read_conf(project_dir)
+    return conf['app']
+
+
+def gen_idea(project_dir, app_name):
+    idea_ipr = app_name + '.ipr'
+    idea_iws = app_name + '.iws'
+    idea_iml = app_name + '.iml'
+    params = {'appName': app_name, 'appSN': uuid.uuid4(), 'gen_path': gen_path}
+    file_content = render_config_file('idea/app.module', params)
+    _storage_file(project_dir, file_content, idea_iml)
+    file_content = render_config_file('idea/app.project', params)
+    _storage_file(project_dir, file_content, idea_ipr)
+    file_content = render_config_file('idea/app.workspace', params)
+    _storage_file(project_dir, file_content, idea_iws)
+    print 'Convert the Intellij idea project Success.'
+
+
+def syncdb(app_dir):
+    conf = read_conf(app_dir)
+    db_url = conf['db.url']
+    host_index = db_url.find(':', 12)
+    host = db_url[13:host_index]
+    port_idx = db_url.find('/', host_index)
+    port = db_url[host_index + 1: port_idx]
+    db = db_url[port_idx + 1: db_url.find('?', port_idx)]
+
+    db_user = conf['db.username']
+    db_pwd = conf['db.password']
+
+    import MySQLdb
+
+    db = MySQLdb.connect(host, db_user, db_pwd, db)
+    cursor = db.cursor()
+    sql = 'show tables'
+
+    models = []
+
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            # table name like ol_member_type
+            real_table_name = row[0]
+            row__find = real_table_name.find('_')
+            table_name = 'tmp_' + real_table_name[row__find + 1: len(real_table_name)]
+            # find table column name
+            cursor.execute("select column_name from information_schema.columns where table_name='%s'" % real_table_name)
+            columns = cursor.fetchall()
+            column_list = []
+            for column in columns:
+                column_list.append(column[0])
+
+            models.append({'model': underline_to_camel(table_name).replace('tmp', ''), 'table': real_table_name,
+                           'columns': ','.join(column_list)})
+
+        cursor.close()
+    except:
+        print "error unkown tables;"
+    finally:
+        db.close()
+
+    model_dir = os.path.join(app_dir, 'src', 'main', 'java', 'app', 'models')
+    sql_conf_dir = os.path.join(app_dir, 'src', 'main', 'resources', 'sqlcnf')
+    for _m in models:
+        model_ = _m['model']
+        model__lower = model_.lower()
+        params = {'tableName': _m['table'], 'model': model_, 'lower_model': model__lower}
+        file_content = render_config_file('code/model.java', params)
+        _storage_file(model_dir, file_content, model_ + ".java")
+
+        sql_conf_content = render_config_file('code/sql.xml', {'model': model__lower, 'columns': _m['columns'],
+                                                               'tableName': _m['table']})
+        _storage_file(sql_conf_dir, sql_conf_content, model__lower + '-sql.xml')
+    print 'sync db to model Success!'
+
+
+def underline_to_camel(str):
+    """
+        下划线命名格式驼峰命名格式
+    """
+    return re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), str)
+
+
+def read_conf(app_dir):
+    """
+        读取项目配置信息，也就是 application.conf文件
+    :param app_dir: 项目所在目录
+    """
     # 1. get project name with application.conf
-    app_config_file = os.path.join(project_dir, 'src', 'main', 'resources', 'application.conf')
+    app_config_file = os.path.join(app_dir, 'src', 'main', 'resources', 'application.conf')
 
     if not os.path.isfile(app_config_file):
-        print '%s does not seem an effective jfinal application.' % project_dir
+        print '%s does not seem an effective jfinal application.' % app_dir
         sys.exit()
 
-    application_name = 'app'
+    config = {}
+
     app_config = file(app_config_file, 'rU')
     for prop_line in app_config:
         prop_def = prop_line.strip()
@@ -201,10 +288,10 @@ def read_app_name(project_dir):
         punctuation = [prop_def.find(c) for c in ':= '] + [len(prop_def)]
         found = min([pos for pos in punctuation if pos != -1])
         prop_name = prop_def[:found].rstrip()
-        if prop_name == 'app':
-            application_name = prop_def[found:].lstrip(":= ").rstrip()
-            break
-    return application_name
+        prop_val = prop_def[found:].lstrip(":= ").rstrip()
+        config[prop_name] = prop_val
+
+    return config
 
 
 def usage():
@@ -212,10 +299,13 @@ def usage():
     print "~ JFinal App gen."
     print "~ Usage: jfgen cmd application_name [-options]"
     print "~"
-    print '~ with,  new      Create a new application'
-    print '~        war      Export the application as a standalone WAR archive'
-    print '~        idea     Convert the project to Intellij IDEA project'
-    print '~        help     Show jfgen help'
+    print '~ with, new          Create a new application'
+    print '~       war          Export the application as a standalone WAR archive'
+    print '~       syncdb       Sync Database table to Jfinal Model'
+    print '~       idea         Convert the project to Intellij IDEA project'
+    print '~       pom          Generate Maven POM file, and comply with the standard configuration Jfinal-app'
+    print '~       db [-dir]    Init database script, the default mysql database'
+    print '~       help         Show jfgen help'
     print '~'
 
 
@@ -253,11 +343,7 @@ if __name__ == "__main__":
 
         gen_config(project_folder, app_name)
 
-        create_maven(project_folder, app_name);
-
         init_default_code(project_folder, app_name)
-
-        # gen_idea(project_folder, app_name)
 
         print '%s project create Success!' % app_name
         sys.exit()
@@ -266,8 +352,17 @@ if __name__ == "__main__":
         pack_war(app_dir)
         sys.exit()
 
+    if cmd == 'pom':
+        pom(app_dir)
+        sys.exit()
+
+    if cmd == 'syncdb':
+        syncdb(app_dir)
+        sys.exit()
+
     if cmd == 'idea':
-        gen_idea(app_dir)
+        app_name = _app_name(app_dir)
+        gen_idea(app_dir, app_name)
         sys.exit()
 
     if cmd == 'help':

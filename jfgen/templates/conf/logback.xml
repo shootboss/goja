@@ -18,6 +18,10 @@
 
     <!-- project default level -->
     <logger name="app" level="DEBUG"/>
+    <!-- todo prod use wran -->
+    <logger name="com.jfinal" level="DEBUG"/>
+    <logger name="com.github.sog" level="DEBUG"/>
+    <!-- prod use wran .. -->
 
     <root level="INFO">
         <appender-ref ref="console"/>
