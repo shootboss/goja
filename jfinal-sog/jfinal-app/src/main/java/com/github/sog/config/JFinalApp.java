@@ -136,7 +136,7 @@ public class JFinalApp extends JFinalConfig {
         }
         String view_404 = ConfigProperties.getProperty(VIEW_404);
         if (!Strings.isNullOrEmpty(view_404)) {
-            constants.setError401View(view_404);
+            constants.setError404View(view_404);
         }
         String view_500 = ConfigProperties.getProperty(VIEW_500);
         if (!Strings.isNullOrEmpty(view_500)) {
