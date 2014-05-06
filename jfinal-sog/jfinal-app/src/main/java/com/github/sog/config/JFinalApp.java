@@ -19,7 +19,6 @@ import com.github.sog.initalizer.AppLoadEvent;
 import com.github.sog.initalizer.ConfigProperties;
 import com.github.sog.initalizer.ctxbox.ClassBox;
 import com.github.sog.initalizer.ctxbox.ClassType;
-import com.github.sog.interceptor.ContextInterceptor;
 import com.github.sog.interceptor.SystemLogProcessor;
 import com.github.sog.interceptor.autoscan.AutoOnLoadInterceptor;
 import com.github.sog.interceptor.syslog.SysLogInterceptor;
@@ -132,7 +131,7 @@ public class JFinalApp extends JFinalConfig {
         if (!StringKit.isBlank(view_type)) {
             setViewType(constants, view_type);
         } else {
-            constants.setFreeMarkerViewExtension(".ftl");
+            constants.setFreeMarkerViewExtension(".ftl.html");
             setFtlSharedVariable();
         }
         String view_404 = ConfigProperties.getProperty(VIEW_404);
