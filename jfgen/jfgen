@@ -206,7 +206,7 @@ def syncdb(app_dir):
 
     db_user = conf['db.username']
     db_pwd = conf['db.password']
-
+    # todo user java run
     import MySQLdb
 
     db = MySQLdb.connect(host, db_user, db_pwd, db)

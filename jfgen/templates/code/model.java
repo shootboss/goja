@@ -10,6 +10,8 @@ import com.github.sog.annotation.TableBind;
 import com.github.sog.plugin.sqlinxml.SqlKit;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.util.List;
+
 /**
  * <p>
  * The table {{tableName}} mapping model.
@@ -26,6 +28,6 @@ public class {{model}} extends Model<{{model}}> {
 
 
     public List<{{model}}> list(){
-    	return find(SqlKit.sql("{{lower_model}}.list"))
+    	return find(SqlKit.sql("{{lower_model}}.list"));
     }
 }

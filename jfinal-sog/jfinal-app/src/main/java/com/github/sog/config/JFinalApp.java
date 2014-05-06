@@ -44,6 +44,7 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.StringKit;
 import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
@@ -78,23 +79,23 @@ import static com.github.sog.initalizer.InitConst.*;
  */
 public class JFinalApp extends JFinalConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(JFinalApp.class);
-    private static final String DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
-    public static boolean initlization = false;
-    public static Properties configuration;
+    private static final Logger  logger         = LoggerFactory.getLogger(JFinalApp.class);
+    private static final String  DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
+    public static        boolean initlization   = false;
+    public static  Properties   configuration;
     /**
      * The application mode
      */
-    public static Mode mode;
-    public static String  viewPath;
-    public static String  domain;
-    public static boolean setViewPath;
-    public static String  appName;
+    public static  Mode         mode;
+    public static  String       viewPath;
+    public static  String       domain;
+    public static  boolean      setViewPath;
+    public static  String       appName;
     private static FlashManager flashManager;
     /**
      * Global routing system configuration.
      */
-    private Routes routes;
+    private        Routes       routes;
 
     public static FlashManager flashManager() {
         if (flashManager == null) {
@@ -201,7 +202,7 @@ public class JFinalApp extends JFinalConfig {
             // ingored.
         }
 
-        interceptors.add(new ContextInterceptor());
+//        interceptors.add(new ContextInterceptor());
 
         new AutoOnLoadInterceptor(interceptors).load();
     }
@@ -209,13 +210,17 @@ public class JFinalApp extends JFinalConfig {
     @Override
     public void configHandler(Handlers handlers) {
         //访问路径是/admin/monitor
-        DruidStatViewHandler dvh = new DruidStatViewHandler("/admin/monitor", new IDruidStatViewAuth() {
-            public boolean isPermitted(HttpServletRequest request) {//获得查看权限
-//				HttpSession hs = request.getSession(false);
-//				return (hs != null && hs.getAttribute("$admin$") != null);
+        DruidStatViewHandler dvh;
+        final String view_url = ConfigProperties.getProperty(DB_STAT_VIEW, "/druid/monitor");
+
+        dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
+            public boolean isPermitted(HttpServletRequest request) {
                 return true;
             }
         });
+
+        handlers.add(new ContextPathHandler("ctx"));
+
         handlers.add(dvh);
     }
 

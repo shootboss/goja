@@ -57,11 +57,11 @@ public abstract class BasicController extends Controller {
 
     @Override
     public void render(String view) {
-        if (view.startsWith(StringPool.SLASH) && JFinalApp.setViewPath) {
-            super.render(JFinalApp.viewPath + view);
-        } else {
-            super.render(view);
-        }
+
+        super.render((view.startsWith(StringPool.SLASH) && JFinalApp.setViewPath)
+                ? JFinalApp.viewPath + view.replaceFirst(StringPool.SLASH, StringPool.EMPTY)
+                : view);
+
     }
 
     /**

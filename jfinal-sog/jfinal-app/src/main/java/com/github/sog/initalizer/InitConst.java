@@ -38,6 +38,7 @@ public interface InitConst {
     String DB_PASSWORD    = "db.password";
     String DB_SQLINXML    = "db.sqlinxml";
     String DB_SCRIPT_PATH = "db.script.path";
+    String DB_STAT_VIEW   = "db.druid.url";
 
 
     /* MongoDB Configuration */
