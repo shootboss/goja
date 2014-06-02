@@ -6,7 +6,7 @@
 
 package com.github.sog.interceptor;
 
-import com.github.sog.config.JApp;
+import japp.JApp;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;

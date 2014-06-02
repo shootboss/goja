@@ -1,7 +1,7 @@
 package com.github.sog.kit.lang;
 
 import japp.Logger;
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import com.google.common.collect.Lists;
 
 import java.io.File;

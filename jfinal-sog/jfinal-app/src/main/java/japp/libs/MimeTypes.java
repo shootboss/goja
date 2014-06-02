@@ -6,8 +6,8 @@
 
 package japp.libs;
 
-import com.github.sog.config.JApp;
-import com.github.sog.config.StringPool;
+import japp.JApp;
+import japp.StringPool;
 import japp.Logger;
 
 import java.io.InputStream;

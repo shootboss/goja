@@ -6,8 +6,8 @@
 
 package japp.mvc.render.csv;
 
-import com.github.sog.config.StringPool;
-import com.github.sog.libs.AppFunc;
+import japp.StringPool;
+import japp.JAppFunc;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -174,9 +174,9 @@ public class CsvUtil {
             } else if (obj instanceof Calendar) {
                 content = ((Calendar) obj).toString();
             } else if (obj instanceof Timestamp) {
-                content = AppFunc.DATE_FORMAT_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
+                content = JAppFunc.DATE_FORMAT_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
             } else if (obj instanceof Date) {
-                content = AppFunc.DATE_FORMAT_YYYY_MM_DD_HH_MM.format((Date) obj);
+                content = JAppFunc.DATE_FORMAT_YYYY_MM_DD_HH_MM.format((Date) obj);
             } else {
                 content = write(String.valueOf(obj));
             }

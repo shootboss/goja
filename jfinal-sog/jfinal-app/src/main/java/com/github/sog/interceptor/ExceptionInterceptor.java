@@ -5,11 +5,11 @@
  */
 package com.github.sog.interceptor;
 
-import com.github.sog.render.exception.ExceptionRender;
 import com.google.common.collect.Maps;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.render.RenderFactory;
+import japp.mvc.render.exception.ExceptionRender;
 
 import java.util.Map;
 

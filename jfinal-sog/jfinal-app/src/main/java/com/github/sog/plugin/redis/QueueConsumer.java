@@ -5,7 +5,7 @@
  */
 package com.github.sog.plugin.redis;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import com.google.common.collect.Maps;
 
 import java.io.Serializable;

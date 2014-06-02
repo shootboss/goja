@@ -6,8 +6,8 @@
 package com.github.sog.test;
 
 import com.alibaba.druid.util.JdbcUtils;
-import com.github.sog.config.JApp;
-import com.github.sog.config.StringPool;
+import japp.JApp;
+import japp.StringPool;
 import japp.init.ConfigProperties;
 import japp.init.ctxbox.ClassFinder;
 import com.github.sog.kit.common.Reflect;

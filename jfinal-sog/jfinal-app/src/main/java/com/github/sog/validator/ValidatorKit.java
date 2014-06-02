@@ -6,23 +6,23 @@
 
 package com.github.sog.validator;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import com.google.common.base.Strings;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
-import static com.github.sog.config.Constants.FLOAT_NEGATIVE;
-import static com.github.sog.config.Constants.FLOAT_NORMAL;
-import static com.github.sog.config.Constants.FLOAT_POSITIVE;
-import static com.github.sog.config.Constants.FLOAT_UNNEGATIVE;
-import static com.github.sog.config.Constants.FLOAT_UNPOSITIVE;
-import static com.github.sog.config.Constants.INTEGER_NEGATIVE;
-import static com.github.sog.config.Constants.INTEGER_NORMAL;
-import static com.github.sog.config.Constants.INTEGER_POSITIVE;
-import static com.github.sog.config.Constants.INTEGER_UNNEGATIVE;
-import static com.github.sog.config.Constants.INTEGER_UNPOSITIVE;
-import static com.github.sog.config.Constants.ValidatorRegex.*;
+import static japp.Constants.FLOAT_NEGATIVE;
+import static japp.Constants.FLOAT_NORMAL;
+import static japp.Constants.FLOAT_POSITIVE;
+import static japp.Constants.FLOAT_UNNEGATIVE;
+import static japp.Constants.FLOAT_UNPOSITIVE;
+import static japp.Constants.INTEGER_NEGATIVE;
+import static japp.Constants.INTEGER_NORMAL;
+import static japp.Constants.INTEGER_POSITIVE;
+import static japp.Constants.INTEGER_UNNEGATIVE;
+import static japp.Constants.INTEGER_UNPOSITIVE;
+import static japp.Constants.ValidatorRegex.*;
 
 /**
  * <p>
@@ -458,7 +458,7 @@ public class ValidatorKit {
      * @author hhd
      */
     /*
-	 * public static boolean isNotSameValue(String strSrc, String strDes) {
+     * public static boolean isNotSameValue(String strSrc, String strDes) {
 	 * if(Strings.isNullOrEmpty(strSrc)&&Strings.isNullOrEmpty(strDes)){ return false; }else{ return
 	 * !(isSameValue(strSrc,strDes)); } }
 	 */

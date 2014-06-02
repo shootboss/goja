@@ -6,7 +6,7 @@
 
 package com.github.sog.kit.format;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 
 import java.math.BigInteger;
 
