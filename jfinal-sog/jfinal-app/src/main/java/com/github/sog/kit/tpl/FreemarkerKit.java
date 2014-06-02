@@ -6,7 +6,7 @@
 
 package com.github.sog.kit.tpl;
 
-import com.github.sog.config.JFinalApp;
+import com.github.sog.config.JApp;
 import com.jfinal.kit.PathKit;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;
@@ -28,6 +28,7 @@ import java.util.Map;
  * @author walter yang
  * @version 1.0 2013-11-11 12:46 AM
  * @since JDK 1.5
+ * @deprecated
  */
 public class FreemarkerKit {
 
@@ -50,8 +51,9 @@ public class FreemarkerKit {
             appConfig = (Configuration) FreeMarkerRender.getConfiguration().clone();
             try {
                 //设置模板路径
-                appConfig.setDirectoryForTemplateLoading(new File(PathKit.getWebRootPath() + JFinalApp.viewPath));
+                appConfig.setDirectoryForTemplateLoading(new File(PathKit.getWebRootPath() + JApp.viewPath));
                 appConfig.setObjectWrapper(new DefaultObjectWrapper());
+
             } catch (IOException e) {
                 // TODO log
             }
@@ -62,18 +64,18 @@ public class FreemarkerKit {
     /**
      * 渲染模版为字符串，并制定参数
      *
-     * @param tpl   模版
-     * @param model 参数信息
+     * @param tpl          模版
+     * @param renderParams 参数信息
      * @return 渲染后的字符串
      */
-    public static String processString(String tpl, Map<String, Object> model) {
+    public static String processString(String tpl, Map<String, Object> renderParams) {
         if (appConfig == null) {
             getAppConfiguration();
         }
         StringWriter result = new StringWriter();
         try {
             Template template = appConfig.getTemplate(tpl);
-            template.process(model, result);
+            template.process(renderParams, result);
         } catch (IOException e) {
             throw new RenderException(e);
         } catch (TemplateException e) {
@@ -81,5 +83,6 @@ public class FreemarkerKit {
         }
         return result.toString();
     }
+
 
 }

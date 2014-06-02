@@ -6,7 +6,7 @@
 
 package com.github.sog.controller.security;
 
-import com.github.sog.config.JFinalApp;
+import com.github.sog.config.JApp;
 import com.github.sog.config.StringPool;
 import com.github.sog.kit.encry.DigestsKit;
 import com.github.sog.kit.encry.EncodeKit;
@@ -42,20 +42,20 @@ import java.util.Enumeration;
  * @since JDK 1.6
  */
 public class SecurityKit {
-    public final static  String COOKIE_LOGIN      = JFinalApp.appName + "_session_id";
+    public final static  String COOKIE_LOGIN      = JApp.appName + "_session_id";
     /**
      * 登录的SESSION。KEY
      */
-    private static final String LOGIN_SESSION_KEY = JFinalApp.appName + "#$session$login_user";
+    private static final String LOGIN_SESSION_KEY = JApp.appName + "#$session$login_user";
     /**
      * 登录的会员IDSession信息
      */
-    private static final String LOGIN_MEMBER_ID   = JFinalApp.appName + "@session#member%id";
+    private static final String LOGIN_MEMBER_ID   = JApp.appName + "@session#member%id";
 
 
     private static final String LOGIN_CACHE_SESSION = "login.session";
 
-    private final static byte[] E_KEY = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
+    private final static byte[] E_KEY   = new byte[]{'1', '2', '3', '4', '5', '6', '7', '8'};
     private final static String DES     = "DES";
     private final static int    MAX_AGE = 86400 * 365;
 

@@ -9,6 +9,7 @@ import com.github.sog.config.StringPool;
 import com.github.sog.kit.encry.EncodeKit;
 import com.google.common.net.HttpHeaders;
 import com.jfinal.kit.StringKit;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.servlet.ServletRequest;
@@ -40,7 +41,7 @@ public class ServletKit {
     public static String getUrl(HttpServletRequest request) {
         String url = request.getRequestURL().toString();
         String parmas = request.getQueryString();
-        if (StringKit.notBlank(parmas)) {
+        if (StringUtils.isNotBlank(parmas)) {
             url = url + StringPool.QUESTION_MARK + parmas;
         }
         return url;

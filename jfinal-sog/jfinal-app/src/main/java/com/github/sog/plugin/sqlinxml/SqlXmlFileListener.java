@@ -8,7 +8,7 @@ package com.github.sog.plugin.sqlinxml;
 
 import com.github.sog.config.StringPool;
 import com.github.sog.kit.map.JaxbKit;
-import com.jfinal.log.Logger;
+import japp.Logger;
 import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,9 +25,7 @@ import java.util.Map;
  * @since JDK 1.6
  */
 public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
-    protected static final Logger logger = Logger.getLogger(SqlXmlFileListener.class);
     final Map<String, String> sqlMap;
-
 
     public SqlXmlFileListener(Map<String, String> sqlMap) {
         this.sqlMap = sqlMap;
@@ -49,11 +47,11 @@ public class SqlXmlFileListener extends FileAlterationListenerAdaptor {
                     SqlKit.putOver(name + StringPool.DOT + sqlItem.id, sqlItem.value);
                 }
             }
-            if (logger.isDebugEnabled()) {
+            if (Logger.isDebugEnabled()) {
                 if (remove) {
-                    logger.debug("delete file." + change_file.getAbsolutePath());
+                    Logger.debug("delete file." + change_file.getAbsolutePath());
                 } else {
-                    logger.debug("reload file." + change_file.getAbsolutePath());
+                    Logger.debug("reload file." + change_file.getAbsolutePath());
                 }
             }
 

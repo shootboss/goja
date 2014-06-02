@@ -7,7 +7,7 @@ package com.github.sog.plugin.redis;
 
 import com.github.sog.kit.lang.SerializableKit;
 import com.google.common.collect.Lists;
-import com.jfinal.log.Logger;
+import japp.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Transaction;
@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class JedisKit {
-    private static Logger LOG = Logger.getLogger(JedisKit.class);
     private static JedisPool pool;
 
     public static void init(JedisPool pool) {
@@ -45,7 +44,7 @@ public class JedisKit {
             result = jedisAction.action(jedis);
         } catch (Exception e) {
             e.printStackTrace();
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         } finally {
             if (null != jedis)
                 pool.returnResource(jedis);

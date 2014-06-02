@@ -6,10 +6,10 @@
 package com.github.sog.plugin.redis;
 
 import com.github.sog.config.StringPool;
-import com.github.sog.initalizer.ConfigProperties;
-import com.github.sog.initalizer.InitConst;
-import com.jfinal.kit.StringKit;
+import japp.init.ConfigProperties;
+import japp.init.InitConst;
 import com.jfinal.plugin.IPlugin;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -77,7 +77,7 @@ public class JedisPlugin implements IPlugin {
             }
         }
         JedisShardInfo shardInfo = new JedisShardInfo(host, port, timeout);
-        if (StringKit.notBlank(password)) {
+        if (StringUtils.isNotBlank(password)) {
             shardInfo.setPassword(password);
         }
         JedisPoolConfig poolConfig = new JedisPoolConfig();

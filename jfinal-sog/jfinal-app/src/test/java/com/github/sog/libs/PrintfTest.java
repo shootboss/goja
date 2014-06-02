@@ -6,6 +6,7 @@
 
 package com.github.sog.libs;
 
+import japp.libs.Printf;
 import org.junit.Test;
 
 /**

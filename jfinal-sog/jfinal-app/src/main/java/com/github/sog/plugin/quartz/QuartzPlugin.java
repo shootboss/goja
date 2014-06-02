@@ -5,10 +5,10 @@
  */
 package com.github.sog.plugin.quartz;
 
+import japp.Logger;
 import com.github.sog.annotation.On;
-import com.github.sog.initalizer.ctxbox.ClassBox;
-import com.github.sog.initalizer.ctxbox.ClassType;
-import com.jfinal.log.Logger;
+import japp.init.ctxbox.ClassBox;
+import japp.init.ctxbox.ClassType;
 import com.jfinal.plugin.IPlugin;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -29,7 +29,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class QuartzPlugin implements IPlugin {
     private static final String JOB = "job";
 
-    private static final Logger logger = Logger.getLogger(QuartzPlugin.class);
     private final Scheduler sched;
     private boolean autoScan = true;
 
@@ -55,7 +54,7 @@ public class QuartzPlugin implements IPlugin {
                     if (!autoScan) {
                         continue;
                     }
-                    logger.warn("the job class [" + jobClass + "] not config on annotion!");
+                    Logger.warn("the job class [" + jobClass + "] not config on annotion!");
                 } else {
                     if (!on.enabled()) {
                         continue;
@@ -85,8 +84,8 @@ public class QuartzPlugin implements IPlugin {
         } catch (SchedulerException e) {
             propagate(e);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
+        if (Logger.isDebugEnabled()) {
+            Logger.debug(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
                     + jobCronExp);
         }
     }

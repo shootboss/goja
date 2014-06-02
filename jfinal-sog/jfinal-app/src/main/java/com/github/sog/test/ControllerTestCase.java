@@ -6,10 +6,10 @@
 package com.github.sog.test;
 
 import com.alibaba.druid.util.JdbcUtils;
-import com.github.sog.config.JFinalApp;
+import com.github.sog.config.JApp;
 import com.github.sog.config.StringPool;
-import com.github.sog.initalizer.ConfigProperties;
-import com.github.sog.initalizer.ctxbox.ClassFinder;
+import japp.init.ConfigProperties;
+import japp.init.ctxbox.ClassFinder;
 import com.github.sog.kit.common.Reflect;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
@@ -42,12 +42,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import static com.github.sog.initalizer.InitConst.DB_PASSWORD;
-import static com.github.sog.initalizer.InitConst.DB_SCRIPT_PATH;
-import static com.github.sog.initalizer.InitConst.DB_URL;
-import static com.github.sog.initalizer.InitConst.DB_USERNAME;
+import static japp.init.InitConst.DB_PASSWORD;
+import static japp.init.InitConst.DB_SCRIPT_PATH;
+import static japp.init.InitConst.DB_URL;
+import static japp.init.InitConst.DB_USERNAME;
 
-public abstract class ControllerTestCase<T extends JFinalApp> {
+public abstract class ControllerTestCase<T extends JApp> {
     protected static final Logger logger = LoggerFactory.getLogger(ControllerTestCase.class);
 
     protected static ServletContext servletContext = new MockServletContext();

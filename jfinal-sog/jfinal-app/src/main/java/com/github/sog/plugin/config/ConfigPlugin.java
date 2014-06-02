@@ -6,16 +6,15 @@
 package com.github.sog.plugin.config;
 
 import com.google.common.collect.Lists;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.IPlugin;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ConfigPlugin implements IPlugin {
 
     static String suffix = "txt";
 
-    protected final Logger logger = Logger.getLogger(getClass());
 
     private final List<String> includeResources = Lists.newArrayList();
 
@@ -25,9 +24,7 @@ public class ConfigPlugin implements IPlugin {
 
     public ConfigPlugin(String... includeResources) {
         if (includeResources != null) {
-            for (String includeResource : includeResources) {
-                this.includeResources.add(includeResource);
-            }
+            Collections.addAll(this.includeResources, includeResources);
         }
     }
 

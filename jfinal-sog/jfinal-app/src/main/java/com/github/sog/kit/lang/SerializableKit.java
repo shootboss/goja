@@ -5,7 +5,6 @@
  */
 package com.github.sog.kit.lang;
 
-import com.jfinal.log.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +17,6 @@ import java.io.Serializable;
 //import java.util.zip.GZIPOutputStream;
 
 public class SerializableKit {
-    private static Logger LOG = Logger.getLogger(SerializableKit.class);
 
     /**
      * 将对象序列化为byte[]

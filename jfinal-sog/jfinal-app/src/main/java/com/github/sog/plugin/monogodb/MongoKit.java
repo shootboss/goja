@@ -5,7 +5,6 @@
  */
 package com.github.sog.plugin.monogodb;
 
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.mongodb.BasicDBObject;
@@ -24,7 +23,6 @@ import java.util.regex.Pattern;
 
 public class MongoKit {
 
-    protected static Logger logger = Logger.getLogger(MongoKit.class);
 
     private static MongoClient client;
     private static DB          defaultDb;

@@ -5,6 +5,9 @@
  */
 package com.github.sog.annotation;
 
+import com.jfinal.plugin.activerecord.DbKit;
+import japp.StringPool;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -17,5 +20,7 @@ import java.lang.annotation.Target;
 public @interface TableBind {
     String tableName();
 
-    String pkName() default "";
+    String pkName() default StringPool.EMPTY;
+
+    String configName() default DbKit.MAIN_CONFIG_NAME;
 }

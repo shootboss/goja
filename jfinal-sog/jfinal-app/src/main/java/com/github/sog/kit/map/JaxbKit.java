@@ -6,7 +6,6 @@
 package com.github.sog.kit.map;
 
 import com.google.common.base.Throwables;
-import com.jfinal.log.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,7 +20,6 @@ import java.io.StringWriter;
  */
 public class JaxbKit {
 
-    protected final static Logger LOG = Logger.getLogger(JaxbKit.class);
 
     /**
      * string -> object

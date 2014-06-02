@@ -16,7 +16,7 @@ import com.google.common.io.Files;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
-import com.jfinal.kit.StringKit;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class SysLogInterceptor implements Interceptor {
             _key = entry.getKey();
             _value = entry.getValue()[0];
             _result = log.params.get(_key);
-            if (StringKit.isBlank(_result))
+            if (StringUtils.isBlank(_result))
                 continue;
             paraMap.put(_result, _value);
         }

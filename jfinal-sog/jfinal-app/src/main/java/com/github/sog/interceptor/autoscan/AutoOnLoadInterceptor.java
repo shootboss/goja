@@ -1,11 +1,11 @@
 package com.github.sog.interceptor.autoscan;
 
 import com.github.sog.annotation.AppInterceptor;
-import com.github.sog.initalizer.ctxbox.ClassBox;
-import com.github.sog.initalizer.ctxbox.ClassType;
+import japp.init.ctxbox.ClassBox;
+import japp.init.ctxbox.ClassType;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.config.Interceptors;
-import com.jfinal.log.Logger;
+import japp.Logger;
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class AutoOnLoadInterceptor {
 
-    private static final Logger logger = Logger.getLogger(AutoOnLoadInterceptor.class);
     private final Interceptors interceptors;
 
 
@@ -39,10 +38,10 @@ public class AutoOnLoadInterceptor {
                     try {
                         interceptors.add((Interceptor) interceptorClas.newInstance());
                     } catch (InstantiationException e) {
-                        logger.error("instance aop interceptor is error!", e);
+                        Logger.error("instance aop interceptor is error!", e);
                         throw new IllegalArgumentException("instance aop interceptor is error!");
                     } catch (IllegalAccessException e) {
-                        logger.error("instance aop interceptor is error!", e);
+                        Logger.error("instance aop interceptor is error!", e);
                         throw new IllegalArgumentException("instance aop interceptor is error!");
                     }
                 }

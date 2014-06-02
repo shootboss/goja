@@ -5,12 +5,10 @@
  */
 package com.github.sog.plugin.redis;
 
-import com.jfinal.log.Logger;
 
 import java.io.Serializable;
 
 public class QueueProducer {
-    protected final Logger logger = Logger.getLogger(getClass());
     String queueName;
 
     private QueueProducer(String queueName) {
@@ -22,6 +20,6 @@ public class QueueProducer {
     }
 
     public boolean publish(Serializable message) {
-        return JedisKit.lpush("queue-" + queueName, message) >= 1 ? true : false;
+        return JedisKit.lpush("queue-" + queueName, message) >= 1;
     }
 }

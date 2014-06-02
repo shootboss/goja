@@ -6,13 +6,13 @@
 package com.github.sog.plugin.sqlinxml;
 
 import com.github.sog.config.StringPool;
-import com.github.sog.initalizer.ConfigProperties;
+import japp.init.ConfigProperties;
 import com.github.sog.kit.map.JaxbKit;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
-import com.jfinal.log.Logger;
+import japp.Logger;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 public class SqlKit {
 
-    protected static final Logger logger = Logger.getLogger(SqlKit.class);
 
     private static final Map<String, String> SQL_MAP = Maps.newHashMap();
 
@@ -72,8 +71,8 @@ public class SqlKit {
                 SQL_MAP.put(name + StringPool.DOT + sqlItem.id, sqlItem.value);
             }
         }
-        if (logger.isDebugEnabled())
-            logger.debug("SQL_MAP" + SQL_MAP);
+        if (Logger.isDebugEnabled())
+            Logger.debug("SQL_MAP" + SQL_MAP);
         final Properties configProps = ConfigProperties.getConfigProps();
         if (BooleanUtils.toBoolean(configProps.getProperty("dev.mode", StringPool.FALSE))) {
             // 启动文件监控
@@ -117,7 +116,7 @@ public class SqlKit {
         try {
             monitor.start();
         } catch (Exception e) {
-            logger.error("file monitor is error!", e);
+            Logger.error("file monitor is error!", e);
         }
 
     }

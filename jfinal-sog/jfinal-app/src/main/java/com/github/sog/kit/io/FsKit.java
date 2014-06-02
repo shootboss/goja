@@ -3,7 +3,6 @@ package com.github.sog.kit.io;
 import com.github.sog.config.StringPool;
 import com.github.sog.kit.lang.TxtKit;
 import com.jfinal.core.Const;
-import com.jfinal.log.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +23,6 @@ import java.util.Properties;
  */
 public class FsKit {
 
-    private static final Logger log = Logger.getLogger(FsKit.class);
 
     private FsKit() {
     }

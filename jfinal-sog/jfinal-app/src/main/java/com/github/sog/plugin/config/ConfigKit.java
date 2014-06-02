@@ -5,11 +5,11 @@
  */
 package com.github.sog.plugin.config;
 
+import japp.Logger;
 import com.github.sog.config.StringPool;
 import com.github.sog.kit.io.ResourceKit;
 import com.google.common.collect.Maps;
 import com.jfinal.kit.PathKit;
-import com.jfinal.log.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 
 public class ConfigKit {
 
-    protected final static Logger LOG = Logger.getLogger(ConfigKit.class);
 
     private static List<String> includeResources;
 
@@ -44,7 +43,7 @@ public class ConfigKit {
         ConfigKit.excludeResources = excludeResources;
         ConfigKit.reload = reload;
         for (final String resource : includeResources) {
-            LOG.debug("include :" + resource);
+            Logger.debug("include :" + resource);
             File[] propertiesFiles = null;
             propertiesFiles = new File(PathKit.getRootClassPath()).listFiles(new FileFilter() {
 
@@ -55,7 +54,7 @@ public class ConfigKit {
             });
             for (File file : propertiesFiles) {
                 String fileName = file.getName();
-                LOG.debug("fileName:" + fileName);
+                Logger.debug("fileName:" + fileName);
                 if (fileName.endsWith("-test." + ConfigPlugin.suffix)) {
                     continue;
                 }
@@ -73,13 +72,13 @@ public class ConfigKit {
                 try {
                     testMap = ResourceKit.readProperties(testFileName(fileName));
                 } catch (IllegalArgumentException e) {
-                    LOG.info(e.getMessage());
+                    Logger.info(e.getMessage());
                 }
             }
         }
-        LOG.debug("map" + map);
-        LOG.debug("testMap" + testMap);
-        LOG.info("config init success!");
+        Logger.debug("map" + map);
+        Logger.debug("testMap" + testMap);
+        Logger.info("config init success!");
     }
 
     private static String testFileName(String fileName) {
@@ -106,7 +105,7 @@ public class ConfigKit {
         for (String filename : filenames) {
             File file = new File(filename);
             if (lastmodifies.get(filename) != file.lastModified()) {
-                LOG.info(filename + " changed, reload.");
+                Logger.info(filename + " changed, reload.");
                 init(includeResources, excludeResources, reload);
             }
         }

@@ -6,7 +6,6 @@
 package com.github.sog.plugin.monogodb;
 
 import com.github.sog.config.StringPool;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.IPlugin;
 import com.mongodb.MongoClient;
 
@@ -18,7 +17,6 @@ public class MongodbPlugin implements IPlugin {
     public static final int    DEFAUL_PORT  = 27017;
     public static final String DEFAULT_PKGS = "app.entitys";
 
-    protected final Logger logger = Logger.getLogger(getClass());
     private final String      host;
     private final int         port;
     private final String      database;

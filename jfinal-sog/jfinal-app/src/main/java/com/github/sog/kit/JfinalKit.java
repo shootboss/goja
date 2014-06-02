@@ -11,14 +11,12 @@ import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.IPlugin;
 
 import java.util.List;
 
 public class JfinalKit {
 
-    protected static final Logger LOG = Logger.getLogger(JfinalKit.class);
 
     static {
         init();

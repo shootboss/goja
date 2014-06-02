@@ -1,6 +1,7 @@
 package com.github.sog.kit.servlet;
 
 import com.github.sog.config.StringPool;
+import com.google.common.base.Strings;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -19,6 +20,7 @@ import java.net.URL;
  * @author sagyf yang
  * @version 1.0 2014-01-04 18:18
  * @since JDK 1.6
+ * @deprecated  use <@link></@link>
  */
 public class RequestKit {
     /**

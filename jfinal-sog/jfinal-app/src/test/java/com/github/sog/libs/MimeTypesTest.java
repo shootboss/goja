@@ -6,6 +6,7 @@
 
 package com.github.sog.libs;
 
+import japp.libs.MimeTypes;
 import org.junit.Test;
 
 /**

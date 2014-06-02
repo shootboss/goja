@@ -48,7 +48,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.6</java.version>
 
-        <jfinal.version>1.6</jfinal.version>
         <!-- the log -->
         <logback-core.version>1.1.2</logback-core.version>
         <slf4j-api.version>1.7.6</slf4j-api.version>
@@ -101,14 +100,6 @@
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jfinal</artifactId>
-            <version>${jfinal.version}</version>
-
-        </dependency>
-
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>

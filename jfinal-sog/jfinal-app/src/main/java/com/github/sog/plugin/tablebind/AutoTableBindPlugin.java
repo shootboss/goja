@@ -6,12 +6,14 @@
 package com.github.sog.plugin.tablebind;
 
 import com.github.sog.annotation.TableBind;
-import com.github.sog.config.StringPool;
-import com.github.sog.initalizer.ctxbox.ClassBox;
-import com.github.sog.initalizer.ctxbox.ClassType;
-import com.jfinal.kit.StringKit;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.IDataSourceProvider;
+import japp.StringPool;
+import japp.init.ctxbox.ClassBox;
+import japp.init.ctxbox.ClassType;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +22,11 @@ import java.util.List;
 
 public class AutoTableBindPlugin extends ActiveRecordPlugin {
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private static final Logger log = LoggerFactory.getLogger(AutoTableBindPlugin.class);
     private final INameStyle nameStyle;
     private boolean autoScan = true;
 
+    private String _config_name = DbKit.MAIN_CONFIG_NAME;
 
     public AutoTableBindPlugin(DataSource dataSource) {
         this(dataSource, SimpleNameStyles.DEFAULT);
@@ -40,6 +43,12 @@ public class AutoTableBindPlugin extends ActiveRecordPlugin {
 
     public AutoTableBindPlugin(IDataSourceProvider dataSourceProvider, INameStyle nameStyle) {
         super(dataSourceProvider);
+        this.nameStyle = nameStyle;
+    }
+
+    public AutoTableBindPlugin(String configName, IDataSourceProvider dataSourceProvider, INameStyle nameStyle) {
+        super(configName, dataSourceProvider);
+        this._config_name = configName;
         this.nameStyle = nameStyle;
     }
 
@@ -62,12 +71,15 @@ public class AutoTableBindPlugin extends ActiveRecordPlugin {
                     log.debug("addMapping(" + tableName + ", " + modelClass.getName() + StringPool.RIGHT_BRACKET);
                 } else {
                     tableName = tb.tableName();
-                    if (StringKit.notBlank(tb.pkName())) {
-                        this.addMapping(tableName, tb.pkName(), modelClass);
-                        log.debug("addMapping(" + tableName + ", " + tb.pkName() + StringPool.COMMA + modelClass.getName() + StringPool.RIGHT_BRACKET);
-                    } else {
-                        this.addMapping(tableName, modelClass);
-                        log.debug("addMapping(" + tableName + ", " + modelClass.getName() + StringPool.RIGHT_BRACKET);
+                    String configName = tb.configName();
+                    if (StringUtils.equalsIgnoreCase(this._config_name, configName)) {
+                        if (StrKit.notBlank(tb.pkName())) {
+                            this.addMapping(tableName, tb.pkName(), modelClass);
+                            log.debug("addMapping(" + tableName + ", " + tb.pkName() + StringPool.COMMA + modelClass.getName() + StringPool.RIGHT_BRACKET);
+                        } else {
+                            this.addMapping(tableName, modelClass);
+                            log.debug("addMapping(" + tableName + ", " + modelClass.getName() + StringPool.RIGHT_BRACKET);
+                        }
                     }
                 }
             }

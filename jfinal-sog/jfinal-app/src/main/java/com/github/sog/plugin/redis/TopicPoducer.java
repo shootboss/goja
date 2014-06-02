@@ -5,8 +5,8 @@
  */
 package com.github.sog.plugin.redis;
 
+import japp.Logger;
 import com.github.sog.kit.lang.SerializableKit;
-import com.jfinal.log.Logger;
 import redis.clients.jedis.Transaction;
 import redis.clients.jedis.Tuple;
 
@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TopicPoducer {
-    protected final Logger logger = Logger.getLogger(getClass());
 
     private TopicNest topic;
     private TopicNest subscriber;
@@ -36,7 +35,7 @@ public class TopicPoducer {
             lastMessageId = Integer.parseInt(slastMessageId);
         }
         lastMessageId++;
-        logger.debug(topic.key() + " nextMessageId " + lastMessageId);
+        Logger.debug(topic.key() + " nextMessageId " + lastMessageId);
         return lastMessageId;
     }
 
@@ -46,7 +45,7 @@ public class TopicPoducer {
         Tuple next = zrangeWithScores.iterator().next();
         Integer lowest = (int) next.getScore();
         String key = topic.cat("message").cat(lowest).key();
-        logger.debug("clean key " + key);
+        Logger.debug("clean key " + key);
         JedisKit.del(key);
     }
 
@@ -68,7 +67,7 @@ public class TopicPoducer {
                     } else {
                         trans.set(msgKey.getBytes(), SerializableKit.toByteArray(message));
                     }
-                    logger.info("produce a message,key[" + msgKey + "],message[" + message + "]");
+                    Logger.info("produce a message,key[" + msgKey + "],message[" + message + "]");
                     trans.set(topic.key(), nextMessageId.toString());
                     if (seconds > 0) {
                         trans.expire(msgKey, seconds);

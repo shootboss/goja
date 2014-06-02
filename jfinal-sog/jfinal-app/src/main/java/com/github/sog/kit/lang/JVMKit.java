@@ -1,8 +1,8 @@
 package com.github.sog.kit.lang;
 
+import japp.Logger;
 import com.github.sog.config.StringPool;
 import com.google.common.collect.Lists;
-import com.jfinal.log.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +24,6 @@ import java.util.List;
  */
 public class JVMKit {
 
-    static Logger logger = Logger.getLogger(JVMKit.class);
 
     static List<FileLock> jvmFile = Lists.newArrayList();
 
@@ -65,7 +64,7 @@ public class JVMKit {
             FileOutputStream output = new FileOutputStream(file);
             FileLock fileLock = output.getChannel().tryLock();
             if (fileLock == null) {
-                logger.warn("文件:'" + file + "'已经被lock,进程已经启动,系统将退出");
+                Logger.warn("文件:'" + file + "'已经被lock,进程已经启动,系统将退出");
                 System.exit(1);
             }
 
@@ -74,9 +73,9 @@ public class JVMKit {
             printStream.flush();
 
             jvmFile.add(fileLock);
-            logger.info("成功lock文件:'" + file + "',用以避免程序被多次启动,pid:" + getPid());
+            Logger.info("成功lock文件:'" + file + "',用以避免程序被多次启动,pid:" + getPid());
         } catch (IOException e) {
-            logger.warn("获得文件lock时异常:'" + file + "',系统退出", e);
+            Logger.warn("获得文件lock时异常:'" + file + "',系统退出", e);
             System.exit(2);
         }
     }

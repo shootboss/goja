@@ -6,8 +6,8 @@
 
 package com.github.sog.controller.flash;
 
-import com.jfinal.kit.StringKit;
 import com.jfinal.plugin.ehcache.CacheKit;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +40,7 @@ public class EhCacheFlashManager implements FlashManager {
      * @param flashCacheName ehcache 中的key值。
      */
     public EhCacheFlashManager(String flashCacheName) {
-        if (StringKit.isBlank(flashCacheName)) {
+        if (StringUtils.isBlank(flashCacheName)) {
             throw new IllegalArgumentException("flashCacheName can not be blank.");
         }
         this.flashCacheName = flashCacheName;

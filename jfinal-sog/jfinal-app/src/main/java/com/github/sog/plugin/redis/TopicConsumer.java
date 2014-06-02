@@ -5,7 +5,7 @@
  */
 package com.github.sog.plugin.redis;
 
-import com.jfinal.log.Logger;
+import japp.Logger;
 import redis.clients.jedis.Tuple;
 
 import java.io.Serializable;
@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class TopicConsumer {
-    protected final Logger logger = Logger.getLogger(getClass());
 
     private TopicNest topic;
     private TopicNest subscriber;
@@ -98,10 +97,10 @@ public class TopicConsumer {
 
     public <T extends Serializable> T read() {
         int lastReadMessage = getLastReadMessage();
-        logger.debug("lastReadMessage " + lastReadMessage);
+        Logger.debug("lastReadMessage " + lastReadMessage);
         String key = topic.cat("message").cat(lastReadMessage + 1).key();
         T message = JedisKit.get(key);
-        logger.info("consume the message," + "key[" + key + "],value[" + message + "]");
+        Logger.info("consume the message," + "key[" + key + "],value[" + message + "]");
         return message;
     }
 

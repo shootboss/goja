@@ -5,7 +5,7 @@
  */
 package com.github.sog.plugin.tablebind;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import com.jfinal.kit.StringKit;
 
 public class SimpleNameStyles {
