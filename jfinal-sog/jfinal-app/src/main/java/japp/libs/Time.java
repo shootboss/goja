@@ -6,7 +6,7 @@
 
 package japp.libs;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.Serializable;

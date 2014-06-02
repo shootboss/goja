@@ -6,7 +6,7 @@
 
 package app.controllers.test;
 
-import com.github.sog.controller.BasicController;
+import com.jfinal.core.Controller;
 
 /**
  * <p>
@@ -17,7 +17,7 @@ import com.github.sog.controller.BasicController;
  * @version 1.0 2014-03-27 21:38
  * @since JDK 1.6
  */
-public class AppController extends BasicController {
+public class AppController extends Controller {
     public void index() {
 
     }

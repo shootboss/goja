@@ -6,8 +6,8 @@
 
 package com.github.sog.kit.cst;
 
-import com.github.sog.libs.AppFunc;
 import com.google.common.collect.Lists;
+import japp.JAppFunc;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class AppFuncTest {
     public void testCommaJoiner() throws Exception {
         String abc = "a,b,c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        String dest = AppFunc.COMMA_JOINER.join(src_strs);
+        String dest = JAppFunc.COMMA_JOINER.join(src_strs);
         Assert.assertEquals(abc, dest);
     }
 
@@ -36,7 +36,7 @@ public class AppFuncTest {
     public void testCommaSplitter() throws Exception {
         String abc = "a,b,c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        List<String> dest = AppFunc.COMMA_SPLITTER.splitToList(abc);
+        List<String> dest = JAppFunc.COMMA_SPLITTER.splitToList(abc);
         Assert.assertEquals(src_strs, dest);
     }
 
@@ -44,7 +44,7 @@ public class AppFuncTest {
     public void testDashJoiner() throws Exception {
         String abc = "a-b-c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        String dest = AppFunc.DASH_JOINER.join(src_strs);
+        String dest = JAppFunc.DASH_JOINER.join(src_strs);
         Assert.assertEquals(abc, dest);
     }
 
@@ -53,7 +53,7 @@ public class AppFuncTest {
 
         String abc = "a-b-c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        List<String> dest = AppFunc.DASH_SPLITTER.splitToList(abc);
+        List<String> dest = JAppFunc.DASH_SPLITTER.splitToList(abc);
         Assert.assertEquals(src_strs, dest);
 
     }
@@ -62,7 +62,7 @@ public class AppFuncTest {
     public void testDotJoiner() throws Exception {
         String abc = "a.b.c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        String dest = AppFunc.DOT_JOINER.join(src_strs);
+        String dest = JAppFunc.DOT_JOINER.join(src_strs);
         Assert.assertEquals(abc, dest);
     }
 
@@ -71,7 +71,7 @@ public class AppFuncTest {
 
         String abc = "a.b.c";
         List<String> src_strs = Lists.newArrayList("a", "b", "c");
-        List<String> dest = AppFunc.DOT_SPLITTER.splitToList(abc);
+        List<String> dest = JAppFunc.DOT_SPLITTER.splitToList(abc);
         Assert.assertEquals(src_strs, dest);
 
     }

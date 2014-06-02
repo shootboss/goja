@@ -6,7 +6,7 @@
 
 package japp.mvc.render.ftl.shiro.role;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import org.apache.shiro.subject.Subject;
 
 /**

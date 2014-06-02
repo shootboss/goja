@@ -5,7 +5,7 @@
  */
 package com.github.sog.plugin.redis;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import japp.init.ConfigProperties;
 import japp.init.InitConst;
 import com.jfinal.plugin.IPlugin;

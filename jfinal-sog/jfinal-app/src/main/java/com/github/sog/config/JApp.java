@@ -14,7 +14,7 @@ package com.github.sog.config;
  * @author walter yang
  * @version 1.0 2013-12-12 13:50
  * @since JDK 1.5
- * @deprecated
+ * @deprecated use {@link japp.JApp}
  */
 public class JApp extends japp.JApp {
 

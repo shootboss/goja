@@ -14,7 +14,7 @@ package com.github.sog.config;
  * @author sagyf yang
  * @version 1.0 2014-02-22 14:54
  * @since JDK 1.6
- * @deprecated
+ * @deprecated use {@link japp.Constants}
  */
 public class Constants extends japp.Constants {
 

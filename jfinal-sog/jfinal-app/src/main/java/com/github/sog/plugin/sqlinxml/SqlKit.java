@@ -5,7 +5,7 @@
  */
 package com.github.sog.plugin.sqlinxml;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import japp.init.ConfigProperties;
 import com.github.sog.kit.map.JaxbKit;
 import com.google.common.collect.FluentIterable;

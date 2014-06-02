@@ -5,7 +5,7 @@
  */
 package com.github.sog.kit.io;
 
-import com.github.sog.config.StringPool;
+import japp.StringPool;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteSource;

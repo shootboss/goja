@@ -41,6 +41,10 @@ public interface InitConst {
     String DB_SCRIPT_PATH = "db.script.path";
     String DB_STAT_VIEW   = "db.druid.url";
 
+    /* Logging Configuration. */
+    String LOGGER_LEVEL = "logger";
+    String LOGGER_PATH = "app.log.path";
+
 
     /* MongoDB Configuration */
     String MONGO_HOST        = "mongo.host";

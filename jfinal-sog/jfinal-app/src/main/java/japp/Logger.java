@@ -6,6 +6,11 @@
 
 package japp;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.status.OnConsoleStatusListener;
+import ch.qos.logback.core.status.StatusManager;
+import japp.init.InitConst;
+import japp.logging.AppLogConfigurator;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
@@ -38,10 +43,17 @@ public class Logger {
      * Try to init stuff.
      */
     public static void init() {
-        String slf4jPath = JApp.configuration.getProperty("application.log.path", "/logback.xml");
+        String slf4jPath = JApp.configuration.getProperty(InitConst.LOGGER_PATH, "/logback.xml");
         URL slf4jConf = Logger.class.getResource(slf4jPath);
         if (slf4jConf == null) {
-            System.err.println("The Application config error!");
+            LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+            StatusManager statusManager = lc.getStatusManager();
+            OnConsoleStatusListener onConsoleListener = new OnConsoleStatusListener();
+            statusManager.add(onConsoleListener);
+            AppLogConfigurator.configure(lc);
+
+            Logger.slf4j = org.slf4j.LoggerFactory.getLogger(JApp.appName + StringPool.AT + JApp.appVersion);
         } else if (Logger.slf4j == null) {
 
             if (slf4jConf.getFile().indexOf(JApp.applicationPath.getAbsolutePath()) == 0) {
@@ -49,7 +61,7 @@ public class Logger {
                 // so it's probably a custom configuration file
                 configuredManually = true;
             }
-            Logger.slf4j = org.slf4j.LoggerFactory.getLogger(JApp.appName + "@" + JApp.appVersion);
+            Logger.slf4j = org.slf4j.LoggerFactory.getLogger(JApp.appName + StringPool.AT + JApp.appVersion);
 
         }
     }

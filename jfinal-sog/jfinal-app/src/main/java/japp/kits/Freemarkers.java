@@ -6,7 +6,7 @@
 
 package japp.kits;
 
-import com.github.sog.config.JApp;
+import japp.JApp;
 import com.jfinal.kit.PathKit;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;

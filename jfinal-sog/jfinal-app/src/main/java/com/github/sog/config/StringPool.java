@@ -25,7 +25,7 @@ package com.github.sog.config;
  * @author sagyf yang
  * @version 1.0 2014-01-31 2:08
  * @since JDK 1.6
- * @deprecated
+ * @deprecated use {@link japp.StringPool}
  */
 public interface StringPool extends japp.StringPool {
 }

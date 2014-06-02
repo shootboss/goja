@@ -6,7 +6,7 @@
 
 package test.controller;
 
-import com.github.sog.config.JApp;
+import japp.JApp;
 import com.github.sog.test.ControllerTestCase;
 import org.junit.Test;
 

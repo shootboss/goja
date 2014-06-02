@@ -126,6 +126,10 @@ public class JApp extends JFinalConfig {
         }
         appName = ConfigProperties.getProperty(APP, "app");
         appVersion = ConfigProperties.getProperty(APP_VERSION, "0.0.1");
+
+        // init logger.
+        Logger.init();
+
         domain = ConfigProperties.getProperty(DOMAIN, DEFAULT_DOMAIN);
         String flash = ConfigProperties.getProperty(FLASH, "session");
         _flashManager = StringUtils.equals("session", flash) ? new SessionFlashManager()

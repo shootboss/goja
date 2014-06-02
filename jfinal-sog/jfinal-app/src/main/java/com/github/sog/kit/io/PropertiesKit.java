@@ -1,7 +1,7 @@
 package com.github.sog.kit.io;
 
-import com.github.sog.config.StringPool;
-import com.github.sog.libs.AppFunc;
+import japp.JAppFunc;
+import japp.StringPool;
 import com.google.common.base.Splitter;
 
 import java.io.ByteArrayInputStream;
@@ -301,7 +301,7 @@ public class PropertiesKit {
     public String[] getStringArray(String key) {
         String v = getProperty(key);
         if (v == null) {
-            return AppFunc.EMPTY_ARRAY;
+            return JAppFunc.EMPTY_ARRAY;
         } else {
             List<String> splits = Splitter.on(", \t\n\r\f").omitEmptyStrings().trimResults().splitToList(key);
             return splits.toArray(new String[splits.size()]);

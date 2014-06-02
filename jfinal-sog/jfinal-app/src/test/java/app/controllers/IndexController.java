@@ -7,9 +7,9 @@
 package app.controllers;
 
 import app.module.Task;
-import com.github.sog.controller.BasicController;
 import com.github.sog.db.filter.Condition;
 import com.github.sog.db.filter.Filter;
+import com.jfinal.core.Controller;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ import com.github.sog.db.filter.Filter;
  * @version 1.0 2014-02-24 11:00
  * @since JDK 1.6
  */
-public class IndexController extends BasicController {
+public class IndexController extends Controller {
 
     public void index() {
         Task.dao.findById(1);
