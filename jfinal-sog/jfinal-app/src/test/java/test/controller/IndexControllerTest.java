@@ -6,9 +6,11 @@
 
 package test.controller;
 
-import japp.JApp;
 import com.github.sog.test.ControllerTestCase;
+import japp.JApp;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -20,13 +22,13 @@ import org.junit.Test;
  * @since JDK 1.6
  */
 public class IndexControllerTest extends ControllerTestCase<JApp> {
-
+    private static final Logger logger = LoggerFactory.getLogger(IndexControllerTest.class);
 
     @Test
     public void testIndex() throws Exception {
         String url = "/index";
         String resp = use(url).invoke();
-        System.out.println(resp);
+        logger.info("The index path repsonse {}", resp);
     }
 
     @Test

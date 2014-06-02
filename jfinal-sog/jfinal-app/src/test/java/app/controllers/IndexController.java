@@ -10,6 +10,7 @@ import app.module.Task;
 import com.github.sog.db.filter.Condition;
 import com.github.sog.db.filter.Filter;
 import com.jfinal.core.Controller;
+import japp.Logger;
 
 /**
  * <p>
@@ -24,6 +25,7 @@ public class IndexController extends Controller {
 
     public void index() {
         Task.dao.findById(1);
+        Logger.debug("The Index With Task by {}", 1);
         renderJson("abc");
     }
 

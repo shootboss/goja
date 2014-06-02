@@ -6,6 +6,7 @@
 
 package japp.logging;
 
+import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -19,6 +20,7 @@ import ch.qos.logback.core.status.StatusManager;
 import japp.JApp;
 import japp.init.ConfigProperties;
 import japp.init.InitConst;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -37,7 +39,7 @@ public class AppLogConfigurator {
     private AppLogConfigurator() {
     }
 
-    public static void configure(LoggerContext lc) {
+    public static void configure(final LoggerContext lc) {
         StatusManager sm = lc.getStatusManager();
         if (sm != null) {
             sm.add(new InfoStatus("Setting up default configuration.", lc));
@@ -51,7 +53,7 @@ public class AppLogConfigurator {
         rfa.setFile(filename);
         final TimeBasedRollingPolicy rollingPolicy = new TimeBasedRollingPolicy();
         rollingPolicy.setParent(rfa);
-        rollingPolicy.setFileNamePattern("../logs/" + JApp.appName + ".%d{yyyy-MM-dd}.log");
+        rollingPolicy.setFileNamePattern(StringUtils.replace(filename, ".log", ".%d{yyyy-MM-dd}.log"));
         rollingPolicy.setContext(lc);
         rfa.setRollingPolicy(rollingPolicy);
         rfa.setContext(lc);
@@ -68,16 +70,24 @@ public class AppLogConfigurator {
         rfa.setEncoder(pl);
         rfa.start();
 
+        // init async loggin
+        AsyncAppender asyncAppender = new AsyncAppender();
+        asyncAppender.setContext(lc);
+        asyncAppender.addAppender(rfa);
+        asyncAppender.setQueueSize(512);
+        asyncAppender.setDiscardingThreshold(0);
 
+        final Level config_level = Level.toLevel(ConfigProperties.getProperty(InitConst.LOGGER_LEVEL), Level.INFO);
+        final Level default_level = JApp.mode.isDev() ? Level.DEBUG : config_level;
         Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
-        rootLogger.setLevel(Level.INFO);
+        rootLogger.setLevel(default_level);
         rootLogger.addAppender(ca);
-        rootLogger.addAppender(rfa);
+        rootLogger.addAppender(asyncAppender);
 
         Logger appLogger = lc.getLogger("app");
-        appLogger.setLevel(Level.toLevel(ConfigProperties.getProperty(InitConst.LOGGER_LEVEL), Level.INFO));
+        appLogger.setLevel(default_level);
         appLogger.addAppender(ca);
-        appLogger.addAppender(rfa);
+        appLogger.addAppender(asyncAppender);
     }
 
     public static void configureDefaultContext() {
