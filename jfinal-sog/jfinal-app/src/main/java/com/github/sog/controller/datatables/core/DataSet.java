@@ -16,6 +16,7 @@ import java.util.List;
  * @author sagyf yang
  * @version 1.0 2014-01-15 14:58
  * @since JDK 1.6
+ * @deprecated use {@link japp.mvc.datatables.core.DataSet}
  */
 public class DataSet<E> {
     private final List<E> rows;

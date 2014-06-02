@@ -92,4 +92,5 @@ public interface StringPool {
 
     String LOCAL_HOST = "127.0.0.1";
 
+    String PK_COLUMN = "id";
 }

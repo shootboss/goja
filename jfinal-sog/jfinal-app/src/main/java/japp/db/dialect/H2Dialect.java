@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.db.dialect;
+package japp.db.dialect;
 
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
 
@@ -14,8 +14,11 @@ import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
  * </p>
  *
  * @author sagyf yang
- * @version 1.0 2014-03-27 0:55
+ * @version 1.0 2014-03-27 0:54
  * @since JDK 1.6
  */
-public class DB2Dialect extends AnsiSqlDialect {
+public class H2Dialect extends AnsiSqlDialect {
+    public boolean isSupportReturning() {
+        return true;
+    }
 }

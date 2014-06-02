@@ -7,7 +7,7 @@
 package japp.libs;
 
 import japp.JApp;
-import com.github.sog.exceptions.MailException;
+import japp.exceptions.MailException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;

@@ -17,6 +17,7 @@ import java.util.List;
  * @author sagyf yang
  * @version 1.0 2014-01-15 14:38
  * @since JDK 1.6
+ * @deprecated use {@link japp.mvc.datatables.core.DatatablesResponse}
  */
 public final class DatatablesResponse<E> implements Serializable {
     private static final long serialVersionUID = 2150327528879897368L;

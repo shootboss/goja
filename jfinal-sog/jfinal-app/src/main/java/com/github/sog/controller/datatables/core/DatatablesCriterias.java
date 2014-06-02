@@ -6,9 +6,9 @@
 
 package com.github.sog.controller.datatables.core;
 
-import com.github.sog.controller.datatables.DTConstants;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
+import japp.mvc.datatables.DTConstants;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +23,7 @@ import java.util.List;
  * @author sagyf yang
  * @version 1.0 2014-01-15 14:32
  * @since JDK 1.6
+ * @deprecated use {@link japp.mvc.datatables.core.DatatablesCriterias}
  */
 public final class DatatablesCriterias implements Serializable {
     private static final long serialVersionUID = 7101911815995931134L;

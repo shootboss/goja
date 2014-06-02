@@ -21,7 +21,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * SessionIdKit.
+ * SessionIds.
  */
 public class SessionIdKit {
 	

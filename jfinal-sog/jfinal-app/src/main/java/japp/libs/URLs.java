@@ -7,7 +7,7 @@
 package japp.libs;
 
 import com.github.sog.config.StringPool;
-import com.github.sog.exceptions.UnexpectedException;
+import japp.exceptions.UnexpectedException;
 
 import java.net.URLEncoder;
 

@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.exceptions;
+package japp.exceptions;
 
 /**
  * <p>
@@ -15,7 +15,7 @@ package com.github.sog.exceptions;
  * @version 1.0 2014-04-04 10:19
  * @since JDK 1.6
  */
-public class UnexpectedException extends JFinalAppException {
+public class UnexpectedException extends JAppException {
 
     public UnexpectedException(String message) {
         super(message);

@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import com.jfinal.plugin.activerecord.cache.ICache;
+import japp.JApp;
+
 import static com.jfinal.plugin.activerecord.DbKit.NULL_PARA_ARRAY;
 
 /**

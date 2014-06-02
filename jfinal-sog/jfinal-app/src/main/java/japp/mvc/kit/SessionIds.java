@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.github.sog.kit.servlet;
+package japp.mvc.kit;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.util.Random;
 
 /**
- * SessionIdKit.
+ * SessionIds.
  */
-public class SessionIdKit {
+public class SessionIds {
 
-    private static final SessionIdKit me = new SessionIdKit();
+    private static final SessionIds me = new SessionIds();
     protected static Random  random;
     private static   boolean weakRandom;
     private static volatile Object lock = new Object();
 
-    private SessionIdKit() {
+    private SessionIds() {
         try {
             // This operation may block on some systems with low entropy. See
             // this page
@@ -46,7 +46,7 @@ public class SessionIdKit {
         }
     }
 
-    public static SessionIdKit me() {
+    public static SessionIds me() {
         return me;
     }
 

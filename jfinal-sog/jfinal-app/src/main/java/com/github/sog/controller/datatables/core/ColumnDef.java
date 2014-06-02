@@ -16,6 +16,7 @@ import com.google.common.base.Objects;
  * @author sagyf yang
  * @version 1.0 2014-01-15 14:52
  * @since JDK 1.6
+ * @deprecated use {@link japp.mvc.datatables.core.ColumnDef}
  */
 public class ColumnDef {
 

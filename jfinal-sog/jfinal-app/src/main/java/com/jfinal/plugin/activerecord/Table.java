@@ -28,6 +28,8 @@ public class Table {
 	private String primaryKey;
 	private String secondaryKey = null;
 	private Map<String, Class<?>> columnTypeMap;	// config.containerFactory.getAttrsMap();
+
+    private String columnSelectSql;
 	
 	private Class<? extends Model<?>> modelClass;
 	
@@ -108,6 +110,14 @@ public class Table {
 	public Class<? extends Model<?>> getModelClass() {
 		return modelClass;
 	}
+
+    public void setColumnSelectSql(String columnSelectSql) {
+        this.columnSelectSql = columnSelectSql;
+    }
+
+    public String getColumnSelectSql() {
+        return columnSelectSql;
+    }
 }
 
 

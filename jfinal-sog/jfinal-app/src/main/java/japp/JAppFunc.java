@@ -6,7 +6,6 @@
 
 package japp;
 
-import com.github.sog.config.StringPool;
 import com.github.sog.kit.date.DateProvider;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -83,7 +82,7 @@ public interface JAppFunc {
     /**
      * 默认的数据库主键
      */
-    String TABLE_PK_COLUMN = "id";
+    String TABLE_PK_COLUMN = StringPool.PK_COLUMN;
 
 
     // ---------------------------------------------------------------- array

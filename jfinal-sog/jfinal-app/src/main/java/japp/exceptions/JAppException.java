@@ -4,29 +4,29 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.exceptions;
+package japp.exceptions;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The super class for all Play! exceptions
  */
-public abstract class JFinalAppException extends RuntimeException {
+public abstract class JAppException extends RuntimeException {
 
     static AtomicLong atomicLong = new AtomicLong(System.currentTimeMillis());
     String id;
 
-    public JFinalAppException() {
+    public JAppException() {
         super();
         setId();
     }
 
-    public JFinalAppException(String message) {
+    public JAppException(String message) {
         super(message);
         setId();
     }
 
-    public JFinalAppException(String message, Throwable cause) {
+    public JAppException(String message, Throwable cause) {
         super(message, cause);
         setId();
     }

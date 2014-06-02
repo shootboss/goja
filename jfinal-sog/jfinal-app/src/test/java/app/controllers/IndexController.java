@@ -7,10 +7,10 @@
 package app.controllers;
 
 import app.module.Task;
-import com.github.sog.db.filter.Condition;
-import com.github.sog.db.filter.Filter;
 import com.jfinal.core.Controller;
 import japp.Logger;
+import japp.db.filter.Condition;
+import japp.db.filter.Filter;
 
 /**
  * <p>

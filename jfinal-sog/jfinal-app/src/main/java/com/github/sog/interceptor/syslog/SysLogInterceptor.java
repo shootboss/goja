@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import japp.StringPool;
 import com.github.sog.interceptor.syslog.config.LogPathConfig;
-import com.github.sog.kit.servlet.ServletKit;
+import japp.mvc.kit.Servlets;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
@@ -80,7 +80,7 @@ public class SysLogInterceptor implements Interceptor {
 
     private void logFromConfig(Controller c, LogConfig log) {
         final SysLog sysLog = new SysLog();
-        sysLog.ip = ServletKit.getIp(c.getRequest());
+        sysLog.ip = Servlets.getIp(c.getRequest());
         sysLog.user = logProcesser.getUsername(c);
         Map<String, String[]> parameterMap = c.getRequest().getParameterMap();
         Set<Entry<String, String[]>> entrySet = parameterMap.entrySet();

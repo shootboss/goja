@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.db.filter;
+package japp.db.filter;
 
 import com.github.sog.config.StringPool;
 import com.google.common.base.Strings;
@@ -32,11 +32,11 @@ import java.util.regex.Pattern;
 public class Filter<M extends Model> {
 
     private static final Pattern PARAM_PARSE = Pattern.compile("\\?\\{(.*?)\\}");
-    private final int pageNo;
-    private final int perPage;
-    private final String  tableName;
+    private final int    pageNo;
+    private final int    perPage;
+    private final String tableName;
     private List<Condition> conditions = Lists.newArrayList();
-    private       boolean shouldPage;
+    private boolean shouldPage;
 
     public Filter(int perPage, int pageNo, M model, Condition... conditions) {
 

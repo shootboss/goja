@@ -4,12 +4,12 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.exceptions;
+package japp.exceptions;
 
 /**
  * Error while sending an email
  */
-public class MailException extends JFinalAppException {
+public class MailException extends JAppException {
 
 
     public MailException(String message) {

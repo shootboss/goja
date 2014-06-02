@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package japp.mvc;
+package japp.mvc.kit;
 
 import com.github.sog.config.StringPool;
 import com.google.common.base.Strings;

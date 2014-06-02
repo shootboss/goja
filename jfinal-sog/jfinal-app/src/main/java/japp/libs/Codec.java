@@ -7,7 +7,7 @@
 package japp.libs;
 
 import com.github.sog.config.StringPool;
-import com.github.sog.exceptions.UnexpectedException;
+import japp.exceptions.UnexpectedException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;

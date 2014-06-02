@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package com.github.sog.kit.servlet;
+package japp.mvc.kit;
 
 import com.github.sog.config.StringPool;
 import com.github.sog.kit.encry.EncodeKit;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-public class ServletKit {
+public class Servlets {
 
     // -- 常用数值定义 --//
     public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;

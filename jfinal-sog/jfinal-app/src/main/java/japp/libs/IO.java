@@ -7,7 +7,7 @@
 package japp.libs;
 
 import japp.StringPool;
-import com.github.sog.exceptions.UnexpectedException;
+import japp.exceptions.UnexpectedException;
 import com.github.sog.kit.OrderSafeProperties;
 import org.apache.commons.io.IOUtils;
 

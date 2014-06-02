@@ -6,6 +6,9 @@
 
 package com.jfinal.plugin.activerecord;
 
+import com.google.common.collect.Lists;
+import japp.JAppFunc;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -43,7 +46,7 @@ class TableBuilder {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static void doBuild(Table table, Connection conn, Config config) throws SQLException {
+	private static void doBuild(final Table table, Connection conn, Config config) throws SQLException {
 		table.setColumnTypeMap(config.containerFactory.getAttrsMap());
 		if (table.getPrimaryKey() == null)
 			table.setPrimaryKey(config.dialect.getDefaultPrimaryKey());
@@ -52,9 +55,14 @@ class TableBuilder {
 		Statement stm = conn.createStatement();
 		ResultSet rs = stm.executeQuery(sql);
 		ResultSetMetaData rsmd = rs.getMetaData();
-		
-		for (int i=1; i<=rsmd.getColumnCount(); i++) {
+
+        // add columns
+
+        List<String> columns = Lists.newArrayListWithCapacity(40);
+
+        for (int i=1; i<=rsmd.getColumnCount(); i++) {
 			String colName = rsmd.getColumnName(i);
+            columns.add(colName);
 			String colClassName = rsmd.getColumnClassName(i);
 			if ("java.lang.String".equals(colClassName)) {
 				// varchar, char, enum, set, text, tinytext, mediumtext, longtext
@@ -120,6 +128,7 @@ class TableBuilder {
 				// throw new RuntimeException("You've got new type to mapping. Please add code in " + TableBuilder.class.getName() + ". The ColumnClassName can't be mapped: " + colClassName);
 			}
 		}
+        table.setColumnSelectSql(JAppFunc.COMMA_JOINER.join(columns));
 		
 		rs.close();
 		stm.close();
