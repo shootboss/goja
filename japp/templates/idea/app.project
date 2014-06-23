@@ -6,7 +6,7 @@
             <root id="root">
                 <element id="directory" name="WEB-INF">
                     <element id="directory" name="classes">
-                        <element id="module-output" name="gru"/>
+                        <element id="module-output" name="{{appName}}"/>
                     </element>
                     <element id="directory" name="lib">
                         <element id="file-copy" path="{{gen_path}}/deps/compile/activation-1.1.jar"/>

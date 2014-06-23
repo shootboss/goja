@@ -24,15 +24,14 @@ from japp.utils import read_conf
 def usage():
     print "~ "
     print "~ JFinal App gen."
-    print "~ Usage: jfgen cmd application_name [-options]"
+    print "~ Usage: japp cmd application_name [-options]"
     print "~"
     print '~ with, new          Create a new application'
     print '~       war          Export the application as a standalone WAR archive'
     print '~       syncdb       Sync Database table to Jfinal Model'
     print '~       idea         Convert the project to Intellij IDEA project'
     print '~       pom          Generate Maven POM file, and comply with the standard configuration Jfinal-app'
-    print '~       db [-dir]    Init database script, the default mysql database'
-    print '~       help         Show jfgen help'
+    print '~       help         Show japp help'
     print '~'
 
 

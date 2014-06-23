@@ -119,28 +119,19 @@ class Application():
     def pack_war(self):
         import subprocess
 
-        # 1. clean idea compile file self.app_dir + 'src/main/webapp/WEB-INF/classes'
-        web_info_path = os.path.join(self.app_dir, 'src', 'main', 'webapp', 'WEB-INF')
-        classes_path = os.path.join(web_info_path, 'classes')
-        if os.path.exists(classes_path):
-            shutil.rmtree(classes_path)
-        lib_path = os.path.join(web_info_path, 'lib')
-        if os.path.exists(lib_path):
-            shutil.rmtree(lib_path)
-
-        # 2. render build.xml file into project dir.
+        # 1. render build.xml file into project dir.
         war_params = {'appName': self.application_name, 'genPath': self.japp_path}
         build_xml_content = self.__code_tpl__('ci/build.xml', war_params)
         build_xml_file = os.path.join(self.app_dir, 'build.xml')
         storage_file(self.app_dir, build_xml_content, 'build.xml')
 
-        # 3. call ant run subprocess.
+        # 2. call ant run subprocess.
         ant_path = os.path.join(self.japp_path, 'ci', 'ant', 'bin', 'ant')
         ant_cmds = '%s clean package' % ant_path
         compile_process = subprocess.Popen(ant_cmds, shell=True, stdout=subprocess.PIPE)
         while compile_process.poll() is None:
             print compile_process.stdout.readline()
-        # 4. clean build file.
+        # 3. clean build file.
         os.remove(build_xml_file)
 
     def __appname__(self):
