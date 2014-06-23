@@ -1,3 +1,3 @@
 @echo off
 
-"%~dp0python\python.exe" "%~dp0jfgen" %*
+"%~dp0python\python.exe" "%~dp0jfapp" %*
