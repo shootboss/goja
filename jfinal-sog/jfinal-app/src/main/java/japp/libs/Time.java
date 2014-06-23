@@ -284,34 +284,35 @@ public class Time {
         protected static final int                  YEAR             = 6;
         protected static final int                  ALL_SPEC_INT     = 99; // '*'
         protected static final int                  NO_SPEC_INT      = 98; // '?'
-        protected static final Integer              ALL_SPEC         = new Integer(ALL_SPEC_INT);
-        protected static final Integer              NO_SPEC          = new Integer(NO_SPEC_INT);
+        protected static final Integer              ALL_SPEC         = ALL_SPEC_INT;
+        protected static final Integer              NO_SPEC          = NO_SPEC_INT;
         private static final   long                 serialVersionUID = 12423409423L;
         protected static       Map<String, Integer> monthMap         = new HashMap<String, Integer>(20);
         protected static       Map<String, Integer> dayMap           = new HashMap<String, Integer>(60);
 
         static {
-            monthMap.put("JAN", new Integer(0));
-            monthMap.put("FEB", new Integer(1));
-            monthMap.put("MAR", new Integer(2));
-            monthMap.put("APR", new Integer(3));
-            monthMap.put("MAY", new Integer(4));
-            monthMap.put("JUN", new Integer(5));
-            monthMap.put("JUL", new Integer(6));
-            monthMap.put("AUG", new Integer(7));
-            monthMap.put("SEP", new Integer(8));
-            monthMap.put("OCT", new Integer(9));
-            monthMap.put("NOV", new Integer(10));
-            monthMap.put("DEC", new Integer(11));
+            monthMap.put("JAN", 0);
+            monthMap.put("FEB", 1);
+            monthMap.put("MAR", 2);
+            monthMap.put("APR", 3);
+            monthMap.put("MAY", 4);
+            monthMap.put("JUN", 5);
+            monthMap.put("JUL", 6);
+            monthMap.put("AUG", 7);
+            monthMap.put("SEP", 8);
+            monthMap.put("OCT", 9);
+            monthMap.put("NOV", 10);
+            monthMap.put("DEC", 11);
 
-            dayMap.put("SUN", new Integer(1));
-            dayMap.put("MON", new Integer(2));
-            dayMap.put("TUE", new Integer(3));
-            dayMap.put("WED", new Integer(4));
-            dayMap.put("THU", new Integer(5));
-            dayMap.put("FRI", new Integer(6));
-            dayMap.put("SAT", new Integer(7));
+            dayMap.put("SUN", 1);
+            dayMap.put("MON", 2);
+            dayMap.put("TUE", 3);
+            dayMap.put("WED", 4);
+            dayMap.put("THU", 5);
+            dayMap.put("FRI", 6);
+            dayMap.put("SAT", 7);
         }
+
         protected transient TreeSet<Integer> seconds;
         protected transient TreeSet<Integer> minutes;
         protected transient TreeSet<Integer> hours;
@@ -319,13 +320,13 @@ public class Time {
         protected transient TreeSet<Integer> months;
         protected transient TreeSet<Integer> daysOfWeek;
         protected transient TreeSet<Integer> years;
-        protected transient boolean lastdayOfWeek    = false;
-        protected transient int     nthdayOfWeek     = 0;
-        protected transient boolean lastdayOfMonth   = false;
-        protected transient boolean nearestWeekday   = false;
-        protected transient boolean expressionParsed = false;
-        private String   cronExpression = null;
-        private TimeZone timeZone       = null;
+        protected transient boolean  lastdayOfWeek    = false;
+        protected transient int      nthdayOfWeek     = 0;
+        protected transient boolean  lastdayOfMonth   = false;
+        protected transient boolean  nearestWeekday   = false;
+        protected transient boolean  expressionParsed = false;
+        private             String   cronExpression   = null;
+        private             TimeZone timeZone         = null;
 
         /**
          * Constructs a new <CODE>CronExpression</CODE> based on the specified
@@ -416,7 +417,7 @@ public class Time {
             adjustCal.set(Calendar.MILLISECOND, 0);
             Date lastDate = adjustCal.getTime();
 
-            Date newDate = null;
+            Date newDate;
 
             //keep getting the next included time until it's farther than one second
             // apart. At that point, lastDate is the last valid fire time. We return
@@ -630,7 +631,7 @@ public class Time {
                             i);
                 }
                 if (type == DAY_OF_WEEK && !lastdayOfMonth) {
-                    int val = daysOfMonth.last().intValue();
+                    int val = daysOfMonth.last();
                     if (val == NO_SPEC_INT) {
                         throw new ParseException(
                                 "'?' can only be specfied for Day-of-Month -OR- Day-of-Week.",
@@ -739,7 +740,7 @@ public class Time {
                     throw new ParseException("'L' option is not valid here. (pos=" + i + ")", i);
                 }
                 TreeSet<Integer> set = getSet(type);
-                set.add(new Integer(val));
+                set.add(val);
                 i++;
                 return i;
             }
@@ -751,7 +752,7 @@ public class Time {
                     throw new ParseException("'W' option is not valid here. (pos=" + i + ")", i);
                 }
                 TreeSet<Integer> set = getSet(type);
-                set.add(new Integer(val));
+                set.add(val);
                 i++;
                 return i;
             }
@@ -773,7 +774,7 @@ public class Time {
                 }
 
                 TreeSet<Integer> set = getSet(type);
-                set.add(new Integer(val));
+                set.add(val);
                 i++;
                 return i;
             }
