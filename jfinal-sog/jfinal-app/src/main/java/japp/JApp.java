@@ -291,6 +291,7 @@ public class JApp extends JFinalConfig {
     @Override
     public void beforeJFinalStop() {
         ClassBox.getInstance().clearBox();
+        started = false;
     }
 
     /**

@@ -16,6 +16,8 @@
 
 package com.jfinal.plugin.activerecord;
 
+import com.google.common.collect.Maps;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,7 +27,6 @@ import java.util.Map;
 /**
  * DbKit
  */
-@SuppressWarnings("rawtypes")
 public final class DbKit {
 	
 	/**
@@ -39,8 +40,8 @@ public final class DbKit {
 	 */
 	static Config brokenConfig = new Config();
 	
-	private static Map<Class<? extends Model>, Config> modelToConfig = new HashMap<Class<? extends Model>, Config>();
-	private static Map<String, Config> configNameToConfig = new HashMap<String, Config>();
+	private static Map<Class<? extends Model>, Config> modelToConfig = Maps.newHashMap();
+	private static Map<String, Config> configNameToConfig = Maps.newHashMap();
 	
 	static final Object[] NULL_PARA_ARRAY = new Object[0];
 	public static final String MAIN_CONFIG_NAME = "main";

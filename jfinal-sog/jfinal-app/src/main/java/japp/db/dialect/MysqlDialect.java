@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import japp.JApp;
+import japp.StringPool;
 
 import java.util.List;
 import java.util.Map;
@@ -64,40 +65,40 @@ public class MysqlDialect extends Dialect {
 	}
 	
 	public String forModelFindById(Table table, String columns) {
-		StringBuilder sql = new StringBuilder("select ");
-		if (columns.trim().equals("*")) {
+		StringBuilder sql = new StringBuilder("SELECT ");
+		if (columns.trim().equals(StringPool.ASTERISK)) {
 			sql.append(JApp.mode.isDev() ? columns : table.getColumnSelectSql());
 		}
 		else {
-			String[] columnsArray = columns.split(",");
+			String[] columnsArray = columns.split(StringPool.COMMA);
 			for (int i=0; i<columnsArray.length; i++) {
 				if (i > 0)
 					sql.append(", ");
 				sql.append("`").append(columnsArray[i].trim()).append("`");
 			}
 		}
-		sql.append(" from `");
+		sql.append(" FROM `");
 		sql.append(table.getName());
-		sql.append("` where `").append(table.getPrimaryKey()).append("` = ?");
+		sql.append("` WHERE `").append(table.getPrimaryKey()).append("` = ?");
 		return sql.toString();
 	}
 	
 	public String forDbFindById(String tableName, String primaryKey, String columns) {
-		StringBuilder sql = new StringBuilder("select ");
-		if (columns.trim().equals("*")) {
+		StringBuilder sql = new StringBuilder("SELECT ");
+		if (columns.trim().equals(StringPool.ASTERISK)) {
 			sql.append(columns);
 		}
 		else {
-			String[] columnsArray = columns.split(",");
+			String[] columnsArray = columns.split(StringPool.COMMA);
 			for (int i=0; i<columnsArray.length; i++) {
 				if (i > 0)
 					sql.append(", ");
 				sql.append("`").append(columnsArray[i].trim()).append("`");
 			}
 		}
-		sql.append(" from `");
+		sql.append(" FROM `");
 		sql.append(tableName.trim());
-		sql.append("` where `").append(primaryKey).append("` = ?");
+		sql.append("` WHERE `").append(primaryKey).append("` = ?");
 		return sql.toString();
 	}
 	
