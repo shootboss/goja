@@ -6,26 +6,23 @@
 
 package japp.jobs;
 
+import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
 import japp.JApp;
 import japp.Logger;
 import japp.exceptions.JAppException;
 import japp.exceptions.UnexpectedException;
+import japp.init.InitConst;
 import japp.init.ctxbox.ClassBox;
 import japp.init.ctxbox.ClassType;
+import japp.kits.PThreadFactory;
 import japp.libs.Expression;
 import japp.libs.Time;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -33,101 +30,62 @@ import java.util.concurrent.TimeUnit;
 
 public class JobsPlugin implements IPlugin {
 
-    public static ScheduledThreadPoolExecutor executor      = null;
-    public static List<Job>                   scheduledJobs = null;
+    public static ScheduledThreadPoolExecutor executor = null;
+    public static List<Job> scheduledJobs = null;
 
-    @Override
-    public String getStatus() {
-        StringWriter sw = new StringWriter();
-        PrintWriter out = new PrintWriter(sw);
-        if (executor == null) {
-            out.println("Jobs execution pool:");
-            out.println("~~~~~~~~~~~~~~~~~~~");
-            out.println("(not yet started)");
-            return sw.toString();
-        }
-        out.println("Jobs execution pool:");
-        out.println("~~~~~~~~~~~~~~~~~~~");
-        out.println("Pool size: " + executor.getPoolSize());
-        out.println("Active count: " + executor.getActiveCount());
-        out.println("Scheduled task count: " + executor.getTaskCount());
-        out.println("Queue size: " + executor.getQueue().size());
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        if (!scheduledJobs.isEmpty()) {
-            out.println();
-            out.println("Scheduled jobs (" + scheduledJobs.size() + "):");
-            out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            for (Job job : scheduledJobs) {
-                out.print(job.getClass().getName());
-                if (job.getClass().isAnnotationPresent(OnApplicationStart.class) && !(job.getClass().isAnnotationPresent(On.class) || job.getClass().isAnnotationPresent(Every.class))) {
-                    OnApplicationStart appStartAnnotation = job.getClass().getAnnotation(OnApplicationStart.class);
-                    out.print(" run at application start" + (appStartAnnotation.async() ? " (async)" : "") + ".");
-                }
+    public JobsPlugin() {
+        int core = Integer.parseInt(JApp.configuration.getProperty(InitConst.JOB_POOL_SIZE, "10"));
+        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("japp-jobs"), new ThreadPoolExecutor.AbortPolicy());
 
-                if (job.getClass().isAnnotationPresent(On.class)) {
-
-                    String cron = job.getClass().getAnnotation(On.class).value();
-                    if (cron != null && cron.startsWith("cron.")) {
-                        cron = JApp.configuration.getProperty(cron);
-                    }
-                    out.print(" run with cron expression " + cron + ".");
-                }
-                if (job.getClass().isAnnotationPresent(Every.class)) {
-                    out.print(" run every " + job.getClass().getAnnotation(Every.class).value() + ".");
-                }
-                if (job.lastRun > 0) {
-                    out.print(" (last run at " + df.format(new Date(job.lastRun)));
-                    if (job.wasError) {
-                        out.print(" with error)");
-                    } else {
-                        out.print(")");
-                    }
-                } else {
-                    out.print(" (has never run)");
-                }
-                out.println();
-            }
-        }
-        if (!executor.getQueue().isEmpty()) {
-            out.println();
-            out.println("Waiting jobs:");
-            out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            for (Object o : executor.getQueue()) {
-                ScheduledFuture task = (ScheduledFuture) o;
-                out.println(extractUnderlyingCallable((FutureTask) task) + " will run in " + task.getDelay(TimeUnit.SECONDS) + " seconds");
-            }
-        }
-        return sw.toString();
     }
 
-    public static Object extractUnderlyingCallable(FutureTask<?> futureTask) {
+
+    public static <V> void scheduleForCRON(Job<V> job) {
+        if (!job.getClass().isAnnotationPresent(On.class)) {
+            return;
+        }
+        String cron = job.getClass().getAnnotation(On.class).value();
+        if (cron.startsWith("cron.")) {
+            cron = JApp.configuration.getProperty(cron);
+        }
+        cron = Expression.evaluate(cron, cron).toString();
+        if (cron == null || "".equals(cron) || "never".equalsIgnoreCase(cron)) {
+            Logger.info("Skipping job %s, cron expression is not defined", job.getClass().getName());
+            return;
+        }
         try {
-            Field syncField = FutureTask.class.getDeclaredField("sync");
-            syncField.setAccessible(true);
-            Object sync = syncField.get(futureTask);
-            Field callableField = sync.getClass().getDeclaredField("callable");
-            callableField.setAccessible(true);
-            Object callable = callableField.get(sync);
-            if (callable.getClass().getSimpleName().equals("RunnableAdapter")) {
-                Field taskField = callable.getClass().getDeclaredField("task");
-                taskField.setAccessible(true);
-                return taskField.get(callable);
+            Date now = new Date();
+            cron = Expression.evaluate(cron, cron).toString();
+            Time.CronExpression cronExp = new Time.CronExpression(cron);
+            Date nextDate = cronExp.getNextValidTimeAfter(now);
+            if (nextDate == null) {
+                Logger.warn("The cron expression for job %s doesn't have any match in the future, will never be executed", job.getClass().getName());
+                return;
             }
-            return callable;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            if (nextDate.equals(job.nextPlannedExecution)) {
+                // Bug #13: avoid running the job twice for the same time
+                // (happens when we end up running the job a few minutes before the planned time)
+                Date nextInvalid = cronExp.getNextInvalidTimeAfter(nextDate);
+                nextDate = cronExp.getNextValidTimeAfter(nextInvalid);
+            }
+            job.nextPlannedExecution = nextDate;
+            executor.schedule((Callable<V>) job, nextDate.getTime() - now.getTime(), TimeUnit.MILLISECONDS);
+            job.executor = executor;
+        } catch (Exception ex) {
+            throw new UnexpectedException(ex);
         }
     }
 
+
     @Override
-    public void afterApplicationStart() {
-        List<Class<?>> jobs = new ArrayList<Class<?>>();
+    public boolean start() {
+        List<Class<?>> jobs = Lists.newArrayList();
         for (Class clazz : ClassBox.getInstance().getClasses(ClassType.JOB)) {
             if (Job.class.isAssignableFrom(clazz)) {
                 jobs.add(clazz);
             }
         }
-        scheduledJobs = new ArrayList<Job>();
+        scheduledJobs = Lists.newArrayList();
         for (final Class<?> clazz : jobs) {
             // @OnApplicationStart
             if (clazz.isAnnotationPresent(OnApplicationStart.class)) {
@@ -204,54 +162,17 @@ public class JobsPlugin implements IPlugin {
                 }
             }
         }
+
+        return true;
     }
 
     @Override
-    public void onApplicationStart() {
-        int core = Integer.parseInt(Play.configuration.getProperty("play.jobs.pool", "10"));
-        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("jobs"), new ThreadPoolExecutor.AbortPolicy());
-    }
-
-    public static <V> void scheduleForCRON(Job<V> job) {
-        if (!job.getClass().isAnnotationPresent(On.class)) {
-            return;
-        }
-        String cron = job.getClass().getAnnotation(On.class).value();
-        if (cron.startsWith("cron.")) {
-            cron = JApp.configuration.getProperty(cron);
-        }
-        cron = Expression.evaluate(cron, cron).toString();
-        if (cron == null || "".equals(cron) || "never".equalsIgnoreCase(cron)) {
-            Logger.info("Skipping job %s, cron expression is not defined", job.getClass().getName());
-            return;
-        }
-        try {
-            Date now = new Date();
-            cron = Expression.evaluate(cron, cron).toString();
-            Time.CronExpression cronExp = new Time.CronExpression(cron);
-            Date nextDate = cronExp.getNextValidTimeAfter(now);
-            if (nextDate == null) {
-                Logger.warn("The cron expression for job %s doesn't have any match in the future, will never be executed", job.getClass().getName());
-                return;
-            }
-            if (nextDate.equals(job.nextPlannedExecution)) {
-                // Bug #13: avoid running the job twice for the same time
-                // (happens when we end up running the job a few minutes before the planned time)
-                Date nextInvalid = cronExp.getNextInvalidTimeAfter(nextDate);
-                nextDate = cronExp.getNextValidTimeAfter(nextInvalid);
-            }
-            job.nextPlannedExecution = nextDate;
-            executor.schedule((Callable<V>) job, nextDate.getTime() - now.getTime(), TimeUnit.MILLISECONDS);
-            job.executor = executor;
-        } catch (Exception ex) {
-            throw new UnexpectedException(ex);
-        }
-    }
-
-    public void onApplicationStop() {
+    public boolean stop() {
 
         List<Class> jobs = ClassBox.getInstance().getClasses(ClassType.JOB);
-
+        if(scheduledJobs == null){
+            scheduledJobs = Lists.newArrayList();
+        }
         for (final Class clazz : jobs) {
             // @OnApplicationStop
             if (clazz.isAnnotationPresent(OnApplicationStop.class)) {
@@ -280,15 +201,6 @@ public class JobsPlugin implements IPlugin {
 
         executor.shutdownNow();
         executor.getQueue().clear();
-    }
-
-    @Override
-    public boolean start() {
-        return false;
-    }
-
-    @Override
-    public boolean stop() {
-        return false;
+        return true;
     }
 }

@@ -12,9 +12,6 @@ import com.alibaba.druid.wall.WallFilter;
 import com.github.sog.controller.flash.EhCacheFlashManager;
 import com.github.sog.controller.flash.FlashManager;
 import com.github.sog.controller.flash.SessionFlashManager;
-import japp.db.dialect.DB2Dialect;
-import japp.db.dialect.H2Dialect;
-import japp.exceptions.DatabaseException;
 import com.github.sog.interceptor.SystemLogProcessor;
 import com.github.sog.interceptor.autoscan.AutoOnLoadInterceptor;
 import com.github.sog.interceptor.syslog.SysLogInterceptor;
@@ -26,12 +23,9 @@ import com.github.sog.plugin.sqlinxml.SqlInXmlPlugin;
 import com.github.sog.plugin.tablebind.AutoTableBindPlugin;
 import com.github.sog.plugin.tablebind.SimpleNameStyles;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.jfinal.config.Constants;
-import com.jfinal.config.Handlers;
-import com.jfinal.config.Interceptors;
-import com.jfinal.config.JFinalConfig;
-import com.jfinal.config.Plugins;
-import com.jfinal.config.Routes;
+import com.jfinal.config.*;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
@@ -46,16 +40,18 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import freemarker.template.Configuration;
+import japp.db.dialect.DB2Dialect;
+import japp.db.dialect.H2Dialect;
+import japp.exceptions.DatabaseException;
 import japp.init.AppLoadEvent;
 import japp.init.ConfigProperties;
+import japp.init.InitConst;
 import japp.init.ctxbox.ClassBox;
 import japp.init.ctxbox.ClassType;
+import japp.jobs.JobsPlugin;
 import japp.mvc.AutoBindRoutes;
-import japp.mvc.render.ftl.BlockDirective;
-import japp.mvc.render.ftl.ExtendsDirective;
-import japp.mvc.render.ftl.OverrideDirective;
-import japp.mvc.render.ftl.PrettyTimeDirective;
-import japp.mvc.render.ftl.SuperDirective;
+import japp.mvc.render.ftl.*;
+import japp.mvc.render.ftl.shiro.ShiroTags;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
@@ -79,22 +75,27 @@ import static japp.init.InitConst.*;
  */
 public class JApp extends JFinalConfig {
 
-    private static final org.slf4j.Logger logger         = LoggerFactory.getLogger(JApp.class);
-    private static final String           DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JApp.class);
+    private static final String DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
 
     public static boolean initlization = false;
-    public static boolean started      = false;
+    public static boolean started = false;
     public static Properties configuration;
-    public static Mode       mode;
-    public static String     viewPath;
-    public static String     domain;
-    public static boolean    setViewPath;
-    public static String     appName;
-    public static String     appVersion;
+    public static Mode mode;
+    public static String viewPath;
+    public static String domain;
+    public static boolean setViewPath;
+    public static String appName;
+    public static String appVersion;
 
     private static FlashManager _flashManager;
-    private        Routes       _routes;
+    private Routes _routes;
 
+
+    /**
+     * The list of supported locales
+     */
+    public static List<String> langs = Lists.newArrayListWithCapacity(16);
 
     public static File applicationPath = null;
 
@@ -168,8 +169,12 @@ public class JApp extends JFinalConfig {
             plugins.add(new EhCachePlugin());
         }
 
-        if (ConfigProperties.getPropertyToBoolean(JOB, false)) {
+        if (ConfigProperties.getPropertyToBoolean(JOB_QUARTZ, false)) {
             plugins.add(new QuartzPlugin());
+        }
+
+        if (ConfigProperties.getPropertyToBoolean(JOB, false)) {
+            plugins.add(new JobsPlugin());
         }
 
         final String mongo_host = ConfigProperties.getProperty(MONGO_HOST, MongodbPlugin.DEFAULT_HOST);
@@ -244,14 +249,12 @@ public class JApp extends JFinalConfig {
                 }
             }
         }
-
-        ClassBox.getInstance().clearBox();
-
         started = true;
     }
 
     @Override
     public void beforeJFinalStop() {
+        ClassBox.getInstance().clearBox();
         super.beforeJFinalStop();
     }
 
@@ -337,7 +340,7 @@ public class JApp extends JFinalConfig {
     private void setViewType(Constants constants, String view_type) {
         final ViewType viewType = ViewType.valueOf(view_type.toUpperCase());
         if (viewType == ViewType.FREE_MARKER) {
-            constants.setFreeMarkerViewExtension(".ftl");
+            constants.setFreeMarkerViewExtension(".ftl.html");
             setFtlSharedVariable();
         }
         constants.setViewType(viewType);
@@ -355,6 +358,9 @@ public class JApp extends JFinalConfig {
         config.setSharedVariable("super", new SuperDirective());
         // 增加日期美化指令（类似 几分钟前）
         config.setSharedVariable("prettyTime", new PrettyTimeDirective());
+        if (ConfigProperties.getPropertyToBoolean(InitConst.SECURITY, true)) {
+            config.setSharedVariable("shiro", new ShiroTags());
+        }
     }
 
     /**

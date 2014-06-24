@@ -25,6 +25,7 @@ public interface InitConst {
     String SECURITY    = "security";
     String CACHE       = "cache";
     String JOB         = "job";
+    String JOB_QUARTZ         = "job.quartz";
     String FLASH       = "flash";
 
     /* View Configuration. */
@@ -68,4 +69,9 @@ public interface InitConst {
     String REDIS_TESTWHILEIDLE                  = "redis.testwhileidle";
     String REDIS_TESTONRETURN                   = "redis.testonreturn";
     String REDIS_TESTONBORROW                   = "redis.testonborrow";
+
+
+    /* JOB Config */
+    String JOB_POOL_SIZE = "japp.jobs.pool";
+    String POOL = "japp.pool";
 }

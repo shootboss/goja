@@ -12,7 +12,7 @@ import com.google.common.collect.Maps;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Model;
-import org.quartz.Job;
+import japp.jobs.Job;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +54,8 @@ public class ClassBox {
             initClassWithType(cls, ClassType.CONTROLLER);
         } else if (Job.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.JOB);
+        } else if (org.quartz.Job.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.QUARTZ);
         } else if (AppLoadEvent.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.APP);
         } else if (Interceptor.class.isAssignableFrom(cls)) {

@@ -5,16 +5,12 @@
  */
 package com.github.sog.plugin.quartz;
 
+import com.jfinal.plugin.IPlugin;
 import japp.Logger;
-import com.github.sog.annotation.On;
 import japp.init.ctxbox.ClassBox;
 import japp.init.ctxbox.ClassType;
-import com.jfinal.plugin.IPlugin;
-import org.quartz.Job;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import japp.jobs.On;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.Date;
@@ -25,12 +21,9 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
-@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class QuartzPlugin implements IPlugin {
-    private static final String JOB = "job";
 
     private final Scheduler sched;
-    private boolean autoScan = true;
 
     public QuartzPlugin() {
         Scheduler tmp_sched = null;
@@ -45,29 +38,21 @@ public class QuartzPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.JOB);
+        List<Class> jobClasses = ClassBox.getInstance().getClasses(ClassType.QUARTZ);
         if (jobClasses != null && !jobClasses.isEmpty()) {
             On on;
             for (Class jobClass : jobClasses) {
                 on = (On) jobClass.getAnnotation(On.class);
-                if (on == null) {
-                    if (!autoScan) {
-                        continue;
-                    }
-                    Logger.warn("the job class [" + jobClass + "] not config on annotion!");
-                } else {
-                    if (!on.enabled()) {
-                        continue;
-                    }
+                if (on != null) {
                     String jobCronExp = on.value();
-                    addJob(jobClass, jobCronExp, on.name());
+                    addJob(jobClass, jobCronExp, jobClass.getName() + ".job");
                 }
             }
         }
         return true;
     }
 
-    private void addJob(Class<Job> jobClass, String jobCronExp, String jobName) {
+    private void addJob(Class<? extends Job> jobClass, String jobCronExp, String jobName) {
         JobDetail job = newJob(jobClass)
                 .withIdentity(jobName, jobName + "group")
                 .build();

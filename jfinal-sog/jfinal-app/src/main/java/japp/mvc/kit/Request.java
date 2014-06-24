@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -29,7 +32,36 @@ import java.net.URL;
  */
 public class Request {
 
+    public static List<String> acceptLanguage(HttpServletRequest request) {
 
+        final Pattern qpattern = Pattern.compile("q=([0-9\\.]+)");
+        final String acceptLanguage = request.getHeader("accept-language");
+        if (Strings.isNullOrEmpty(acceptLanguage)) {
+            return Collections.emptyList();
+        }
+        List<String> languages = Arrays.asList(acceptLanguage.split(","));
+        Collections.sort(languages, new Comparator<String>() {
+
+            public int compare(String lang1, String lang2) {
+                double q1 = 1.0;
+                double q2 = 1.0;
+                Matcher m1 = qpattern.matcher(lang1);
+                Matcher m2 = qpattern.matcher(lang2);
+                if (m1.find()) {
+                    q1 = Double.parseDouble(m1.group(1));
+                }
+                if (m2.find()) {
+                    q2 = Double.parseDouble(m2.group(1));
+                }
+                return (int) (q2 - q1);
+            }
+        });
+        List<String> result = new ArrayList<String>(10);
+        for (String lang : languages) {
+            result.add(lang.trim().split(";")[0]);
+        }
+        return result;
+    }
 
     /**
      * 获取客户端IP地址，此方法用在proxy环境中
@@ -190,7 +222,8 @@ public class Request {
             int ipd = Integer.parseInt(ips[3]);
             return ipa >= 0 && ipa <= 255 && ipb >= 0 && ipb <= 255 && ipc >= 0
                     && ipc <= 255 && ipd >= 0 && ipd <= 255;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return false;
     }
 

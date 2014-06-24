@@ -60,12 +60,12 @@ public abstract class JFinalConfig {
 	/**
 	 * Call back after JFinal start
 	 */
-	public void afterJFinalStart(){};
+	public void afterJFinalStart(){}
 	
 	/**
 	 * Call back before JFinal stop
 	 */
-	public void beforeJFinalStop(){};
+	public void beforeJFinalStop(){}
 	
 	private Properties properties;
 	

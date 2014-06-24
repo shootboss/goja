@@ -43,4 +43,8 @@ public enum ClassType {
      * The System Event.
      */
     EVENT,
+    /**
+     * THE Quartz job class.
+     */
+    QUARTZ
 }
