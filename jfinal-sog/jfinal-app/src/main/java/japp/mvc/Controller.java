@@ -16,11 +16,8 @@ import japp.kits.Freemarkers;
 import japp.mvc.datatables.core.DataSet;
 import japp.mvc.datatables.core.DatatablesCriterias;
 import japp.mvc.datatables.core.DatatablesResponse;
-import japp.mvc.render.BadRequest;
-import japp.mvc.render.CaptchaRender;
-import japp.mvc.render.FreeMarkerXMLRender;
-import japp.mvc.render.JxlsRender;
-import japp.mvc.render.NotModified;
+import japp.mvc.kit.Request;
+import japp.mvc.render.*;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -66,7 +63,7 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     protected static void renderExcel(String templateFile, Map<String, Object> datas) {
-        JxlsRender.me(templateFile).beans(datas).render();
+        (new JxlsRender(templateFile).beans(datas)).render();
     }
 
     @Override
@@ -236,6 +233,15 @@ public class Controller extends com.jfinal.core.Controller {
             flashflag = false;
         }
         super.redirect(url, withQueryString);
+    }
+
+    /**
+     * The Request is ajax with return <code>true</code>.
+     *
+     * @return true the request is ajax request.
+     */
+    protected boolean isAjaxRequest() {
+        return Request.ajax(getRequest());
     }
 
     /**

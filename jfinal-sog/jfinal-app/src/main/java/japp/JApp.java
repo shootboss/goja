@@ -234,7 +234,6 @@ public class JApp extends JFinalConfig {
 
     @Override
     public void afterJFinalStart() {
-        super.afterJFinalStart();
         List<Class> appCliasses = ClassBox.getInstance().getClasses(ClassType.APP);
         if (appCliasses != null && !appCliasses.isEmpty()) {
             for (Class appCliass : appCliasses) {
@@ -255,7 +254,6 @@ public class JApp extends JFinalConfig {
     @Override
     public void beforeJFinalStop() {
         ClassBox.getInstance().clearBox();
-        super.beforeJFinalStop();
     }
 
     /**

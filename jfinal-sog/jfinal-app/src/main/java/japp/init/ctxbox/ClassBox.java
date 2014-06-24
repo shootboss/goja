@@ -6,6 +6,8 @@
 
 package japp.init.ctxbox;
 
+import com.jfinal.handler.Handler;
+import com.jfinal.plugin.IPlugin;
 import japp.init.AppLoadEvent;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -60,8 +62,10 @@ public class ClassBox {
             initClassWithType(cls, ClassType.APP);
         } else if (Interceptor.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.AOP);
-        } else {
-            //ignore
+        } else if (IPlugin.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.PLUGIN);
+        }else if (Handler.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.HANDLER);
         }
     }
 
