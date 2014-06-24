@@ -15,6 +15,7 @@ import com.github.sog.controller.flash.SessionFlashManager;
 import com.github.sog.interceptor.SystemLogProcessor;
 import com.github.sog.interceptor.autoscan.AutoOnLoadInterceptor;
 import com.github.sog.interceptor.syslog.SysLogInterceptor;
+import com.github.sog.kit.common.Reflect;
 import com.github.sog.plugin.monogodb.MongodbPlugin;
 import com.github.sog.plugin.quartz.QuartzPlugin;
 import com.github.sog.plugin.redis.JedisPlugin;
@@ -40,6 +41,8 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import freemarker.template.Configuration;
+import japp.annotation.HandlerBind;
+import japp.annotation.PluginBind;
 import japp.db.dialect.DB2Dialect;
 import japp.db.dialect.H2Dialect;
 import japp.exceptions.DatabaseException;
@@ -195,6 +198,23 @@ public class JApp extends JFinalConfig {
             plugins.add(jedis);
         }
 
+        final List<Class> plugins_clses = ClassBox.getInstance().getClasses(ClassType.PLUGIN);
+        if (plugins_clses != null && !plugins_clses.isEmpty()) {
+            PluginBind pluginBind;
+            for (Class plugin : plugins_clses) {
+                pluginBind = (PluginBind) plugin.getAnnotation(PluginBind.class);
+                if (pluginBind != null) {
+                    try {
+                        plugins.add((com.jfinal.plugin.IPlugin) plugin.newInstance());
+                    } catch (InstantiationException e) {
+                        Logger.error("The plugin instance is error!", e);
+                    } catch (IllegalAccessException e) {
+                        Logger.error("The plugin instance is error!", e);
+                    }
+                }
+            }
+        }
+
     }
 
     @Override
@@ -230,6 +250,23 @@ public class JApp extends JFinalConfig {
         handlers.add(new ContextPathHandler("ctx"));
 
         handlers.add(dvh);
+
+        final List<Class> handler_clses = ClassBox.getInstance().getClasses(ClassType.HANDLER);
+        if (handler_clses != null && !handler_clses.isEmpty()) {
+            HandlerBind handlerBind;
+            for (Class handler : handler_clses) {
+                handlerBind = (HandlerBind) handler.getAnnotation(HandlerBind.class);
+                if (handlerBind != null) {
+                    try {
+                        handlers.add((com.jfinal.handler.Handler) handler.newInstance());
+                    } catch (InstantiationException e) {
+                        Logger.error("The Handler instance is error!", e);
+                    } catch (IllegalAccessException e) {
+                        Logger.error("The Handler instance is error!", e);
+                    }
+                }
+            }
+        }
     }
 
     @Override

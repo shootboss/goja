@@ -145,7 +145,7 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
         try {
             if (init()) {
                 before();
-                V result = null;
+                V result;
 
                 try {
                     lastException = null;

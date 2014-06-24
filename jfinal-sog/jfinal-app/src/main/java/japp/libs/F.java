@@ -1,23 +1,11 @@
 package japp.libs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 
+@SuppressWarnings("UnusedDeclaration")
 public class F {
 
     public static None<Object> None = new None<Object>();
@@ -39,19 +27,19 @@ public class F {
     }
 
     public static <A> Some<A> Some(A a) {
-        return new Some(a);
+        return new Some<A>(a);
     }
 
     public static <A, B> Tuple<A, B> Tuple(A a, B b) {
-        return new Tuple(a, b);
+        return new Tuple<A, B>(a, b);
     }
 
     public static <A, B> T2<A, B> T2(A a, B b) {
-        return new T2(a, b);
+        return new T2<A, B>(a, b);
     }
 
     public static <A, B, C> T3<A, B, C> T3(A a, B b, C c) {
-        return new T3(a, b, c);
+        return new T3<A, B, C>(a, b, c);
     }
 
     public static <A, B, C, D> T4<A, B, C, D> T4(A a, B b, C c, D d) {
@@ -72,14 +60,15 @@ public class F {
         void invoke(T result);
     }
 
+    @SuppressWarnings({"UnusedDeclaration", "unchecked", "RedundantCast"})
     public static class Promise<V> implements Future<V>, F.Action<V> {
 
         final CountDownLatch taskLock = new CountDownLatch(1);
         boolean cancelled = false;
         List<F.Action<Promise<V>>> callbacks = new ArrayList<F.Action<Promise<V>>>();
-        boolean                    invoked   = false;
-        V                          result    = null;
-        Throwable                  exception = null;
+        boolean invoked = false;
+        V result = null;
+        Throwable exception = null;
 
         public static <T> Promise<List<T>> waitAll(final Promise<T>... promises) {
             return waitAll(Arrays.asList(promises));
@@ -448,7 +437,7 @@ public class F {
 
         static Timer timer = new Timer("F.Timeout", true);
         final public String token;
-        final public long   delay;
+        final public long delay;
 
         public Timeout(String delay) {
             this(Time.parseDuration(delay) * 1000);
@@ -485,8 +474,8 @@ public class F {
     public static class EventStream<T> {
 
         final int bufferSize;
-        final ConcurrentLinkedQueue<T> events  = new ConcurrentLinkedQueue<T>();
-        final List<Promise<T>>         waiting = Collections.synchronizedList(new ArrayList<Promise<T>>());
+        final ConcurrentLinkedQueue<T> events = new ConcurrentLinkedQueue<T>();
+        final List<Promise<T>> waiting = Collections.synchronizedList(new ArrayList<Promise<T>>());
 
         public EventStream() {
             this.bufferSize = 100;
@@ -555,7 +544,7 @@ public class F {
     public static class IndexedEvent<M> {
 
         private static final AtomicLong idGenerator = new AtomicLong(1);
-        final public M    data;
+        final public M data;
         final public Long id;
 
         public IndexedEvent(M data) {
@@ -576,9 +565,9 @@ public class F {
     public static class ArchivedEventStream<T> {
 
         final int archiveSize;
-        final ConcurrentLinkedQueue<IndexedEvent<T>> events       = new ConcurrentLinkedQueue<IndexedEvent<T>>();
-        final List<FilterTask<T>>                    waiting      = Collections.synchronizedList(new ArrayList<FilterTask<T>>());
-        final List<EventStream<T>>                   pipedStreams = new ArrayList<EventStream<T>>();
+        final ConcurrentLinkedQueue<IndexedEvent<T>> events = new ConcurrentLinkedQueue<IndexedEvent<T>>();
+        final List<FilterTask<T>> waiting = Collections.synchronizedList(new ArrayList<FilterTask<T>>());
+        final List<EventStream<T>> pipedStreams = new ArrayList<EventStream<T>>();
 
         public ArchivedEventStream(int archiveSize) {
             this.archiveSize = archiveSize;
@@ -622,7 +611,7 @@ public class F {
             if (events.size() >= archiveSize) {
                 events.poll();
             }
-            events.offer(new IndexedEvent(event));
+            events.offer(new IndexedEvent<T>(event));
             notifyNewEvent();
             for (EventStream<T> eventStream : pipedStreams) {
                 eventStream.publish(event);
@@ -731,6 +720,7 @@ public class F {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static class Either<A, B> {
 
         final public Option<A> _1;
@@ -953,6 +943,7 @@ public class F {
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static abstract class Matcher<T, R> {
 
         public static Matcher<Object, String> String = new Matcher<Object, String>() {
