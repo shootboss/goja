@@ -15,6 +15,7 @@ import com.github.sog.controller.flash.SessionFlashManager;
 import com.github.sog.interceptor.SystemLogProcessor;
 import com.github.sog.interceptor.autoscan.AutoOnLoadInterceptor;
 import com.github.sog.interceptor.syslog.SysLogInterceptor;
+import com.github.sog.kit.JfinalKit;
 import com.github.sog.kit.common.Reflect;
 import com.github.sog.plugin.monogodb.MongodbPlugin;
 import com.github.sog.plugin.quartz.QuartzPlugin;
@@ -285,6 +286,7 @@ public class JApp extends JFinalConfig {
                 }
             }
         }
+        JfinalKit.init();
         started = true;
     }
 
