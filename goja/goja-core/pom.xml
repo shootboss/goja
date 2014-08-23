@@ -21,6 +21,11 @@
             <artifactId>goja-jfinal</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-jcseg</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.activation</groupId>

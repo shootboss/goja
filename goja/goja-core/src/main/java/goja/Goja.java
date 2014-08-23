@@ -46,6 +46,7 @@ import goja.app.mvc.render.ftl.OverrideDirective;
 import goja.app.mvc.render.ftl.PrettyTimeDirective;
 import goja.app.mvc.render.ftl.SuperDirective;
 import goja.app.mvc.render.ftl.shiro.ShiroTags;
+import goja.app.plugin.index.IndexPlugin;
 import goja.app.plugin.monogodb.MongodbPlugin;
 import goja.app.plugin.quartz.QuartzPlugin;
 import goja.app.plugin.redis.JedisPlugin;
@@ -81,6 +82,7 @@ import static goja.init.InitConst.DB_URL;
 import static goja.init.InitConst.DB_USERNAME;
 import static goja.init.InitConst.DEV_MODE;
 import static goja.init.InitConst.DOMAIN;
+import static goja.init.InitConst.INDEX_PATH;
 import static goja.init.InitConst.JOB;
 import static goja.init.InitConst.JOB_QUARTZ;
 import static goja.init.InitConst.MONGO_DB;
@@ -199,6 +201,10 @@ public class Goja extends JFinalConfig {
 
         if (ConfigProperties.getPropertyToBoolean(JOB, false)) {
             plugins.add(new JobsPlugin());
+        }
+
+        if( !Strings.isNullOrEmpty(ConfigProperties.getProperty(INDEX_PATH))){
+            plugins.add(new IndexPlugin());
         }
 
         final String mongo_host = ConfigProperties.getProperty(MONGO_HOST, MongodbPlugin.DEFAULT_HOST);

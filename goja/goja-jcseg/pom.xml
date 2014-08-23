@@ -18,6 +18,57 @@
     </parent>
 
     <artifactId>goja-jcseg</artifactId>
+    <url>http://code.google.com/p/jcseg/</url>
+    <description>Lightweight open source chinese tokenizer with lucene and solr support.</description>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
+    <organization>
+        <url>http://www.lionsoul.org/</url>
+        <name>lionsoul</name>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>lionsoul</id>
+            <name>chenxin</name>
+            <email>chenxin619315@gmail.com</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <url>http://code.google.com/p/jcseg/issues</url>
+        <system>google code issues</system>
+    </issueManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+    </dependencies>
 </project>

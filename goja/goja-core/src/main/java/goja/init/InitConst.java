@@ -73,4 +73,7 @@ public interface InitConst {
     /* JOB Config */
     String JOB_POOL_SIZE = "japp.jobs.pool";
     String POOL          = "japp.pool";
+
+    String INDEX_PATH       = "index.path";
+    String INDEX_JCSEG_PATH = "index.jcseg.path";
 }
