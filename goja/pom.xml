@@ -44,12 +44,6 @@
         <url>https://github.com/sogyf/goja/issues</url>
     </issueManagement>
 
-    <modules>
-        <module>goja-jfinal</module>
-        <module>goja-core</module>
-        <module>goja-uc</module>
-        <module>goja-wxchat</module>
-    </modules>
 
 
     <properties>
@@ -107,6 +101,13 @@
         <jxls-core.version>1.0.5</jxls-core.version>
     </properties>
 
+    <modules>
+        <module>goja-jfinal</module>
+        <module>goja-core</module>
+        <module>goja-uc</module>
+        <module>goja-wxchat</module>
+        <module>goja-jcseg</module>
+    </modules>
     <build>
         <finalName>goja</finalName>
 

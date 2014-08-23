@@ -6,7 +6,7 @@
 
 package goja.libs;
 
-import goja.StringPool;
+import goja.app.StringPool;
 import goja.exceptions.UnexpectedException;
 import goja.kits.OrderSafeProperties;
 import org.apache.commons.io.IOUtils;

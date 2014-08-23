@@ -9,7 +9,7 @@ package goja.i18n;
 import com.google.common.base.Strings;
 import goja.Goja;
 import goja.Logger;
-import goja.mvc.kit.Request;
+import goja.app.mvc.kit.Request;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

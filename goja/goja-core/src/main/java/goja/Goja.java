@@ -9,24 +9,14 @@ package goja;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
-import goja.mvc.flash.EhCacheFlashManager;
-import goja.mvc.flash.FlashManager;
-import goja.mvc.flash.SessionFlashManager;
-import goja.interceptor.SystemLogProcessor;
-import goja.interceptor.autoscan.AutoOnLoadInterceptor;
-import goja.interceptor.syslog.SysLogInterceptor;
-import goja.kits.JfinalKit;
-import goja.plugin.monogodb.MongodbPlugin;
-import goja.plugin.quartz.QuartzPlugin;
-import goja.plugin.redis.JedisPlugin;
-import goja.plugin.shiro.ShiroPlugin;
-import goja.plugin.sqlinxml.SqlInXmlPlugin;
-import goja.plugin.tablebind.AutoTableBindPlugin;
-import goja.plugin.tablebind.SimpleNameStyles;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.jfinal.config.Constants;
-import com.jfinal.config.*;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
@@ -43,8 +33,26 @@ import com.jfinal.render.ViewType;
 import freemarker.template.Configuration;
 import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
-import goja.db.dialect.DB2Dialect;
-import goja.db.dialect.H2Dialect;
+import goja.app.StringPool;
+import goja.app.db.dialect.DB2Dialect;
+import goja.app.db.dialect.H2Dialect;
+import goja.app.interceptor.SystemLogProcessor;
+import goja.app.interceptor.autoscan.AutoOnLoadInterceptor;
+import goja.app.interceptor.syslog.SysLogInterceptor;
+import goja.app.mvc.AutoBindRoutes;
+import goja.app.mvc.render.ftl.BlockDirective;
+import goja.app.mvc.render.ftl.ExtendsDirective;
+import goja.app.mvc.render.ftl.OverrideDirective;
+import goja.app.mvc.render.ftl.PrettyTimeDirective;
+import goja.app.mvc.render.ftl.SuperDirective;
+import goja.app.mvc.render.ftl.shiro.ShiroTags;
+import goja.app.plugin.monogodb.MongodbPlugin;
+import goja.app.plugin.quartz.QuartzPlugin;
+import goja.app.plugin.redis.JedisPlugin;
+import goja.app.plugin.shiro.ShiroPlugin;
+import goja.app.plugin.sqlinxml.SqlInXmlPlugin;
+import goja.app.plugin.tablebind.AutoTableBindPlugin;
+import goja.app.plugin.tablebind.SimpleNameStyles;
 import goja.exceptions.DatabaseException;
 import goja.init.AppLoadEvent;
 import goja.init.ConfigProperties;
@@ -52,9 +60,7 @@ import goja.init.InitConst;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
 import goja.jobs.JobsPlugin;
-import goja.mvc.AutoBindRoutes;
-import goja.mvc.render.ftl.*;
-import goja.mvc.render.ftl.shiro.ShiroTags;
+import goja.kits.JfinalKit;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +71,31 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-import static goja.init.InitConst.*;
+import static goja.init.InitConst.APP;
+import static goja.init.InitConst.APP_VERSION;
+import static goja.init.InitConst.CACHE;
+import static goja.init.InitConst.DB_PASSWORD;
+import static goja.init.InitConst.DB_SQLINXML;
+import static goja.init.InitConst.DB_STAT_VIEW;
+import static goja.init.InitConst.DB_URL;
+import static goja.init.InitConst.DB_USERNAME;
+import static goja.init.InitConst.DEV_MODE;
+import static goja.init.InitConst.DOMAIN;
+import static goja.init.InitConst.JOB;
+import static goja.init.InitConst.JOB_QUARTZ;
+import static goja.init.InitConst.MONGO_DB;
+import static goja.init.InitConst.MONGO_HOST;
+import static goja.init.InitConst.MONGO_MORIPH;
+import static goja.init.InitConst.MONGO_MORIPH_PKGS;
+import static goja.init.InitConst.MONGO_PORT;
+import static goja.init.InitConst.MONGO_URL;
+import static goja.init.InitConst.REDIS_HOST;
+import static goja.init.InitConst.REDIS_PORT;
+import static goja.init.InitConst.SECURITY;
+import static goja.init.InitConst.VIEW_404;
+import static goja.init.InitConst.VIEW_500;
+import static goja.init.InitConst.VIEW_PATH;
+import static goja.init.InitConst.VIEW_TYPE;
 
 /**
  * <p>
@@ -79,19 +109,19 @@ import static goja.init.InitConst.*;
 public class Goja extends JFinalConfig {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Goja.class);
+
     private static final String DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
 
     public static boolean initlization = false;
-    public static boolean started = false;
+    public static boolean started      = false;
     public static Properties configuration;
-    public static Mode mode;
-    public static String viewPath;
-    public static String domain;
-    public static boolean setViewPath;
-    public static String appName;
-    public static String appVersion;
+    public static Mode       mode;
+    public static String     viewPath;
+    public static String     domain;
+    public static boolean    setViewPath;
+    public static String     appName;
+    public static String     appVersion;
 
-    private static FlashManager _flashManager;
     private Routes _routes;
 
 
@@ -102,12 +132,6 @@ public class Goja extends JFinalConfig {
 
     public static File applicationPath = null;
 
-    public static FlashManager flashManager() {
-        if (_flashManager == null) {
-            _flashManager = new SessionFlashManager();
-        }
-        return _flashManager;
-    }
 
     @Override
     public void configConstant(Constants constants) {
@@ -123,7 +147,7 @@ public class Goja extends JFinalConfig {
         mode = dev_mode ? Mode.DEV : Mode.PROD;
         constants.setDevMode(dev_mode);
 
-        viewPath = ConfigProperties.getProperty(VIEW_PATH, "/WEB-INF/views/");
+        viewPath = ConfigProperties.getProperty(VIEW_PATH, File.separator + "WEB-INF" + File.separator + "views" + File.separator);
         if (!StrKit.isBlank(viewPath)) {
             setViewPath = true;
             constants.setBaseViewPath(viewPath);
@@ -135,9 +159,6 @@ public class Goja extends JFinalConfig {
         Logger.init();
 
         domain = ConfigProperties.getProperty(DOMAIN, DEFAULT_DOMAIN);
-        String flash = ConfigProperties.getProperty(FLASH, "session");
-        _flashManager = StringUtils.equals("session", flash) ? new SessionFlashManager()
-                : new EhCacheFlashManager("flash_cache_val");
         String view_type = ConfigProperties.getProperty(VIEW_TYPE);
         if (!StrKit.isBlank(view_type)) {
             setViewType(constants, view_type);

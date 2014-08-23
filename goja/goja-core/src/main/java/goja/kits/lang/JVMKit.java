@@ -1,7 +1,7 @@
 package goja.kits.lang;
 
 import goja.Logger;
-import goja.StringPool;
+import goja.app.StringPool;
 import com.google.common.collect.Lists;
 
 import java.io.File;

@@ -6,7 +6,7 @@
 
 package goja.kits.validator;
 
-import goja.StringPool;
+import goja.app.StringPool;
 import com.google.common.base.Strings;
 
 import java.io.UnsupportedEncodingException;

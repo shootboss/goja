@@ -25,8 +25,7 @@ public interface InitConst {
     String SECURITY    = "security";
     String CACHE       = "cache";
     String JOB         = "job";
-    String JOB_QUARTZ         = "job.quartz";
-    String FLASH       = "flash";
+    String JOB_QUARTZ  = "job.quartz";
 
     /* View Configuration. */
     String VIEW_PATH = "view.path";
@@ -44,7 +43,7 @@ public interface InitConst {
 
     /* Logging Configuration. */
     String LOGGER_LEVEL = "logger";
-    String LOGGER_PATH = "app.log.path";
+    String LOGGER_PATH  = "app.log.path";
 
 
     /* MongoDB Configuration */
@@ -73,5 +72,5 @@ public interface InitConst {
 
     /* JOB Config */
     String JOB_POOL_SIZE = "japp.jobs.pool";
-    String POOL = "japp.pool";
+    String POOL          = "japp.pool";
 }

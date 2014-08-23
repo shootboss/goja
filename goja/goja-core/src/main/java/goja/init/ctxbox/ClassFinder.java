@@ -6,7 +6,7 @@
 
 package goja.init.ctxbox;
 
-import com.github.sog.config.StringPool;
+import goja.app.StringPool;
 import goja.kits.common.Reflect;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;

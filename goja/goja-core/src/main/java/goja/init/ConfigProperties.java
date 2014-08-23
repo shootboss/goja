@@ -2,7 +2,7 @@ package goja.init;
 
 import goja.kits.io.ResourceKit;
 import com.google.common.collect.Lists;
-import goja.StringPool;
+import goja.app.StringPool;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

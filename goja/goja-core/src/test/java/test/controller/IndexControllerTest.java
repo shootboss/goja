@@ -7,7 +7,7 @@
 package test.controller;
 
 import goja.Goja;
-import goja.test.ControllerTestCase;
+import goja.app.test.ControllerTestCase;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

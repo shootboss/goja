@@ -5,7 +5,7 @@
  */
 package goja.kits.io;
 
-import goja.StringPool;
+import goja.app.StringPool;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
 import com.google.common.io.ByteSource;

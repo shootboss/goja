@@ -6,7 +6,7 @@
 
 package goja.libs;
 
-import com.github.sog.config.StringPool;
+import goja.app.StringPool;
 import goja.exceptions.UnexpectedException;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;

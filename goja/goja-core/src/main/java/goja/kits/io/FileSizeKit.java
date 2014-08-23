@@ -1,6 +1,7 @@
 package goja.kits.io;
 
-import com.github.sog.config.StringPool;
+
+import goja.app.StringPool;
 
 import java.text.DecimalFormat;
 

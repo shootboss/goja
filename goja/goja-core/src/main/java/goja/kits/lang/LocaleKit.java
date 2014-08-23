@@ -6,8 +6,8 @@
 
 package goja.kits.lang;
 
-import com.github.sog.config.StringPool;
 import com.google.common.collect.Maps;
+import goja.app.StringPool;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;

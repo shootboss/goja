@@ -6,7 +6,8 @@
 
 package goja.kits.lang;
 
-import com.github.sog.libs.AppFunc;
+
+import goja.app.Func;
 
 import java.lang.reflect.Array;
 
@@ -60,7 +61,7 @@ public class ArraysKit {
      */
     public static String[] join(String[]... arrays) {
         if (arrays.length == 0) {
-            return AppFunc.EMPTY_ARRAY;
+            return Func.EMPTY_ARRAY;
         }
         if (arrays.length == 1) {
             return arrays[0];

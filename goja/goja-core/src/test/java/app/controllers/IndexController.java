@@ -9,8 +9,8 @@ package app.controllers;
 import app.module.Task;
 import com.jfinal.core.Controller;
 import goja.Logger;
-import goja.db.filter.Condition;
-import goja.db.filter.Filter;
+import goja.app.db.filter.Condition;
+import goja.app.db.filter.Filter;
 
 /**
  * <p>

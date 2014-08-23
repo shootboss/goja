@@ -6,7 +6,7 @@
 
 package goja.kits.common;
 
-import com.github.sog.config.StringPool;
+import goja.app.StringPool;
 import goja.kits.lang.CharKit;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;

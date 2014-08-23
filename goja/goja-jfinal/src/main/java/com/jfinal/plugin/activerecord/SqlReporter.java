@@ -6,7 +6,9 @@
 
 package com.jfinal.plugin.activerecord;
 
-import japp.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -19,16 +21,13 @@ import java.sql.Connection;
  */
 public class SqlReporter implements InvocationHandler {
 
-    private Connection conn;
-    private static boolean loggerOn = false;
+    private final Connection conn;
+    private static final Logger logger = LoggerFactory.getLogger(SqlReporter.class);
 
     SqlReporter(Connection conn) {
         this.conn = conn;
     }
 
-    public static void setLogger(boolean on) {
-        SqlReporter.loggerOn = on;
-    }
 
     @SuppressWarnings("rawtypes")
     Connection getConnection() {
@@ -39,11 +38,12 @@ public class SqlReporter implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
             if (method.getName().equals("prepareStatement")) {
-                String info = "Sql: " + args[0];
-                if (loggerOn)
-                    Logger.info(info);
-                else
-                    System.out.println(info);
+                if (logger.isDebugEnabled()) {
+
+                    String info = "Sql: " + args[0];
+                    logger.info("The Exec Sql is:  {} , And the params is {}", info, args);
+                }
+
             }
             return method.invoke(conn, args);
         } catch (InvocationTargetException e) {

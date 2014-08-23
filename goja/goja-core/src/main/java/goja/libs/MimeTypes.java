@@ -7,7 +7,7 @@
 package goja.libs;
 
 import goja.Goja;
-import goja.StringPool;
+import goja.app.StringPool;
 import goja.Logger;
 
 import java.io.InputStream;

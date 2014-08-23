@@ -1,6 +1,7 @@
 package goja.kits.encry;
 
-import com.github.sog.config.StringPool;
+
+import goja.app.StringPool;
 
 import java.security.SecureRandom;
 import java.util.UUID;

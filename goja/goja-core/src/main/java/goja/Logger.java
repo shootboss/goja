@@ -9,6 +9,7 @@ package goja;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.status.OnConsoleStatusListener;
 import ch.qos.logback.core.status.StatusManager;
+import goja.app.StringPool;
 import goja.init.InitConst;
 import goja.logging.AppLogConfigurator;
 import org.slf4j.LoggerFactory;

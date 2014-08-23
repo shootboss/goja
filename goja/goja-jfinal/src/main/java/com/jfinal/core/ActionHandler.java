@@ -9,17 +9,20 @@ package com.jfinal.core;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import japp.Logger;
 import com.jfinal.config.Constants;
 import com.jfinal.handler.Handler;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ActionHandler
  */
 final class ActionHandler extends Handler {
+
+    private static final Logger logger = LoggerFactory.getLogger(ActionHandler.class);
 
     private final boolean       devMode;
     private final ActionMapping actionMapping;
@@ -46,9 +49,9 @@ final class ActionHandler extends Handler {
         Action action = actionMapping.getAction(target, urlPara);
 
         if (action == null) {
-            if (Logger.isWarnEnabled()) {
+            if (logger.isWarnEnabled()) {
                 String qs = request.getQueryString();
-                Logger.warn("404 Action Not Found: " + (qs == null ? target : target + "?" + qs));
+                logger.warn("404 Action Not Found: " + (qs == null ? target : target + "?" + qs));
             }
             renderFactory.getErrorRender(404).setContext(request, response).render();
             return;
@@ -82,35 +85,35 @@ final class ActionHandler extends Handler {
 			render.setContext(request, response, action.getViewPath()).render();
 		}
 		catch (RenderException e) {
-			if (Logger.isErrorEnabled()) {
+			if (logger.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                Logger.error(qs == null ? target : target + "?" + qs, e);
+                logger.error(qs == null ? target : target + "?" + qs, e);
 			}
 		}
 		catch (ActionException e) {
 			int errorCode = e.getErrorCode();
-			if (errorCode == 404 && Logger.isWarnEnabled()) {
+			if (errorCode == 404 && logger.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                Logger.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
+                logger.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (errorCode == 401 && Logger.isWarnEnabled()) {
+			else if (errorCode == 401 && logger.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                Logger.warn("401 Unauthorized: " + (qs == null ? target : target + "?" + qs));
+                logger.warn("401 Unauthorized: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (errorCode == 403 && Logger.isWarnEnabled()) {
+			else if (errorCode == 403 && logger.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                Logger.warn("403 Forbidden: " + (qs == null ? target : target + "?" + qs));
+                logger.warn("403 Forbidden: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (Logger.isErrorEnabled()) {
+			else if (logger.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                Logger.error(qs == null ? target : target + "?" + qs, e);
+                logger.error(qs == null ? target : target + "?" + qs, e);
 			}
 			e.getErrorRender().setContext(request, response).render();
 		}
 		catch (Exception e) {
-			if (Logger.isErrorEnabled()) {
+			if (logger.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                Logger.error(qs == null ? target : target + "?" + qs, e);
+                logger.error(qs == null ? target : target + "?" + qs, e);
 			}
 			renderFactory.getErrorRender(500).setContext(request, response).render();
 		}

@@ -1,43 +1,39 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package com.jfinal.plugin.ehcache;
 
 import java.util.List;
 
-import japp.Logger;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CacheKit. Useful tool box for EhCache.
  */
 public class CacheKit {
-	
-	private static volatile CacheManager cacheManager;
+    private static final Logger logger = LoggerFactory.getLogger(CacheKit.class);
 
-	static void init(CacheManager cacheManager) {
-		CacheKit.cacheManager = cacheManager;
-	}
-	
-	public static CacheManager getCacheManager() {
-		return cacheManager;
-	}
-	
-	static Cache getOrAddCache(String cacheName) {
-		Cache cache = cacheManager.getCache(cacheName);
-		if (cache == null) {
-			synchronized(cacheManager) {
-				cache = cacheManager.getCache(cacheName);
-				if (cache == null) {
-                    Logger.warn("Could not find cache config [" + cacheName + "], using default.");
+    private static volatile CacheManager cacheManager;
+
+    static void init(CacheManager cacheManager) {
+        CacheKit.cacheManager = cacheManager;
+    }
+
+    public static CacheManager getCacheManager() {
+        return cacheManager;
+    }
+
+    static Cache getOrAddCache(String cacheName) {
+        Cache cache = cacheManager.getCache(cacheName);
+        if (cache == null) {
+            synchronized (cacheManager) {
+                cache = cacheManager.getCache(cacheName);
+                if (cache == null) {
+                    logger.warn("Could not find cache config [" + cacheName + "], using default.");
 					cacheManager.addCacheIfAbsent(cacheName);
 					cache = cacheManager.getCache(cacheName);
-                    Logger.debug("Cache [" + cacheName + "] started.");
+                    logger.debug("Cache [" + cacheName + "] started.");
 				}
 			}
 		}

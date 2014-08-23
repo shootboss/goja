@@ -6,7 +6,8 @@
 
 package goja.kits.lang;
 
-import com.github.sog.config.StringPool;
+
+import goja.app.StringPool;
 
 import java.math.BigDecimal;
 

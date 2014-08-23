@@ -1,7 +1,7 @@
 package goja.kits.io;
 
-import goja.AppFunc;
-import goja.StringPool;
+import goja.app.Func;
+import goja.app.StringPool;
 import com.google.common.base.Splitter;
 
 import java.io.ByteArrayInputStream;
@@ -301,7 +301,7 @@ public class PropertiesKit {
     public String[] getStringArray(String key) {
         String v = getProperty(key);
         if (v == null) {
-            return AppFunc.EMPTY_ARRAY;
+            return Func.EMPTY_ARRAY;
         } else {
             List<String> splits = Splitter.on(", \t\n\r\f").omitEmptyStrings().trimResults().splitToList(key);
             return splits.toArray(new String[splits.size()]);

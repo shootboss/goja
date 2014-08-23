@@ -1,7 +1,7 @@
 package goja.kits.lang;
 
-import com.github.sog.config.StringPool;
 import com.jfinal.core.Const;
+import goja.app.StringPool;
 
 import java.util.ArrayList;
 import java.util.List;
