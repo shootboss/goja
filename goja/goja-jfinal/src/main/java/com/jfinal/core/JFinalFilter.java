@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package com.jfinal.core;
 
 import com.jfinal.config.Constants;
@@ -59,9 +53,7 @@ public final class JFinalFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
         request.setCharacterEncoding(encoding);
-        // set cookie http only.
-        SessionCookieConfig config = request.getServletContext(). getSessionCookieConfig();
-        config.setHttpOnly(true);
+
 
         String target = request.getRequestURI();
         if (contextPathLength != 0)

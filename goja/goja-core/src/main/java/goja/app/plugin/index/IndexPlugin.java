@@ -34,7 +34,7 @@ public class IndexPlugin implements IPlugin {
             logger.error("the index plugin has error!", e);
             return false;
         }
-        return false;
+        return true;
     }
 
     @Override
