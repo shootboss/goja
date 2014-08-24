@@ -26,10 +26,12 @@ import static goja.init.InitConst.INDEX_PATH;
 public class IndexPlugin implements IPlugin {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(IndexHolder.class);
 
+    protected static IndexHolder holder;
+
     @Override
     public boolean start() {
         try {
-            IndexHolder.init(ConfigProperties.getProperty(INDEX_PATH));
+            holder = IndexHolder.init(ConfigProperties.getProperty(INDEX_PATH));
         } catch (IOException e) {
             logger.error("the index plugin has error!", e);
             return false;

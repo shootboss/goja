@@ -5,18 +5,18 @@
  */
 package goja.app.plugin.sqlinxml;
 
-import goja.app.StringPool;
-import goja.init.ConfigProperties;
-import goja.kits.map.JaxbKit;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
+import goja.Goja;
 import goja.Logger;
+import goja.app.StringPool;
+import goja.init.ConfigProperties;
+import goja.kits.map.JaxbKit;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -73,8 +73,7 @@ public class SqlKit {
         }
         if (Logger.isDebugEnabled())
             Logger.debug("SQL_MAP" + SQL_MAP);
-        final Properties configProps = ConfigProperties.getConfigProps();
-        if (BooleanUtils.toBoolean(configProps.getProperty("dev.mode", StringPool.FALSE))) {
+        if (Goja.mode.isDev()){
             // 启动文件监控
             runWatch();
         }

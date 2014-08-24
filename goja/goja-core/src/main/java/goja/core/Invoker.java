@@ -6,8 +6,6 @@
 
 package goja.core;
 
-import com.jamonapi.Monitor;
-import com.jamonapi.MonitorFactory;
 import goja.Goja;
 import goja.Logger;
 import goja.exceptions.JAppException;
@@ -46,9 +44,6 @@ public class Invoker {
      * @return The future object, to know when the task is completed
      */
     public static Future<?> invoke(final Invocation invocation) {
-        Monitor monitor = MonitorFactory.getMonitor("Invoker queue size", "elmts.");
-        monitor.add(executor.getQueue().size());
-        invocation.waitInQueue = MonitorFactory.start("Waiting for execution");
         return executor.submit(invocation);
     }
 
@@ -59,8 +54,6 @@ public class Invoker {
      * @return The future object, to know when the task is completed
      */
     public static Future<?> invoke(final Invocation invocation, long millis) {
-        Monitor monitor = MonitorFactory.getMonitor("Invocation queue", "elmts.");
-        monitor.add(executor.getQueue().size());
         return executor.schedule(invocation, millis, TimeUnit.MILLISECONDS);
     }
 
@@ -175,11 +168,6 @@ public class Invoker {
     public static abstract class Invocation implements Runnable {
 
         /**
-         * If set, monitor the time the invocation waited in the queue
-         */
-        Monitor waitInQueue;
-
-        /**
          * Override this method
          * @throws java.lang.Exception
          */
@@ -266,9 +254,6 @@ public class Invoker {
          * It's time to execute.
          */
         public void run() {
-            if (waitInQueue != null) {
-                waitInQueue.stop();
-            }
             try {
                 preInit();
                 if (init()) {

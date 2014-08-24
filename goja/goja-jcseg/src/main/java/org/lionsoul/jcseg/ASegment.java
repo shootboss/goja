@@ -150,7 +150,7 @@ public abstract class ASegment implements ISegment
 	/**
 	 * get the current task config instance. <br /> 
 	 * 
-	 * @param	JcsegTaskConfig
+	 * @return 	JcsegTaskConfig
 	 */
 	public JcsegTaskConfig getConfig() 
 	{
@@ -731,7 +731,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param	w
 	 * @param	retfw	Wether to return the fword.
-	 * @param	IWord - the first sub token for the secondary segment.
+	 * @return 	IWord - the first sub token for the secondary segment.
 	 */
 	public IWord enSecondSeg( IWord w, boolean retfw ) 
 	{
@@ -823,10 +823,8 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isCJKChar( int c ) 
 	{
-		if ( Character.getType(c) == Character.OTHER_LETTER ) 
-			return true;
-		return false;
-	}
+        return Character.getType(c) == Character.OTHER_LETTER;
+    }
 	
 	/**
 	 * check the specified char is a basic latin and russia and 
@@ -863,10 +861,8 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isLetterNumber( int c ) 
 	{
-		if ( Character.getType(c) == Character.LETTER_NUMBER ) 
-			return true;
-		return false;
-	}
+        return Character.getType(c) == Character.LETTER_NUMBER;
+    }
 	
 	/**
 	 * check the specified char is other number like '①⑩⑽㈩'
@@ -878,10 +874,8 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isOtherNumber( int c ) 
 	{
-		if ( Character.getType(c) == Character.OTHER_NUMBER ) 
-			return true;
-		return false;
-	}
+        return Character.getType(c) == Character.OTHER_NUMBER;
+    }
 	
 	/**
 	 * match the next CJK word in the dictionary. <br />

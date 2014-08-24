@@ -25,6 +25,7 @@
             <groupId>com.github.sogyf</groupId>
             <artifactId>goja-jcseg</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -44,11 +45,6 @@
             <version>${mail.version}</version>
         </dependency>
         <!-- commons utils and google guava -->
-        <dependency>
-            <groupId>com.jamonapi</groupId>
-            <artifactId>jamon</artifactId>
-            <version>${jamon.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

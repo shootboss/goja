@@ -37,7 +37,7 @@ import goja.app.StringPool;
 import goja.app.db.dialect.DB2Dialect;
 import goja.app.db.dialect.H2Dialect;
 import goja.app.interceptor.SystemLogProcessor;
-import goja.app.interceptor.autoscan.AutoOnLoadInterceptor;
+import goja.init.autoscan.AutoOnLoadInterceptor;
 import goja.app.interceptor.syslog.SysLogInterceptor;
 import goja.app.mvc.AutoBindRoutes;
 import goja.app.mvc.render.ftl.BlockDirective;
@@ -101,7 +101,7 @@ import static goja.init.InitConst.VIEW_TYPE;
 
 /**
  * <p>
- * .
+ * The core of goja.
  * </p>
  *
  * @author sagyf yang

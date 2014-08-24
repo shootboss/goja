@@ -17,7 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +34,7 @@ import java.util.regex.Pattern;
  * @version 1.0 2014-06-01 20:47
  * @since JDK 1.6
  */
-public class Request {
+public abstract class Request {
 
     public static List<String> acceptLanguage(HttpServletRequest request) {
 
@@ -71,6 +75,12 @@ public class Request {
      */
     public static String remoteAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
         if (StringUtils.isNotBlank(ip)) {
             String[] ips = StringUtils.split(ip, ',');
             if (ips != null) {

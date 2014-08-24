@@ -188,7 +188,7 @@ public class SearchHelper {
      * 获取文档对应的对象类
      *
      * @param doc
-     * @return
+     * @return Searchable
      * @throws ClassNotFoundException
      */
     public static Searchable doc2obj(Document doc) {

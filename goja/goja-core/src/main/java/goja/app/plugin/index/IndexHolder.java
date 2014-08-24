@@ -24,7 +24,6 @@ import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.lionsoul.jcseg.analyzer.JcsegAnalyzer4X;
 import org.lionsoul.jcseg.core.JcsegTaskConfig;
 import org.slf4j.Logger;
 
@@ -46,11 +45,26 @@ import java.util.List;
 public class IndexHolder {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(IndexHolder.class);
 
-    private static final JcsegAnalyzer4X ANALYZER  = new JcsegAnalyzer4X(JcsegTaskConfig.COMPLEX_MODE);
-    private final static int             MAX_COUNT = 1000;
+    private static final GojaJcsegAnalyzer4X ANALYZER  = new GojaJcsegAnalyzer4X(JcsegTaskConfig.COMPLEX_MODE);
+    private final static int                 MAX_COUNT = 1000;
     private String indexPath;
 
     private IndexHolder() {
+    }
+
+
+    public static IndexHolder getInstance() {
+        return IndexPlugin.holder;
+    }
+
+    protected IndexHolder(String idx_path) {
+        idx_path = FilenameUtils.normalize(idx_path);
+        File file = new File(idx_path);
+        if (!file.exists() || !file.isDirectory())
+            throw new RuntimeException("the index plugin is erro!, the index directory is not found.");
+        if (!idx_path.endsWith(File.separator))
+            idx_path += File.separator;
+        indexPath = idx_path;
     }
 
     /**
@@ -88,6 +102,7 @@ public class IndexHolder {
 
     /**
      * 多个资料库的搜索
+     *
      * @param objClasses
      * @return
      * @throws IOException
@@ -95,7 +110,7 @@ public class IndexHolder {
     private IndexSearcher getSearchers(List<Class<? extends Searchable>> objClasses) throws IOException {
         IndexReader[] readers = new IndexReader[objClasses.size()];
         int idx = 0;
-        for(Class<? extends Searchable> objClass : objClasses){
+        for (Class<? extends Searchable> objClass : objClasses) {
             FSDirectory dir = FSDirectory.open(new File(indexPath + objClass.getSimpleName()));
             readers[idx++] = DirectoryReader.open(dir);
         }
@@ -104,15 +119,16 @@ public class IndexHolder {
 
     /**
      * 优化索引库
+     *
      * @param objClass
      * @throws IOException
      */
     public void optimize(Class<? extends Searchable> objClass) throws IOException {
         IndexWriter writer = getWriter(objClass);
-        try{
+        try {
             writer.forceMerge(1);
             writer.commit();
-        }finally{
+        } finally {
             writer.close();
             writer = null;
         }
@@ -120,6 +136,7 @@ public class IndexHolder {
 
     /**
      * 多库搜索
+     *
      * @param objClasses
      * @param query
      * @param filter
@@ -136,6 +153,7 @@ public class IndexHolder {
 
     /**
      * 单库搜索
+     *
      * @param objClass
      * @param query
      * @param filter
@@ -149,8 +167,8 @@ public class IndexHolder {
         IndexSearcher searcher = getSearcher(objClass);
         List<Searchable> results = find(searcher, query, filter, sort, page, count);
         List<Long> ids = new ArrayList<Long>();
-        for(Searchable obj : results){
-            if(obj != null)
+        for (Searchable obj : results) {
+            if (obj != null)
                 ids.add(obj.id());
         }
         return ids;
@@ -158,6 +176,7 @@ public class IndexHolder {
 
     /**
      * 多库搜索
+     *
      * @param objClasses
      * @param query
      * @param filter
@@ -171,6 +190,7 @@ public class IndexHolder {
 
     /**
      * 搜索
+     *
      * @param objClass
      * @param query
      * @param filter
@@ -184,6 +204,7 @@ public class IndexHolder {
 
     /**
      * 搜索
+     *
      * @param searcher
      * @param query
      * @param filter
@@ -194,31 +215,31 @@ public class IndexHolder {
      * @throws IOException
      */
     private List<Searchable> find(IndexSearcher searcher, Query query, Filter filter, Sort sort, int page, int count) throws IOException {
-        try{
+        try {
             TopDocs hits = null;
-            if(filter != null && sort != null)
+            if (filter != null && sort != null)
                 hits = searcher.search(query, filter, MAX_COUNT, sort);
-            else if(filter != null)
+            else if (filter != null)
                 hits = searcher.search(query, filter, MAX_COUNT);
-            else if(sort != null)
+            else if (sort != null)
                 hits = searcher.search(query, MAX_COUNT, sort);
             else
                 hits = searcher.search(query, MAX_COUNT);
-            if(hits==null) return null;
+            if (hits == null) return null;
             List<Searchable> results = new ArrayList<Searchable>();
             int nBegin = (page - 1) * count;
             int nEnd = Math.min(nBegin + count, hits.scoreDocs.length);
-            for (int i = nBegin; i < nEnd; i++){
-                ScoreDoc s_doc = (ScoreDoc)hits.scoreDocs[i];
+            for (int i = nBegin; i < nEnd; i++) {
+                ScoreDoc s_doc = (ScoreDoc) hits.scoreDocs[i];
                 Document doc = searcher.doc(s_doc.doc);
                 Searchable obj = SearchHelper.doc2obj(doc);
-                if(obj != null && !results.contains(obj)){
+                if (obj != null && !results.contains(obj)) {
                     results.add(obj);
                 }
             }
             return results;
 
-        }catch(IOException e){
+        } catch (IOException e) {
             logger.error("Unabled to find via query: " + query, e);
         }
         return null;
@@ -226,6 +247,7 @@ public class IndexHolder {
 
     /**
      * 根据查询条件统计搜索结果数
+     *
      * @param searcher
      * @param query
      * @param filter
@@ -233,14 +255,14 @@ public class IndexHolder {
      * @throws IOException
      */
     private int count(IndexSearcher searcher, Query query, Filter filter) throws IOException {
-        try{
+        try {
             TotalHitCountCollector thcc = new TotalHitCountCollector();
-            if(filter != null)
-                searcher.search(query,filter,thcc);
+            if (filter != null)
+                searcher.search(query, filter, thcc);
             else
-                searcher.search(query,thcc);
+                searcher.search(query, thcc);
             return Math.min(MAX_COUNT, thcc.getTotalHits());
-        }catch(IOException e){
+        } catch (IOException e) {
             logger.error("Unabled to find via query: " + query, e);
             return -1;
         }
@@ -248,6 +270,7 @@ public class IndexHolder {
 
     /**
      * 批量添加索引
+     *
      * @param objs
      * @throws IOException
      */
@@ -256,14 +279,14 @@ public class IndexHolder {
             return 0;
         int doc_count = 0;
         IndexWriter writer = getWriter(objs.get(0).getClass());
-        try{
+        try {
             for (Searchable obj : objs) {
                 Document doc = SearchHelper.obj2doc(obj);
                 writer.addDocument(doc);
                 doc_count++;
             }
             writer.commit();
-        }finally{
+        } finally {
             writer.close();
             writer = null;
         }
@@ -272,6 +295,7 @@ public class IndexHolder {
 
     /**
      * 批量删除索引
+     *
      * @param docs
      * @throws IOException
      */
@@ -280,13 +304,13 @@ public class IndexHolder {
             return 0;
         int doc_count = 0;
         IndexWriter writer = getWriter(objs.get(0).getClass());
-        try{
+        try {
             for (Searchable obj : objs) {
                 writer.deleteDocuments(new Term("id", String.valueOf(obj.id())));
                 doc_count++;
             }
             writer.commit();
-        }finally{
+        } finally {
             writer.close();
             writer = null;
         }
@@ -295,6 +319,7 @@ public class IndexHolder {
 
     /**
      * 批量更新索引
+     *
      * @param objs
      * @throws IOException
      */

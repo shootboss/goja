@@ -19,7 +19,8 @@ public class Util {
 		String path = o.getClass().getProtectionDomain()
 					.getCodeSource().getLocation().getFile();
 		File jarFile = new File(path);
-		return jarFile.getParentFile().getAbsolutePath();
+        final File parentFile = jarFile.getParentFile();
+        return parentFile.getParentFile().getAbsolutePath();
 	}
 
 }

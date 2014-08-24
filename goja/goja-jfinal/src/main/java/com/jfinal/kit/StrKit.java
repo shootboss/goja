@@ -20,7 +20,7 @@ package com.jfinal.kit;
  * StrKit.
  */
 public class StrKit {
-	
+
 	/**
 	 * 首字母变小写
 	 */
@@ -45,14 +45,14 @@ public class StrKit {
 	 * 字符串为 null 或者为  "" 时返回 true
 	 */
 	public static boolean isBlank(String str) {
-		return str == null || "".equals(str.trim()) ? true : false;
+		return str == null || "".equals(str.trim());
 	}
 	
 	/**
 	 * 字符串不为 null 而且不为  "" 时返回 true
 	 */
 	public static boolean notBlank(String str) {
-		return str == null || "".equals(str.trim()) ? false : true;
+		return !(str == null || "".equals(str.trim()));
 	}
 	
 	public static boolean notBlank(String... strings) {

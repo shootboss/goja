@@ -6,8 +6,6 @@
 
 package goja.jobs;
 
-import com.jamonapi.Monitor;
-import com.jamonapi.MonitorFactory;
 import goja.Logger;
 import goja.core.Invoker;
 import goja.exceptions.JAppException;
@@ -141,7 +139,6 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
     }
 
     public V call() {
-        Monitor monitor = null;
         try {
             if (init()) {
                 before();
@@ -150,10 +147,7 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
                 try {
                     lastException = null;
                     lastRun = System.currentTimeMillis();
-                    monitor = MonitorFactory.start(getClass().getName() + ".doJob()");
                     result = doJobWithResult();
-                    monitor.stop();
-                    monitor = null;
                     wasError = false;
                 } catch (JAppException e) {
                     throw e;
@@ -167,9 +161,6 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
         } catch (Throwable e) {
             onException(e);
         } finally {
-            if (monitor != null) {
-                monitor.stop();
-            }
             _finally();
         }
         return null;
