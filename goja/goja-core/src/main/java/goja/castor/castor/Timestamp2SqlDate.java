@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 public class Timestamp2SqlDate extends Castor<Timestamp, Date> {
 

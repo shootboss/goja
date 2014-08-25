@@ -3,7 +3,7 @@ package goja.castor.castor;
 
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 public class Object2String extends Castor<Object, String> {
 

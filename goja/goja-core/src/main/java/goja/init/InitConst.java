@@ -19,6 +19,7 @@ public interface InitConst {
     /*App Configurate*/
     String APP         = "app";
     String APP_VERSION = "app.version";
+    String APP_I18N_COOKIE = "app.i18n.cookie";
     String DEV_MODE    = "dev.mode";
     String DEV_SCAN    = "dev.scan";
     String DOMAIN      = "domain";

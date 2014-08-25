@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import com.alibaba.fastjson.JSON;
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 @SuppressWarnings({"rawtypes"})
 public class String2Collection extends Castor<String, Collection> {

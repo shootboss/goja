@@ -8,7 +8,7 @@ package goja.jobs;
 
 import goja.Logger;
 import goja.core.Invoker;
-import goja.exceptions.JAppException;
+import goja.exceptions.GojaException;
 import goja.libs.Time;
 
 import java.util.Date;
@@ -149,7 +149,7 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
                     lastRun = System.currentTimeMillis();
                     result = doJobWithResult();
                     wasError = false;
-                } catch (JAppException e) {
+                } catch (GojaException e) {
                     throw e;
                 } catch (Exception e) {
 

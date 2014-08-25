@@ -8,6 +8,7 @@ package goja.kits.common;
 
 import goja.kits.date.DateProvider;
 import goja.kits.encry.EncodeKit;
+import org.apache.commons.lang3.RandomStringUtils;
 import sun.misc.BASE64Encoder;
 
 import java.security.MessageDigest;
@@ -33,12 +34,10 @@ public class KeyCodeGenKit {
      * @return 授权码
      */
     public static String generateKeyCode(String productSerialNo, String codeKey) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(CommonKit.getLimitLenStr(productSerialNo, 10))
-                .append(CommonKit.getLimitLenStr(codeKey, 5))
-                .append(CommonKit.randomAlphanumeric(5))
-                .append(DateProvider.DEFAULT.getCurrentTimeInMillis());
-        return digestPassword(sb.toString());
+        return digestPassword(CommonKit.getLimitLenStr(productSerialNo, 10)
+                + CommonKit.getLimitLenStr(codeKey, 5)
+                + RandomStringUtils.randomAlphanumeric(5)
+                + DateProvider.DEFAULT.getCurrentTimeInMillis());
     }
 
 

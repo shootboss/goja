@@ -56,7 +56,7 @@ public class ZipKit {
      * Compresses a file into zlib archive.
      */
     public static void zlib(File file) throws IOException {
-        if (file.isDirectory() == true) {
+        if (file.isDirectory()) {
             throw new IOException("Can't zlib folder");
         }
         FileInputStream fis = new FileInputStream(file);
@@ -83,7 +83,7 @@ public class ZipKit {
      * Compresses a file into gzip archive.
      */
     public static void gzip(File file) throws IOException {
-        if (file.isDirectory() == true) {
+        if (file.isDirectory()) {
             throw new IOException("Can't gzip folder");
         }
         FileInputStream fis = new FileInputStream(file);
@@ -183,7 +183,7 @@ public class ZipKit {
             File file = (destDir != null) ? new File(destDir, entryName) : new File(entryName);
             if (entry.isDirectory()) {
                 if (!file.mkdirs()) {
-                    if (file.isDirectory() == false) {
+                    if (!file.isDirectory()) {
                         throw new IOException("Failed to create directory: " + file);
                     }
                 }
@@ -191,7 +191,7 @@ public class ZipKit {
                 File parent = file.getParentFile();
                 if (parent != null && !parent.exists()) {
                     if (!parent.mkdirs()) {
-                        if (file.isDirectory() == false) {
+                        if (!file.isDirectory()) {
                             throw new IOException("Failed to create directory: " + parent);
                         }
                     }

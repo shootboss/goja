@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 import static java.lang.String.*;
 

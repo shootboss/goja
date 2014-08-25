@@ -3,7 +3,7 @@ package goja.castor.castor;
 
 import goja.castor.Castor;
 import goja.castor.Castors;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 import java.lang.reflect.Array;
 

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.kits.common;
+package goja.exceptions;
 
 /**
  * A unchecked wrapper for any of Java's checked reflection exceptions:

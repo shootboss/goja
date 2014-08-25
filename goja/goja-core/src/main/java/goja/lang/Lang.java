@@ -8,7 +8,7 @@ package goja.lang;
 
 import com.google.common.collect.Maps;
 import goja.castor.Castors;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;

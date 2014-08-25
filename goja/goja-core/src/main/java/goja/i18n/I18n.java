@@ -10,6 +10,7 @@ import com.google.common.base.Strings;
 import goja.Goja;
 import goja.Logger;
 import goja.app.mvc.kit.Request;
+import goja.init.InitConst;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ import java.util.Locale;
  * @version 1.0 2014-06-24 22:08
  * @since JDK 1.6
  */
-public class Lang {
+public class I18n {
 
 
     public static ThreadLocal<String> current = new ThreadLocal<String>();
@@ -151,11 +152,12 @@ public class Lang {
      * <li>otherwise, server's locale language is assumed
      * </ol>
      *
-     * @param request
+     * @param request  the Request.
+     * @param response the Response.
      */
     private static void resolvefrom(HttpServletRequest request, HttpServletResponse response) {
         // Check a cookie
-        String cn = Goja.configuration.getProperty("application.lang.cookie", "JAPP_LANG");
+        String cn = Goja.configuration.getProperty(InitConst.APP_I18N_COOKIE, Goja.appName + ".lang");
         final Cookie locale_cookie = Request.getCookie(request, cn);
         if (locale_cookie != null) {
             final String localeFromCookie = locale_cookie.getValue();
@@ -187,6 +189,8 @@ public class Lang {
     }
 
     /**
+     * @param request  the Request.
+     * @param response the Response.
      * @return the default locale if the Locale cannot be found otherwise the locale
      * associated to the current Lang.
      */

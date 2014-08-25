@@ -9,7 +9,7 @@ package goja.exceptions;
 /**
  * Error while sending an email
  */
-public class MailException extends JAppException {
+public class MailException extends GojaException {
 
 
     public MailException(String message) {

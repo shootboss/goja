@@ -7,10 +7,7 @@
 package goja.kits.common;
 
 import goja.app.StringPool;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import java.text.DecimalFormat;
 
 /**
  * <p>
@@ -36,17 +33,6 @@ public class CommonKit {
     }
 
     /**
-     * 生成制定位随机字母和数字
-     *
-     * @param i 位数
-     * @return 指定<code>i</code>的字母或者数字
-     */
-    public static String randomAlphanumeric(int i) {
-        return RandomStringUtils.randomAlphanumeric(i);
-    }
-
-
-    /**
      * 将字符串数字转化为int型数字
      *
      * @param str      被转化字符串
@@ -61,31 +47,6 @@ public class CommonKit {
         }
     }
 
-    /**
-     * 将字符串数字转化为double型数字
-     *
-     * @param str      被转化字符串
-     * @param defValue 转化失败后的默认值
-     * @return double
-     */
-    public static double parseDouble(String str, double defValue) {
-        try {
-            return Double.parseDouble(str);
-        } catch (Exception e) {
-            return defValue;
-        }
-    }
-
-    /**
-     * 格式化double类型值，使得其末尾保留两位小数
-     *
-     * @param value 数值
-     * @return 格式化后的数值
-     */
-    public static String formatDouble(double value) {
-        DecimalFormat df = new DecimalFormat("######0.00");
-        return df.format(value);
-    }
 
     /**
      * 循环删除最后的某个字符，至不是以该字符结尾
@@ -94,7 +55,7 @@ public class CommonKit {
      * @param c     结尾字符
      * @return 截取后的字符串
      */
-    public static String removeEnd(String value, char c) {
+    private static String removeEnd(String value, char c) {
 
         if (StringUtils.isBlank(value)) {
             return StringPool.EMPTY;
@@ -107,7 +68,7 @@ public class CommonKit {
         return ret;
     }
 
-    public static String removeStart(String value, char c) {
+    private static String removeStart(String value, char c) {
         if (StringUtils.isBlank(value)) {
             return StringPool.EMPTY;
         }
@@ -118,11 +79,6 @@ public class CommonKit {
             ret = StringUtils.removeStart(ret, String.valueOf(c));
         }
         return ret;
-    }
-
-    public static String removeFirstAndEnd(String value, char c) {
-        String ret = removeEnd(value, c);
-        return removeStart(ret, c);
     }
 
     /**

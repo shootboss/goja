@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
 import goja.Goja;
 import goja.Logger;
-import goja.exceptions.JAppException;
+import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
 import goja.init.InitConst;
 import goja.init.ctxbox.ClassBox;
@@ -107,8 +107,8 @@ public class JobsPlugin implements IPlugin {
                     } catch (IllegalAccessException e) {
                         throw new UnexpectedException("Job could not be instantiated", e);
                     } catch (Throwable ex) {
-                        if (ex instanceof JAppException) {
-                            throw (JAppException) ex;
+                        if (ex instanceof GojaException) {
+                            throw (GojaException) ex;
                         }
                         throw new UnexpectedException(ex);
                     }
@@ -190,8 +190,8 @@ public class JobsPlugin implements IPlugin {
                 } catch (IllegalAccessException e) {
                     throw new UnexpectedException("Job could not be instantiated", e);
                 } catch (Throwable ex) {
-                    if (ex instanceof JAppException) {
-                        throw (JAppException) ex;
+                    if (ex instanceof GojaException) {
+                        throw (GojaException) ex;
                     }
                     throw new UnexpectedException(ex);
                 }

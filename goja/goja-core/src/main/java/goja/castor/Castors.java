@@ -2,6 +2,7 @@
 package goja.castor;
 
 import goja.castor.castor.*;
+import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
 import goja.lang.Mirror;
 import goja.lang.TypeExtractor;
@@ -183,7 +184,7 @@ public class Castors {
      * @param toType   目标类型
      * @param args     转换时参数。有些 Castor 可能需要这个参数，比如 Array2Map
      * @return 目标对象
-     * @throws FailToCastObjectException 如果没有找到转换器，或者转换失败
+     * @throws goja.exceptions.FailToCastObjectException 如果没有找到转换器，或者转换失败
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <F, T> T cast(Object src,

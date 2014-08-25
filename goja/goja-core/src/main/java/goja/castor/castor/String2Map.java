@@ -6,8 +6,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
-import goja.lang.Lang;
+import goja.exceptions.FailToCastObjectException;
 
 @SuppressWarnings({"rawtypes"})
 public class String2Map extends Castor<String, Map> {

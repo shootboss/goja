@@ -1,8 +1,8 @@
 package goja.kits.io;
 
+import com.google.common.base.Splitter;
 import goja.app.Func;
 import goja.app.StringPool;
-import com.google.common.base.Splitter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -34,8 +33,8 @@ public class PropertiesKit {
     /**
      * 不使用系统属性,这个是默认值
      */
-    public static final int SYSTEM_PROPERTIES_MODE_NEVER = 0;
-    private int systemPropertiesMode = SYSTEM_PROPERTIES_MODE_NEVER;
+    public static final int SYSTEM_PROPERTIES_MODE_NEVER    = 0;
+    private             int systemPropertiesMode            = SYSTEM_PROPERTIES_MODE_NEVER;
     /**
      * 如果在properties中没有找到属性值,则查找系统属性
      */
@@ -275,7 +274,7 @@ public class PropertiesKit {
     }
 
     public Object getClassInstance(String key) throws IllegalArgumentException {
-        String s = (String) getProperty(key);
+        String s = getProperty(key);
         if (s == null || "".equals(s.trim())) {
             throw new IllegalArgumentException("Property " + key + " must be a valid classname  : " + key);
         }
@@ -446,8 +445,7 @@ public class PropertiesKit {
         p.load(inStream);
     }
 
-    public void loadFromXML(InputStream in) throws IOException,
-            InvalidPropertiesFormatException {
+    public void loadFromXML(InputStream in) throws IOException {
         p.loadFromXML(in);
     }
 
@@ -455,7 +453,7 @@ public class PropertiesKit {
         return p.put(key, value);
     }
 
-    public void putAll(Map<? extends Object, ? extends Object> t) {
+    public void putAll(Map<?, ?> t) {
         p.putAll(t);
     }
 

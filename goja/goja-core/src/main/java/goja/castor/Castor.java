@@ -1,6 +1,7 @@
 
 package goja.castor;
 
+import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
 import goja.lang.Mirror;
 

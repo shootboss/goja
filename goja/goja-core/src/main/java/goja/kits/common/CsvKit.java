@@ -22,7 +22,7 @@ import java.util.List;
  * @version 1.0 2014-01-31 17:57
  * @since JDK 1.6
  */
-public class CsvKit {
+public abstract class CsvKit {
 
 
     protected static final char   FIELD_SEPARATOR = ',';

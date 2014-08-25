@@ -5,7 +5,7 @@ import java.lang.reflect.Array;
 
 import com.alibaba.fastjson.JSON;
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
 import goja.lang.Strings;
 

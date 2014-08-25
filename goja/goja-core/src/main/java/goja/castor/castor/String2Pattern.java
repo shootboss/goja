@@ -4,7 +4,7 @@ package goja.castor.castor;
 import java.util.regex.Pattern;
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
 
 public class String2Pattern extends Castor<String, Pattern> {

@@ -8,9 +8,9 @@ package goja.core;
 
 import goja.Goja;
 import goja.Logger;
-import goja.exceptions.JAppException;
+import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
-import goja.i18n.Lang;
+import goja.i18n.I18n;
 import goja.init.InitConst;
 import goja.kits.PThreadFactory;
 import goja.libs.F;
@@ -181,7 +181,7 @@ public class Invoker {
          */
         protected void preInit() {
             // clear language for this request - we're resolving it later when it is needed
-            Lang.clear();
+            I18n.clear();
         }
 
         /**
@@ -225,8 +225,8 @@ public class Invoker {
          * Things to do if the Invocation code thrown an exception
          */
         public void onException(Throwable e) {
-            if (e instanceof JAppException) {
-                throw (JAppException) e;
+            if (e instanceof GojaException) {
+                throw (GojaException) e;
             }
             throw new UnexpectedException(e);
         }
@@ -311,7 +311,7 @@ public class Invoker {
      * Throwable to indicate that the request must be suspended
      */
     @SuppressWarnings("UnusedDeclaration")
-    public static class Suspend extends JAppException {
+    public static class Suspend extends GojaException {
 
         /**
          * Suspend for a timeout (in milliseconds).

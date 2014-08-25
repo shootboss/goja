@@ -1,8 +1,11 @@
 package goja.kits.io;
 
+import com.google.common.io.Files;
+import com.jfinal.core.Const;
 import goja.app.StringPool;
 import goja.kits.lang.TxtKit;
-import com.jfinal.core.Const;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -82,10 +85,7 @@ public class FsKit {
      * @see #copyAs(java.io.File, java.io.File, boolean)
      */
     public static boolean copyTo(File fromFile, File toDir, boolean overwrite) {
-        if (toDir.isFile()) {
-            return false;
-        }
-        return copyAs(fromFile, new File(toDir.getPath() + File.separator + fromFile.getName()), overwrite);
+        return !toDir.isFile() && copyAs(fromFile, new File(toDir.getPath() + File.separator + fromFile.getName()), overwrite);
     }
 
     /**
@@ -115,7 +115,7 @@ public class FsKit {
         if (!file.exists()) return;
         File[] fs;
         if (file.isDirectory()) if ((fs = file.listFiles()) != null) for (File f : fs) delAll(f);
-        file.delete();
+        FileUtils.deleteQuietly(file);
     }
 
     /**
@@ -138,7 +138,13 @@ public class FsKit {
     public synchronized static void delEmpty(File dir) {
         if (dir.isFile()) return;
         String[] s = dir.list();
-        if (s == null || s.length < 1) dir.delete();//取消了删除空子级目录，因为当子目录或文件过多时占资源
+        if (s == null || s.length < 1)
+            try {
+                //取消了删除空子级目录，因为当子目录或文件过多时占资源
+                FileUtils.deleteDirectory(dir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     /**
@@ -328,12 +334,7 @@ public class FsKit {
                 contents.append(text).append(System.getProperty("line.separator"));
             }
         } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException ignore) {
-            }
+            IOUtils.closeQuietly(reader);
         }
         return contents.toString();
     }
@@ -369,20 +370,14 @@ public class FsKit {
         FileOutputStream fos = null;
         OutputStreamWriter osw = null;
         try {
-            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if (!file.getParentFile().exists()) Files.createParentDirs(file);
             fos = new FileOutputStream(file);
             osw = new OutputStreamWriter(fos, encoding);
             osw.write(str);
             osw.flush();
         } finally {
-            try {
-                if (null != osw)
-                    osw.close();
-                if (null != fos)
-                    fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            IOUtils.closeQuietly(osw);
+            IOUtils.closeQuietly(fos);
         }
     }
 
@@ -493,19 +488,23 @@ public class FsKit {
             return false;
         }
         int byteread;
-        toFile.getParentFile().mkdirs();
+        InputStream inStream = null;
+        FileOutputStream fs = null;
         try {
-            InputStream inStream = new FileInputStream(fromFile.getPath()); //读入原文件
-            FileOutputStream fs = new FileOutputStream(toFile.getPath());
+            Files.createParentDirs(toFile);
+            //读入原文件
+            inStream = new FileInputStream(fromFile.getPath());
+            fs = new FileOutputStream(toFile.getPath());
             byte[] buffer = new byte[1444];
             while ((byteread = inStream.read(buffer)) != -1)
                 fs.write(buffer, 0, byteread);
 
-            inStream.close();
-            fs.close();
             return true;
         } catch (Exception ioe) {
             throw new RuntimeException(ioe);
+        }finally {
+            IOUtils.closeQuietly(inStream);
+            IOUtils.closeQuietly(fs);
         }
     }
 
@@ -513,7 +512,11 @@ public class FsKit {
         if (!overWrite && toFile.exists()) {
             return false;
         }
-        toFile.mkdirs();
+        try {
+            Files.createParentDirs(toFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         File[] files = fromFile.listFiles();
         boolean isOk = true;
         if (files != null) {

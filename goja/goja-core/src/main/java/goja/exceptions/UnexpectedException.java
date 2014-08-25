@@ -15,7 +15,7 @@ package goja.exceptions;
  * @version 1.0 2014-04-04 10:19
  * @since JDK 1.6
  */
-public class UnexpectedException extends JAppException {
+public class UnexpectedException extends GojaException {
 
     public UnexpectedException(String message) {
         super(message);

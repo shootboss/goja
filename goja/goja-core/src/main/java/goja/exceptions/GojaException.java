@@ -11,22 +11,22 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * The super class for all Play! exceptions
  */
-public abstract class JAppException extends RuntimeException {
+public abstract class GojaException extends RuntimeException {
 
     static AtomicLong atomicLong = new AtomicLong(System.currentTimeMillis());
     String id;
 
-    public JAppException() {
+    public GojaException() {
         super();
         setId();
     }
 
-    public JAppException(String message) {
+    public GojaException(String message) {
         super(message);
         setId();
     }
 
-    public JAppException(String message, Throwable cause) {
+    public GojaException(String message, Throwable cause) {
         super(message, cause);
         setId();
     }

@@ -13,15 +13,14 @@ package goja.kits.io;
  */
 public class FastCharBuffer implements CharSequence, Appendable {
 
-    // @@generated
 
-    private final int    minChunkLen;
+    private final int minChunkLen;
     private char[][] buffers = new char[16][];
     private int buffersCount;
     private int currentBufferIndex = -1;
-    private       char[] currentBuffer;
-    private       int    offset;
-    private       int    size;
+    private char[] currentBuffer;
+    private int    offset;
+    private int    size;
 
     /**
      * Creates a new <code>char</code> buffer. The buffer capacity is

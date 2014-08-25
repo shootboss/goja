@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import goja.castor.Castors;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 import goja.lang.born.BornContext;
 import goja.lang.born.Borning;
 import goja.lang.born.BorningException;

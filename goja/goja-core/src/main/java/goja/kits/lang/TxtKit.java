@@ -131,45 +131,6 @@ public class TxtKit {
         return sb.toString();
     }
 
-    /**
-     * 将字符串数组元素按指定的字符串分隔符连成一个新的字符串。
-     *
-     * @param arr     要连接的字符串数组.
-     * @param joinStr 连接字符串. 如果此字符串为空(null)，则使用逗号加一个空格(, )进行连接。
-     * @return 返回arr的每个下标元素按joinStr连接成的新的字符串. 如果数组arr为空(null),则返回结果也将为null.
-     */
-    public static String join(String[] arr, String joinStr) {
-        if (null == arr) return null;
-        if (null == joinStr) joinStr = ", ";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            if (i > 0) sb.append(joinStr);
-            sb.append(arr[i]);
-        }
-        return sb.toString();
-    }
-
-
-    /**
-     * 将字符串按指定的分隔符分割成为一个数组.   <br />
-     * 与String.split(String s)、StringTokenizer不同的是，此方法将比它们更加高效快速.
-     * 在需要将字符串split转换为数组时，应该优先使用此方法.
-     *
-     * @param str 要转换的字符串.
-     * @param sp  分隔字符串.
-     * @return 转换后的String数组.
-     */
-    public static String[] split(String str, String sp) {
-        List<String> arrayList = new ArrayList<String>();
-        int index = 0, offset = 0, len = sp.length();
-        while ((index = str.indexOf(sp, index + len)) != -1) {
-            arrayList.add(str.substring(offset, index));
-            offset = index + len;
-        }
-        if (offset < str.length()) arrayList.add(str.substring(offset));
-        return arrayList.toArray(new String[arrayList.size()]);
-    }
-
 
     /**
      * 此方法将HTML内容转换为普通文本.  <br/>

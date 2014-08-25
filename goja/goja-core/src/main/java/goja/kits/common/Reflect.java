@@ -6,6 +6,7 @@
 package goja.kits.common;
 
 import com.google.common.collect.Maps;
+import goja.exceptions.ReflectException;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -116,7 +117,7 @@ public class Reflect {
      *
      * @param name A fully qualified class name
      * @return A wrapped class object, to be used for further reflection.
-     * @throws ReflectException If any reflection exception occurred.
+     * @throws goja.exceptions.ReflectException If any reflection exception occurred.
      * @see #on(Class)
      */
     public static Reflect on(String name) throws ReflectException {

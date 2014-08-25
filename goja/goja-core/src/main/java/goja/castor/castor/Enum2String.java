@@ -3,7 +3,7 @@ package goja.castor.castor;
 
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 @SuppressWarnings({"rawtypes"})
 public class Enum2String extends Castor<Enum, String> {

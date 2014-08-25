@@ -1,4 +1,4 @@
-package goja.castor;
+package goja.exceptions;
 
 @SuppressWarnings("serial")
 public class FailToCastObjectException extends RuntimeException {

@@ -2,7 +2,7 @@
 package goja.castor.castor;
 
 import goja.castor.Castor;
-import goja.castor.FailToCastObjectException;
+import goja.exceptions.FailToCastObjectException;
 
 import java.sql.Timestamp;
 import java.util.Date;

@@ -13,13 +13,13 @@ package goja.kits.io;
  */
 public class FastByteBuffer {
 
-    private final int    minChunkLen;
+    private final int minChunkLen;
     private byte[][] buffers = new byte[16][];
     private int buffersCount;
     private int currentBufferIndex = -1;
-    private       byte[] currentBuffer;
-    private       int    offset;
-    private       int    size;
+    private byte[] currentBuffer;
+    private int    offset;
+    private int    size;
 
     /**
      * Creates a new <code>byte</code> buffer. The buffer capacity is

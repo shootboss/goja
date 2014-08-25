@@ -15,7 +15,7 @@ package goja.exceptions;
  * @version 1.0 2014-03-28 12:08
  * @since JDK 1.6
  */
-public class DatabaseException extends JAppException {
+public class DatabaseException extends GojaException {
 
     public DatabaseException() {
     }
