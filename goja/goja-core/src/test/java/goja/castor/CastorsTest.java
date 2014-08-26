@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class CastorsTest {
     @Test
     public void testInt() throws Exception {
-        final int integer = Castors.me().castTo("563", int.class);
+        final int integer = Castors.me().castTo("563", Integer.class);
         assertEquals(integer,563);
 
     }

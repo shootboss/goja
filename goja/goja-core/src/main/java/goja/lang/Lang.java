@@ -9,7 +9,11 @@ package goja.lang;
 import com.google.common.collect.Maps;
 import goja.castor.Castors;
 import goja.exceptions.FailToCastObjectException;
+import goja.lang.util.Context;
+import goja.lang.util.SimpleContext;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
@@ -82,6 +86,16 @@ public abstract class Lang {
         return sb;
     }
 
+    /**
+     * 根据一段文本模拟出一个文本输入流对象
+     *
+     * @param cs
+     *            文本
+     * @return 文本输出流对象
+     */
+    public static Reader inr(CharSequence cs) {
+        return new StringReader(cs.toString());
+    }
 
 
     /**
@@ -406,7 +420,6 @@ public abstract class Lang {
      * @return 新数组
      * @throws FailToCastObjectException
      *
-     * @see org.nutz.castor.Castors
      */
     public static <T> Object[] array2ObjectArray(T[] args, Class<?>[] pts)
             throws FailToCastObjectException {
@@ -444,7 +457,7 @@ public abstract class Lang {
      *
      * @param c
      *            分隔符
-     * @param coll
+     * @param it
      *            集合
      * @return 拼合后的字符串
      */
@@ -532,6 +545,16 @@ public abstract class Lang {
             return false;
         s = s.toLowerCase();
         return !"false".equals(s) && !"off".equals(s) && !"no".equals(s);
+    }
+
+
+    /**
+     * 创建一个新的上下文对象
+     *
+     * @return 一个新创建的上下文对象
+     */
+    public static Context context() {
+        return new SimpleContext();
     }
 
 }
