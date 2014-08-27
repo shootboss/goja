@@ -16,7 +16,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>goja-wxchat</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
 
     <developers>
         <developer>

@@ -6,7 +6,7 @@
 
 package goja.kits.lang;
 
-import goja.app.StringPool;
+import goja.StringPool;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;

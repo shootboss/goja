@@ -5,7 +5,7 @@
  */
 package goja.kits;
 
-import goja.kits.common.Reflect;
+import goja.kits.lang.Reflect;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;

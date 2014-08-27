@@ -6,7 +6,7 @@
 
 package goja.libs;
 
-import goja.app.StringPool;
+import goja.StringPool;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.Serializable;

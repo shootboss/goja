@@ -6,6 +6,7 @@
 
 package goja.kits.common;
 
+import goja.kits.lang.KeyCodeGenKit;
 import org.junit.Test;
 
 /**

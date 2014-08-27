@@ -72,6 +72,8 @@
         <commons-digester.version>2.1</commons-digester.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
 
+        <zxing.version>3.1.0</zxing.version>
+
         <!-- the common service -->
         <mail.version>1.4.7</mail.version>
         <quartz.version>2.2.1</quartz.version>
@@ -104,9 +106,11 @@
     <modules>
         <module>goja-jfinal</module>
         <module>goja-core</module>
+        <module>goja-mvt</module>
         <module>goja-uc</module>
         <module>goja-wxchat</module>
         <module>goja-jcseg</module>
+        <module>goja-qrcode</module>
     </modules>
     <build>
         <finalName>goja</finalName>

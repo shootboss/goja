@@ -7,7 +7,7 @@
 package goja.lang;
 
 import com.google.common.base.Charsets;
-import goja.kits.validator.ValidatorKit;
+import goja.validator.ValidatorKit;
 
 import java.util.Collection;
 import java.util.LinkedList;

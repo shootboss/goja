@@ -6,6 +6,7 @@
 
 package goja.kits.lang;
 
+import goja.kits.ArithKit;
 import org.junit.Test;
 
 /**

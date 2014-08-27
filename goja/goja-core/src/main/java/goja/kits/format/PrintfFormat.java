@@ -6,7 +6,7 @@
 
 package goja.kits.format;
 
-import goja.app.StringPool;
+import goja.StringPool;
 
 import java.math.BigInteger;
 

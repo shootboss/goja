@@ -7,7 +7,7 @@ package goja.kits;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import goja.app.StringPool;
+import goja.StringPool;
 
 import java.io.Serializable;
 import java.util.List;

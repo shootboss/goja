@@ -6,26 +6,24 @@
 
 package goja.libs;
 
-import goja.Goja;
-import goja.app.StringPool;
-import goja.Logger;
+import goja.StringPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-04-04 10:24
  * @since JDK 1.6
  */
 public class MimeTypes {
+    private static final Logger logger = LoggerFactory.getLogger(MimeTypes.class);
 
 
     private static Properties mimetypes = null;
@@ -69,8 +67,8 @@ public class MimeTypes {
     }
 
     /**
-     * return the content-type from a file name. If none is found returning application/octet-stream<br/>
-     * For a text-based content-type, also return the encoding suffix eg. <em>"text/plain; charset=utf-8"</em>
+     * return the content-type from a file name. If none is found returning application/octet-stream<br/> For a
+     * text-based content-type, also return the encoding suffix eg. <em>"text/plain; charset=utf-8"</em>
      *
      * @param filename the file name
      * @return the content-type deduced from the file extension.
@@ -80,8 +78,8 @@ public class MimeTypes {
     }
 
     /**
-     * return the content-type from a file name.<br/>
-     * For a text-based content-type, also return the encoding suffix eg. <em>"text/plain; charset=utf-8"</em>
+     * return the content-type from a file name.<br/> For a text-based content-type, also return the encoding suffix eg.
+     * <em>"text/plain; charset=utf-8"</em>
      *
      * @param filename           the file name
      * @param defaultContentType the default content-type to return when no matching content-type is found
@@ -122,20 +120,9 @@ public class MimeTypes {
             mimetypes = new Properties();
             mimetypes.load(is);
         } catch (Exception ex) {
-            Logger.warn(ex.getMessage());
+            logger.warn(ex.getMessage());
         }
-        // Load custom mimetypes from the application configuration
-        if (Goja.initlization) {
-            Enumeration<Object> confenum = Goja.configuration.keys();
-            while (confenum.hasMoreElements()) {
-                String key = (String) confenum.nextElement();
-                if (key.startsWith("mimetype.")) {
-                    String type = key.substring(key.indexOf('.') + 1).toLowerCase();
-                    String value = (String) Goja.configuration.get(key);
-                    mimetypes.setProperty(type, value);
-                }
-            }
-        }
+
     }
 
     private static Properties mimetypes() {

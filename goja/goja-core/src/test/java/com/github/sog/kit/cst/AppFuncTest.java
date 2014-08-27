@@ -7,7 +7,7 @@
 package com.github.sog.kit.cst;
 
 import com.google.common.collect.Lists;
-import goja.app.Func;
+import goja.Func;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,16 +1,8 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package goja.el.opt.custom;
 
-import com.google.common.collect.Lists;
 import goja.el.opt.RunMethod;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 

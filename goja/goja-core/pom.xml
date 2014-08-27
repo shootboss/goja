@@ -18,14 +18,9 @@
 
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-jfinal</artifactId>
+            <artifactId>goja-jfinal</artifactId> 
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-jcseg</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -122,12 +117,6 @@
             </exclusions>
         </dependency>
 
-        <!-- view template -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
-        </dependency>
 
         <!--http utils-->
         <dependency>
@@ -174,44 +163,6 @@
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
         </dependency>
-
-        <!--database driver -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
-
-        <!-- h2 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-        </dependency>
-        <!-- postgresql -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
-        </dependency>
-
-        <!-- redis -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
-        </dependency>
-        <!-- mongoDB -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb.morphia</groupId>
-            <artifactId>morphia</artifactId>
-            <version>${morphia.version}</version>
-        </dependency>
         <!-- ant tools -->
         <dependency>
             <groupId>org.apache.ant</groupId>
@@ -236,23 +187,6 @@
             <version>${logback-core.version}</version>
         </dependency>
 
-        <!--Jobs-->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>${quartz.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>c3p0</groupId>
-                    <artifactId>c3p0</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
-            <version>${quartz.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>net.sf.jxls</groupId>
@@ -303,22 +237,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--Shiro -->
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <version>${shiro.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-            <version>${shiro.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-ehcache</artifactId>
-            <version>${shiro.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.jfinal</groupId>
