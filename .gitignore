@@ -20,3 +20,4 @@ build
 *.pyc
 *.7z
 
+.DS_Store
