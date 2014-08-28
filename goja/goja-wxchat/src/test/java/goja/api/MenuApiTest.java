@@ -1,8 +1,10 @@
-package com.jfinal.module.wxchat.api;
+package goja.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.module.wxchat.api.beans.Button;
-import com.jfinal.module.wxchat.api.beans.ErrCodeMsg;
+import goja.wxchat.api.AccessTokenApi;
+import goja.wxchat.api.MenuApi;
+import goja.wxchat.api.beans.Button;
+import goja.wxchat.api.beans.ErrCodeMsg;
 import org.junit.Test;
 
 /**

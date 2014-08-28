@@ -1,8 +1,8 @@
-package com.jfinal.module.wxchat.api.beans;
+package goja.api.beans;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.jfinal.module.wxchat.core.Constants;
+import goja.wxchat.api.beans.Menu;
+import goja.wxchat.core.Constants;
 import org.junit.Test;
 
 /**

@@ -1,4 +1,4 @@
-package com.jfinal.module.wxchat.api;
+package goja.api;
 
 /**
  * <p>

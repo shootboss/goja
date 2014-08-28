@@ -1,8 +1,10 @@
-package com.jfinal.module.wxchat.api.beans;
+package goja.api.beans;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.jfinal.module.wxchat.core.Constants;
+import goja.wxchat.api.beans.Button;
+import goja.wxchat.api.beans.Menu;
+import goja.wxchat.core.Constants;
 import org.junit.Test;
 
 import java.util.ArrayList;

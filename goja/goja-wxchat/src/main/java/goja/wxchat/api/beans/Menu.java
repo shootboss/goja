@@ -2,7 +2,7 @@ package goja.wxchat.api.beans;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jfinal.module.wxchat.core.Constants;
+import goja.wxchat.core.Constants;
 
 import java.util.List;
 

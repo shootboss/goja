@@ -1,8 +1,14 @@
 package goja.wxchat.processor;
 
 import goja.wxchat.message.InputMessage;
-import com.jfinal.module.wxchat.message.input.*;
-import com.jfinal.module.wxchat.utils.MessageUtil;
+import goja.wxchat.message.input.EventInputMessage;
+import goja.wxchat.message.input.ImageInputMessage;
+import goja.wxchat.message.input.LinkInputMessage;
+import goja.wxchat.message.input.LocationInputMessage;
+import goja.wxchat.message.input.TextInputMessage;
+import goja.wxchat.message.input.VideoInputMessage;
+import goja.wxchat.message.input.VoiceInputMessage;
+import goja.wxchat.utils.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +58,7 @@ public abstract class MessageProcessor implements Processor {
         VIDEO("video", VideoInputMessage.class),
         VOICE("voice", VoiceInputMessage.class);
 
-        private String msgType;
+        private String                        msgType;
         private Class<? extends InputMessage> clazz;
 
         Clazz(String msgType, Class<? extends InputMessage> clazz) {

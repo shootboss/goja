@@ -1,8 +1,19 @@
-package com.jfinal.module.wxchat.message;
+package goja.message;
 
-import com.jfinal.module.wxchat.core.Constants;
-import com.jfinal.module.wxchat.message.output.*;
-import com.jfinal.module.wxchat.utils.MessageUtil;
+import goja.wxchat.core.Constants;
+import goja.wxchat.message.OutputMessage;
+import goja.wxchat.message.output.Image;
+import goja.wxchat.message.output.ImageOutputMessage;
+import goja.wxchat.message.output.Item;
+import goja.wxchat.message.output.Music;
+import goja.wxchat.message.output.MusicOutputMessage;
+import goja.wxchat.message.output.NewsOutputMessage;
+import goja.wxchat.message.output.TextOutputMessage;
+import goja.wxchat.message.output.Video;
+import goja.wxchat.message.output.VideoOutputMessage;
+import goja.wxchat.message.output.Voice;
+import goja.wxchat.message.output.VoiceOutputMessage;
+import goja.wxchat.utils.MessageUtil;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -70,6 +81,7 @@ public class OutputMessageBuilderTest {
 
     @Test
     public void testVideoOutputMessageBuilder() {
+
         VideoOutputMessage.Builder builder = new VideoOutputMessage
                 .Builder("<![CDATA[toUserName]]>", "FromUserName", System.currentTimeMillis(), Constants.MSGTYPE_VIDEO);
         Video video = new Video("id1", "title", "Description");

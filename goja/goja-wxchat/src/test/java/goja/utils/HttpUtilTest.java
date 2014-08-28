@@ -1,10 +1,6 @@
-package com.jfinal.module.wxchat.utils;
+package goja.utils;
 
-import com.google.common.collect.Maps;
-import com.jfinal.module.wxchat.api.DefaultApp;
 import org.junit.Test;
-
-import java.util.Map;
 
 /**
  * <p>

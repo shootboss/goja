@@ -1,9 +1,9 @@
-package com.jfinal.module.wxchat.utils;
+package goja.utils;
 
-import com.jfinal.module.wxchat.processor.MessageProcessor;
-import com.jfinal.module.wxchat.message.OutputMessage;
-import com.jfinal.module.wxchat.message.input.EventInputMessage;
-import com.jfinal.module.wxchat.utils.MessageUtil;
+import goja.wxchat.message.OutputMessage;
+import goja.wxchat.message.input.EventInputMessage;
+import goja.wxchat.processor.MessageProcessor;
+import goja.wxchat.utils.MessageUtil;
 import org.junit.Test;
 
 import java.util.HashMap;

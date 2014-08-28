@@ -1,12 +1,12 @@
 package goja.wxchat.core;
 
 import com.jfinal.handler.Handler;
-import com.jfinal.module.wxchat.message.OutputMessage;
-import com.jfinal.module.wxchat.processor.Processor;
-import com.jfinal.module.wxchat.utils.MessageUtil;
-import com.jfinal.module.wxchat.utils.SecurityUtil;
+import goja.AppConfig;
 import goja.StringPool;
-import goja.init.ConfigProperties;
+import goja.wxchat.message.OutputMessage;
+import goja.wxchat.processor.Processor;
+import goja.wxchat.utils.MessageUtil;
+import goja.wxchat.utils.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,13 +28,13 @@ import java.util.Map;
  * @since JDK 1.6
  */
 public class WxchatHandler extends Handler {
-    private final Logger logger = LoggerFactory.getLogger(WxchatHandler.class);
+    private final Logger        logger = LoggerFactory.getLogger(WxchatHandler.class);
     private final Configuration config = Configuration.me;
 
     private Processor processor;
 
     public WxchatHandler() {
-        String className = ConfigProperties.getProperty(Constants.WECHAT_PROCESSOR);
+        String className = AppConfig.getProperty(Constants.WECHAT_PROCESSOR);
         createProcessor(className);
     }
 
@@ -45,7 +45,7 @@ public class WxchatHandler extends Handler {
         try {
             Object temp = Class.forName(configClass).newInstance();
             if (temp instanceof Processor)
-                processor = (Processor)temp;
+                processor = (Processor) temp;
             else
                 throw new RuntimeException("Can not create instance of class: " + configClass);
         } catch (InstantiationException e) {

@@ -1,12 +1,11 @@
 package goja.wxchat.api;
 
 import com.alibaba.fastjson.JSON;
-import goja.wxchat.api.Api;
 import goja.wxchat.api.beans.Button;
 import goja.wxchat.api.beans.ErrCodeMsg;
 import goja.wxchat.api.beans.MenuButtonHelp;
-import com.jfinal.module.wxchat.exceptions.WechatException;
-import com.jfinal.module.wxchat.utils.HttpUtil;
+import goja.wxchat.exceptions.WechatException;
+import goja.wxchat.utils.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public class MenuApi {
      */
     private static ErrCodeMsg createMenu(String menu, String accessToken){
         try {
-            String result = HttpUtil.post(Api.MENU.CREATE_MENU_URL + "?access_token="+ accessToken, menu);
+            String result = HttpUtil.post(Api.MENU.CREATE_MENU_URL + "?access_token=" + accessToken, menu);
             return parseResult(result);
         } catch (Exception e) {
             logger.error("Error create menu", e);

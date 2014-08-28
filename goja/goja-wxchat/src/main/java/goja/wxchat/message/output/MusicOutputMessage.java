@@ -1,8 +1,8 @@
 package goja.wxchat.message.output;
 
 
-import com.jfinal.module.wxchat.message.OutputMessage;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import goja.wxchat.message.OutputMessage;
 
 /**
  * <p>

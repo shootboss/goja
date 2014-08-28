@@ -1,12 +1,11 @@
-package com.jfinal.module.wxchat.api;
+package goja.api;
 
-import com.jfinal.module.wxchat.api.beans.AccessToken;
+import goja.wxchat.api.AccessTokenApi;
+import goja.wxchat.api.beans.AccessToken;
 import org.junit.Test;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author Jerry Ou
  * @version 1.0 2014-02-12 13:41

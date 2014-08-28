@@ -2,20 +2,17 @@ package goja.wxchat.api;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import goja.wxchat.api.Api;
-import goja.wxchat.api.MenuApi;
 import goja.wxchat.api.beans.AccessToken;
-import com.jfinal.module.wxchat.exceptions.WechatException;
-import com.jfinal.module.wxchat.utils.HttpUtil;
+import goja.wxchat.exceptions.WechatException;
+import goja.wxchat.utils.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 /**
- * <p>
- *     获取获取access token接口服务
- *
+ * <p> 获取获取access token接口服务
+ * <p/>
  * </p>
  *
  * @author Jerry Ou
@@ -28,12 +25,10 @@ public class AccessTokenApi {
 
     /**
      * 获取 使用凭证
-     *
+     * <p/>
      * https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-     *
-     * grant_type : 获取access_token填写client_credential
-     * appid : 第三方用户唯一凭证
-     * secret : 第三方用户唯一凭证密钥，即appsecret
+     * <p/>
+     * grant_type : 获取access_token填写client_credential appid : 第三方用户唯一凭证 secret : 第三方用户唯一凭证密钥，即appsecret
      *
      * @param appId
      * @param appSecret
@@ -48,8 +43,7 @@ public class AccessTokenApi {
             map.put("secret", appSecret);
             String result = HttpUtil.get(Api.AccessToken.GET_ACCESS_TOKEN_URL, map);
             if (result.contains("access_token") && result.contains("expires_in")) {
-                AccessToken at = JSON.parseObject(result, AccessToken.class);
-                return at;
+                return JSON.parseObject(result, AccessToken.class);
             } else {
                 logger.error("Error to Get AccessToken, err code and msg: ", result);
                 throw new WechatException("Error to Get AccessToken, err code and msg: " + result);
