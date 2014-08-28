@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Ordering;
 import com.jfinal.kit.PathKit;
+import goja.AppConfig;
 import goja.StringPool;
 import goja.init.ctxbox.ClassFinder;
 import org.apache.commons.io.FileUtils;
@@ -57,9 +58,9 @@ public class GojaInitializer implements ServletContainerInitializer {
     public void onStartup(Set<Class<?>> classSet, ServletContext ctx)
             throws ServletException {
 
-        final Properties p = ConfigProperties.getConfigProps();
+        final Properties p = AppConfig.getConfigProps();
 
-        boolean security = ConfigProperties.getPropertyToBoolean(InitConst.SECURITY, true);
+        boolean security = AppConfig.getPropertyToBoolean(InitConst.SECURITY, true);
         if (security) {
             ctx.addListener("org.apache.shiro.web.env.EnvironmentLoaderListener");
             ctx.addFilter("ShiroFilter", "org.apache.shiro.web.servlet.ShiroFilter")
@@ -70,7 +71,7 @@ public class GojaInitializer implements ServletContainerInitializer {
         //Before starting JFinal, lookup class file on the classpath.
         ClassFinder.find();
 
-        String app_name = ConfigProperties.getProperty(InitConst.APP, StringUtils.EMPTY);
+        String app_name = AppConfig.getProperty(InitConst.APP, StringUtils.EMPTY);
 
         FilterRegistration.Dynamic jfinalFilter = ctx.addFilter("goja@jfinal", "com.jfinal.core.JFinalFilter");
 

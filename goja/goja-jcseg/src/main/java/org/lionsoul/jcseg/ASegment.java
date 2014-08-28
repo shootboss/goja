@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import java.io.BufferedReader;
@@ -77,7 +71,7 @@ public abstract class ASegment implements ISegment
 	 * stream/reader reset.
 	 * 
 	 * @param input
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	public void reset( Reader input ) throws IOException
 	{ 
@@ -88,7 +82,7 @@ public abstract class ASegment implements ISegment
 	
 	/**
 	 * read the next char from the current position 
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	protected int readNext() 
 			throws IOException 
@@ -102,7 +96,7 @@ public abstract class ASegment implements ISegment
 	 * push back the data to the stream.
 	 * 
 	 * @param data
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	protected void pushBack( int data ) 
 			throws IOException 
@@ -158,7 +152,7 @@ public abstract class ASegment implements ISegment
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.ISegment#next()
+	 * @see ISegment#next() 
 	 */
 	@Override
 	public IWord next() throws IOException 
@@ -390,7 +384,7 @@ public abstract class ASegment implements ISegment
 						StringBuilder sb = new StringBuilder();
 						sb.append(w.getValue());
 						String str = null;
-						
+
 						//the w is a Chinese last name.
 						if ( dic.match(ILexicon.CN_LNAME, w.getValue())
 								&& (str = findCHName(chars, 0, chunk)) != null) 
@@ -422,6 +416,7 @@ public abstract class ASegment implements ISegment
 						{
 							w = new Word(sb.toString(), T);
 							//if ( config.APPEND_PART_OF_SPEECH )
+							//w.setPosition(pos+cjkidx);
 							w.setPartSpeech(IWord.NAME_POSPEECH);
 						}
 					}
@@ -526,11 +521,14 @@ public abstract class ASegment implements ISegment
 					}
 					
 					//handle the after english word
+					//generated at the above chinese and english mix word
 					if ( enAfter != null && ! ( config.CLEAR_STOPWORD 
 							&& dic.match(ILexicon.STOP_WORD, 
 									enAfter.getValue()) ) )
 					{
-						enAfter.setPosition(chars.length);
+						//@Note: bug fixed for the position (2014-07-23)
+						//	changed chars.length to pos+chars.length
+						enAfter.setPosition(pos+chars.length);
 						//check and to the secondary split.
 						if ( config.EN_SECOND_SEG
 								&& ( ctrlMask & ISegment.START_SS_MASK ) != 0 ) 
@@ -555,6 +553,7 @@ public abstract class ASegment implements ISegment
 					if ( config.CLEAR_STOPWORD 
 							&& dic.match(ILexicon.STOP_WORD, str) ) continue;
 					w = new Word(str, IWord.T_PUNCTUATION);
+					w.setPosition(pos);
 					w.setPartSpeech(IWord.PUNCTUATION);
 				} 
 				else  
@@ -596,8 +595,10 @@ public abstract class ASegment implements ISegment
 				return (sword == null) ? w : sword;
 			} 
 			/* find a content around with pair punctuations.
+			 * 	set the pptmaxlen to 0 to close it
 			 * */
-			else if ( PPTFilter.isPairPunctuation( (char) c ) ) 
+			else if ( config.PPT_MAX_LENGTH > 0 
+					&& PPTFilter.isPairPunctuation( (char) c ) ) 
 			{
 				IWord w = null, w2 = null;
 				String text = getPairPunctuationText(c);
@@ -701,7 +702,17 @@ public abstract class ASegment implements ISegment
 	 */
 	private void appendLatinSyn( IWord w )
 	{
-		IWord ew = dic.get(ILexicon.EN_WORD, w.getValue());
+		IWord ew;
+		
+		/*
+		 * @added 2014-07-07
+		 * w maybe EC_MIX_WORD, so check its syn first
+		 * 	and make sure it is not a EC_MIX_WORD then check the EN_WORD 
+		 */
+		if ( w.getSyn() == null )
+			ew = dic.get(ILexicon.EN_WORD, w.getValue());
+		else 
+			ew = w;
 		
 		if (  ew != null && ew.getSyn() != null ) 
 		{
@@ -731,7 +742,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param	w
 	 * @param	retfw	Wether to return the fword.
-	 * @return 	IWord - the first sub token for the secondary segment.
+	 * @param	IWord - the first sub token for the secondary segment.
 	 */
 	public IWord enSecondSeg( IWord w, boolean retfw ) 
 	{
@@ -795,7 +806,7 @@ public abstract class ASegment implements ISegment
 		//Continue to check the last item.
 		if ( isb.length() >= config.STOKEN_MIN_LEN ) 
 		{
-			start = j - isb.length();
+			start = j - isb.length() - p;
 			_str = isb.toString();
 			
 			if ( ! ( config.CLEAR_STOPWORD
@@ -823,8 +834,10 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isCJKChar( int c ) 
 	{
-        return Character.getType(c) == Character.OTHER_LETTER;
-    }
+		if ( Character.getType(c) == Character.OTHER_LETTER ) 
+			return true;
+		return false;
+	}
 	
 	/**
 	 * check the specified char is a basic latin and russia and 
@@ -861,8 +874,10 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isLetterNumber( int c ) 
 	{
-        return Character.getType(c) == Character.LETTER_NUMBER;
-    }
+		if ( Character.getType(c) == Character.LETTER_NUMBER ) 
+			return true;
+		return false;
+	}
 	
 	/**
 	 * check the specified char is other number like '①⑩⑽㈩'
@@ -874,8 +889,10 @@ public abstract class ASegment implements ISegment
 	 */
 	static boolean isOtherNumber( int c ) 
 	{
-        return Character.getType(c) == Character.OTHER_NUMBER;
-    }
+		if ( Character.getType(c) == Character.OTHER_NUMBER ) 
+			return true;
+		return false;
+	}
 	
 	/**
 	 * match the next CJK word in the dictionary. <br />
@@ -1151,7 +1168,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param c
 	 * @return char[]
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	protected char[] nextCJKSentence( int c ) throws IOException 
 	{
@@ -1165,7 +1182,12 @@ public abstract class ASegment implements ISegment
 		
 		while ( (ch = readNext()) != -1 ) 
 		{
-			if ( ENSCFilter.isWhitespace(ch) ) break;
+			if ( ENSCFilter.isWhitespace(ch) ) 
+			{
+				pushBack(ch);
+				break;
+			}
+			
 			if ( ! isCJKChar(ch) ) 
 			{
 				pushBack(ch);
@@ -1186,7 +1208,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param c
 	 * @return IWord
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	protected IWord nextBasicLatin( int c ) throws IOException 
 	{
@@ -1307,7 +1329,7 @@ public abstract class ASegment implements ISegment
 			}
 		}
 		
-		//conditioan to start the secondary segmentation.
+		//condition to start the secondary segmentation.
 		boolean ssseg = (tcount > 1) && chkunits;
 		
 		/*@step 3: check the end condition.
@@ -1375,13 +1397,18 @@ public abstract class ASegment implements ISegment
 					&& (ch = readNext()) != -1; j++ ) 
 		{
 			/* Attension:
-			 *  it is a chance that jcseg works find for 
+			 *  it is a accident that jcseg works find for 
 			 *  	we break the loop directly when we meet a whitespace.
 			 *  1. if a EC word is found, unit check process will be ignore.
 			 *  2. if matches no EC word, certianly return of readNext() 
 			 *  	will make sure the units check process works find.
 			 */
-			if ( ENSCFilter.isWhitespace(ch) ) break; 
+			if ( ENSCFilter.isWhitespace(ch) )
+			{
+				pushBack(ch);
+				break;
+			}
+			
 			ibuffer.append((char)ch);
 			//System.out.print((char)ch+",");
 			ialist.add(ch);
@@ -1437,7 +1464,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param c
 	 * @return String
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	protected String nextLetterNumber( int c ) throws IOException 
 	{
@@ -1447,7 +1474,12 @@ public abstract class ASegment implements ISegment
 		int ch;
 		while ( (ch = readNext()) != -1 ) 
 		{
-			if ( ENSCFilter.isWhitespace(ch) ) break;
+			if ( ENSCFilter.isWhitespace(ch) ) 
+			{
+				pushBack(ch);
+				break;
+			}
+			
 			if ( ! isLetterNumber( ch ) ) 
 			{
 				pushBack(ch);
@@ -1466,7 +1498,7 @@ public abstract class ASegment implements ISegment
 	 * 
 	 * @param c
 	 * @return String
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	protected String nextOtherNumber( int c ) throws IOException 
 	{
@@ -1476,7 +1508,12 @@ public abstract class ASegment implements ISegment
 		int ch;
 		while ( (ch = readNext()) != -1 ) 
 		{
-			if ( ENSCFilter.isWhitespace(ch) ) break;
+			if ( ENSCFilter.isWhitespace(ch) ) 
+			{
+				pushBack(ch);
+				break;
+			}
+			
 			if ( ! isOtherNumber(ch) ) 
 			{
 				pushBack(ch);
@@ -1546,7 +1583,7 @@ public abstract class ASegment implements ISegment
 	 * the purpose is to get the text bettween them. <br />
 	 * 
 	 * @param c
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	protected String getPairPunctuationText( int c ) throws IOException 
 	{
@@ -1593,7 +1630,7 @@ public abstract class ASegment implements ISegment
 	 * @param  chars
 	 * @param  index
 	 * @return IChunk
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	protected abstract IChunk getBestCJKChunk(char chars[], int index) throws IOException;
 

@@ -30,13 +30,6 @@
         </developer>
     </developers>
 
-    <properties>
-        <junit.version>4.11</junit.version>
-        <jfinal-app.version>0.0.9-SNAPSHOT</jfinal-app.version>
-        <xstream.version>1.4.2</xstream.version>
-        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -53,6 +46,7 @@
         </dependency>
 
         <dependency>
+
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
             <version>${xstream.version}</version>
@@ -60,8 +54,13 @@
 
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>jfinal-app</artifactId>
-            <version>${jfinal-app.version}</version>
+            <artifactId>goja-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-jfinal</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

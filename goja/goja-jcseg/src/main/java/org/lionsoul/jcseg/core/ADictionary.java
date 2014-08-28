@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg.core;
 
 import java.io.BufferedReader;
@@ -50,6 +44,7 @@ public abstract class ADictionary {
 	/**
 	 * load all the words from a specified lexicon file . <br /> 
 	 * 
+	 * @param	config
 	 * @param	file
 	 */
 	public void loadFromLexiconFile( File file ) {
@@ -66,17 +61,17 @@ public abstract class ADictionary {
 	 * 
 	 * @param	lexDir
 	 * 
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	public void loadFromLexiconDirectory( String lexDir ) throws IOException {
 		
 		File[] files = getLexiconFiles(lexDir, 
 				config.getLexiconFilePrefix(), config.getLexiconFileSuffix());
 		if ( files == null ) return;
-
-        for (File file : files) {
-            loadWordsFromFile(config, this, file, "UTF-8");
-        }
+		
+		for ( int j = 0; j < files.length; j++ ) {
+			loadWordsFromFile(config, this, files[j], "UTF-8");
+		}
 	}
 	
 	/**start the lexicon autoload thread .*/
@@ -99,7 +94,7 @@ public abstract class ADictionary {
 					//load words form the lexicon files
 					try {
 						BufferedReader reader = new BufferedReader(new FileReader(todo));
-						String line;
+						String line = null;
 						while ( ( line = reader.readLine() ) != null ) {
 							line = line.trim();
 							if ( line.indexOf('#') != -1 ) continue;
@@ -236,7 +231,7 @@ public abstract class ADictionary {
 	 * get all the lexicon file under the specified path
 	 * 		and meet the specified conditions . <br />
 	 * 
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	public static File[] getLexiconFiles( String lexDir, 
 			String prefix, String suffix ) throws IOException {

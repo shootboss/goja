@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg.core;
 
 import java.io.IOException;
@@ -28,7 +22,7 @@ public interface ISegment
 	 * 
 	 * @param input
 	 */
-	public void reset(Reader input) throws IOException;
+	public void reset( Reader input ) throws IOException;
 	
 	/**
 	 * get the current length of the stream

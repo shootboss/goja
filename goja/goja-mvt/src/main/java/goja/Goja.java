@@ -35,8 +35,16 @@ import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
 import goja.db.dialect.DB2Dialect;
 import goja.db.dialect.H2Dialect;
+import goja.exceptions.DatabaseException;
+import goja.init.AppLoadEvent;
+import goja.init.InitConst;
+import goja.init.autoscan.AutoOnLoadInterceptor;
+import goja.init.ctxbox.ClassBox;
+import goja.init.ctxbox.ClassType;
 import goja.interceptor.SystemLogProcessor;
 import goja.interceptor.syslog.SysLogInterceptor;
+import goja.job.JobsPlugin;
+import goja.kits.JfinalKit;
 import goja.mvc.AutoBindRoutes;
 import goja.mvc.render.ftl.BlockDirective;
 import goja.mvc.render.ftl.ExtendsDirective;
@@ -44,23 +52,14 @@ import goja.mvc.render.ftl.OverrideDirective;
 import goja.mvc.render.ftl.PrettyTimeDirective;
 import goja.mvc.render.ftl.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
-import goja.plugin.index.IndexPlugin;
-import goja.plugin.monogodb.MongodbPlugin;
-import goja.plugin.quartz.QuartzPlugin;
-import goja.plugin.redis.JedisPlugin;
-import goja.plugin.shiro.ShiroPlugin;
-import goja.plugin.sqlinxml.SqlInXmlPlugin;
-import goja.plugin.tablebind.AutoTableBindPlugin;
-import goja.plugin.tablebind.SimpleNameStyles;
-import goja.exceptions.DatabaseException;
-import goja.init.AppLoadEvent;
-import goja.init.ConfigProperties;
-import goja.init.InitConst;
-import goja.init.autoscan.AutoOnLoadInterceptor;
-import goja.init.ctxbox.ClassBox;
-import goja.init.ctxbox.ClassType;
-import goja.job.JobsPlugin;
-import goja.kits.JfinalKit;
+import goja.plugins.index.IndexPlugin;
+import goja.plugins.monogo.MongoPlugin;
+import goja.plugins.quartz.QuartzPlugin;
+import goja.plugins.redis.JedisPlugin;
+import goja.plugins.shiro.ShiroPlugin;
+import goja.plugins.sqlinxml.SqlInXmlPlugin;
+import goja.plugins.tablebind.AutoTableBindPlugin;
+import goja.plugins.tablebind.SimpleNameStyles;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 
@@ -99,9 +98,7 @@ import static goja.init.InitConst.VIEW_PATH;
 import static goja.init.InitConst.VIEW_TYPE;
 
 /**
- * <p>
- * The core of goja.
- * </p>
+ * <p> The core of goja. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-02 11:11
@@ -113,15 +110,23 @@ public class Goja extends JFinalConfig {
 
     private static final String DEFAULT_DOMAIN = "http://127.0.0.1:8080/app";
 
+    public static final String FTL_HTML_PREFIX = ".ftl.html";
+
     public static boolean initlization = false;
     public static boolean started      = false;
+
+    // the application configuration.
     public static Properties configuration;
-    public static Mode       mode;
-    public static String     viewPath;
-    public static String     domain;
-    public static boolean    setViewPath;
-    public static String     appName;
-    public static String     appVersion;
+
+    //
+    public static Mode mode;
+
+    // the application view path.
+    public static String  viewPath;
+    public static String  domain;
+    public static boolean setViewPath;
+    public static String  appName;
+    public static String  appVersion;
 
     private Routes _routes;
 
@@ -137,41 +142,41 @@ public class Goja extends JFinalConfig {
     @Override
     public void configConstant(Constants constants) {
         // set config propertis.
-        configuration = ConfigProperties.getConfigProps();
+        configuration = AppConfig.getConfigProps();
         // init application path
         applicationPath = new File(PathKit.getWebRootPath());
 
         initlization = true;
 
         // dev_mode
-        final boolean dev_mode = ConfigProperties.getPropertyToBoolean(DEV_MODE, false);
+        final boolean dev_mode = AppConfig.getPropertyToBoolean(DEV_MODE, false);
         mode = dev_mode ? Mode.DEV : Mode.PROD;
         constants.setDevMode(dev_mode);
 
-        viewPath = ConfigProperties.getProperty(VIEW_PATH, File.separator + "WEB-INF" + File.separator + "views" + File.separator);
+        viewPath = AppConfig.getProperty(VIEW_PATH, File.separator + "WEB-INF" + File.separator + "views" + File.separator);
         if (!StrKit.isBlank(viewPath)) {
             setViewPath = true;
             constants.setBaseViewPath(viewPath);
         }
-        appName = ConfigProperties.getProperty(APP, "app");
-        appVersion = ConfigProperties.getProperty(APP_VERSION, "0.0.1");
+        appName = AppConfig.getProperty(APP, "app");
+        appVersion = AppConfig.getProperty(APP_VERSION, "0.0.1");
 
         // init logger.
         Logger.init();
 
-        domain = ConfigProperties.getProperty(DOMAIN, DEFAULT_DOMAIN);
-        String view_type = ConfigProperties.getProperty(VIEW_TYPE);
+        domain = AppConfig.getProperty(DOMAIN, DEFAULT_DOMAIN);
+        String view_type = AppConfig.getProperty(VIEW_TYPE);
         if (!StrKit.isBlank(view_type)) {
             setViewType(constants, view_type);
         } else {
-            constants.setFreeMarkerViewExtension(".ftl.html");
+            constants.setFreeMarkerViewExtension(FTL_HTML_PREFIX);
             setFtlSharedVariable();
         }
-        String view_404 = ConfigProperties.getProperty(VIEW_404);
+        String view_404 = AppConfig.getProperty(VIEW_404);
         if (!Strings.isNullOrEmpty(view_404)) {
             constants.setError404View(view_404);
         }
-        String view_500 = ConfigProperties.getProperty(VIEW_500);
+        String view_500 = AppConfig.getProperty(VIEW_500);
         if (!Strings.isNullOrEmpty(view_500)) {
             constants.setError500View(view_500);
         }
@@ -187,39 +192,39 @@ public class Goja extends JFinalConfig {
     public void configPlugin(Plugins plugins) {
         initDataSource(plugins);
 
-        if (ConfigProperties.getPropertyToBoolean(SECURITY, false)) {
+        if (AppConfig.getPropertyToBoolean(SECURITY, false)) {
             plugins.add(new ShiroPlugin(this._routes));
         }
-        if (ConfigProperties.getPropertyToBoolean(CACHE, false)) {
+        if (AppConfig.getPropertyToBoolean(CACHE, false)) {
             plugins.add(new EhCachePlugin());
         }
 
-        if (ConfigProperties.getPropertyToBoolean(JOB_QUARTZ, false)) {
+        if (AppConfig.getPropertyToBoolean(JOB_QUARTZ, false)) {
             plugins.add(new QuartzPlugin());
         }
 
-        if (ConfigProperties.getPropertyToBoolean(JOB, false)) {
+        if (AppConfig.getPropertyToBoolean(JOB, false)) {
             plugins.add(new JobsPlugin());
         }
 
-        if( !Strings.isNullOrEmpty(ConfigProperties.getProperty(INDEX_PATH))){
+        if (!Strings.isNullOrEmpty(AppConfig.getProperty(INDEX_PATH))) {
             plugins.add(new IndexPlugin());
         }
 
-        final String mongo_host = ConfigProperties.getProperty(MONGO_HOST, MongodbPlugin.DEFAULT_HOST);
-        final String mongo_url = ConfigProperties.getProperty(MONGO_URL, StringUtils.EMPTY);
+        final String mongo_host = AppConfig.getProperty(MONGO_HOST, MongoPlugin.DEFAULT_HOST);
+        final String mongo_url = AppConfig.getProperty(MONGO_URL, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(mongo_host) || !Strings.isNullOrEmpty(mongo_url)) {
-            int mongo_port = ConfigProperties.getPropertyToInt(MONGO_PORT, MongodbPlugin.DEFAUL_PORT);
-            String mongo_db = ConfigProperties.getProperty(MONGO_DB, "test");
-            boolean moriph = ConfigProperties.getPropertyToBoolean(MONGO_MORIPH, false);
-            String pkgs = ConfigProperties.getProperty(MONGO_MORIPH_PKGS, MongodbPlugin.DEFAULT_PKGS);
-            final MongodbPlugin mongodb = new MongodbPlugin(mongo_host, mongo_port, mongo_db, moriph, pkgs);
+            int mongo_port = AppConfig.getPropertyToInt(MONGO_PORT, MongoPlugin.DEFAUL_PORT);
+            String mongo_db = AppConfig.getProperty(MONGO_DB, "test");
+            boolean moriph = AppConfig.getPropertyToBoolean(MONGO_MORIPH, false);
+            String pkgs = AppConfig.getProperty(MONGO_MORIPH_PKGS, MongoPlugin.DEFAULT_PKGS);
+            final MongoPlugin mongodb = new MongoPlugin(mongo_host, mongo_port, mongo_db, moriph, pkgs);
             plugins.add(mongodb);
         }
 
-        final String redis_host = ConfigProperties.getProperty(REDIS_HOST, StringUtils.EMPTY);
+        final String redis_host = AppConfig.getProperty(REDIS_HOST, StringUtils.EMPTY);
         if (!Strings.isNullOrEmpty(redis_host)) {
-            int port = ConfigProperties.getPropertyToInt(REDIS_PORT, JedisPlugin.DEFAULT_PORT);
+            int port = AppConfig.getPropertyToInt(REDIS_PORT, JedisPlugin.DEFAULT_PORT);
             final JedisPlugin jedis = new JedisPlugin(redis_host, port, 2000);
             plugins.add(jedis);
         }
@@ -264,10 +269,10 @@ public class Goja extends JFinalConfig {
     @Override
     public void configHandler(Handlers handlers) {
         //访问路径是/admin/monitor
-        DruidStatViewHandler dvh;
-        final String view_url = ConfigProperties.getProperty(DB_STAT_VIEW, "/druid/monitor");
 
-        dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
+        final String view_url = AppConfig.getProperty(DB_STAT_VIEW, "/druid/monitor");
+
+        final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
             public boolean isPermitted(HttpServletRequest request) {
                 return true;
             }
@@ -328,18 +333,18 @@ public class Goja extends JFinalConfig {
      */
     private void initDataSource(Plugins plugins) {
 
-        List<String> configNames = ConfigProperties.dbConfigNames();
+        List<String> configNames = AppConfig.dbConfigNames();
         if (configNames != null && !configNames.isEmpty()) {
             for (String configName : configNames) {
                 configDatabasePlugins(configName, plugins,
-                        ConfigProperties.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "url",
-                        ConfigProperties.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "username",
-                        ConfigProperties.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "password");
+                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "url",
+                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "username",
+                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "password");
             }
         }
         configDatabasePlugins(plugins, DB_URL, DB_USERNAME, DB_PASSWORD);
 
-        if (ConfigProperties.getPropertyToBoolean(DB_SQLINXML, false)) {
+        if (AppConfig.getPropertyToBoolean(DB_SQLINXML, false)) {
             plugins.add(new SqlInXmlPlugin());
         }
 
@@ -350,7 +355,7 @@ public class Goja extends JFinalConfig {
     }
 
     private void configDatabasePlugins(String configName, Plugins plugins, String url_key, String username, String password) {
-        String db_url = ConfigProperties.getProperty(url_key);
+        String db_url = AppConfig.getProperty(url_key);
         if (!Strings.isNullOrEmpty(db_url)) {
             String dbtype = JdbcUtils.getDbType(db_url, StringUtils.EMPTY);
             String driverClassName;
@@ -361,8 +366,8 @@ public class Goja extends JFinalConfig {
             }
             final DruidPlugin druidPlugin = new DruidPlugin(
                     db_url,
-                    ConfigProperties.getProperty(username),
-                    ConfigProperties.getProperty(password),
+                    AppConfig.getProperty(username),
+                    AppConfig.getProperty(password),
                     driverClassName);
             druidPlugin.setFilters("stat,wall");
             final WallFilter wall = new WallFilter();
@@ -403,7 +408,7 @@ public class Goja extends JFinalConfig {
     private void setViewType(Constants constants, String view_type) {
         final ViewType viewType = ViewType.valueOf(view_type.toUpperCase());
         if (viewType == ViewType.FREE_MARKER) {
-            constants.setFreeMarkerViewExtension(".ftl.html");
+            constants.setFreeMarkerViewExtension(FTL_HTML_PREFIX);
             setFtlSharedVariable();
         }
         constants.setViewType(viewType);
@@ -421,7 +426,7 @@ public class Goja extends JFinalConfig {
         config.setSharedVariable("super", new SuperDirective());
         // 增加日期美化指令（类似 几分钟前）
         config.setSharedVariable("prettyTime", new PrettyTimeDirective());
-        if (ConfigProperties.getPropertyToBoolean(InitConst.SECURITY, true)) {
+        if (AppConfig.getPropertyToBoolean(InitConst.SECURITY, true)) {
             config.setSharedVariable("shiro", new ShiroTags());
         }
     }

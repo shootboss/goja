@@ -6,8 +6,8 @@
 
 package goja.jobs;
 
+import goja.AppConfig;
 import goja.Goja;
-import goja.init.ConfigProperties;
 import goja.init.ctxbox.ClassFinder;
 import goja.job.JobsPlugin;
 import org.junit.After;
@@ -22,8 +22,8 @@ public class JobsPluginTest {
     @Before
     public void setUp() throws Exception {
         ClassFinder.findWithTest();
-        ConfigProperties.getConfigProps();
-        Goja.configuration = ConfigProperties.getConfigProps();
+        AppConfig.getConfigProps();
+        Goja.configuration = AppConfig.getConfigProps();
         jobsPlugin = new JobsPlugin();
     }
 

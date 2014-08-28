@@ -11,16 +11,14 @@ import goja.StringPool;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * <p>
- * ajax请求返回信息
- * </p>
+ * <p> ajax请求返回信息 </p>
  *
  * @param <E> 数据格式
  * @author mumu@yfyang
  * @version 1.0 2013-08-10 12:27 PM
  * @since JDK 1.5
  */
-public class AjaxMessage<E> {
+public final class AjaxMessage<E> {
 
     private static final String SUCCESS_MSG   = "您好，请求以筋斗云的速度请求成功，恭喜你！";
     /**
@@ -35,6 +33,8 @@ public class AjaxMessage<E> {
      * 没有登录的提示语
      */
     private static final String NOLOGIN_MSG   = "您好，你是不是没有登录?只有登录后才能访问。";
+
+
     /**
      * 返回带的消息数据
      */
@@ -51,6 +51,13 @@ public class AjaxMessage<E> {
      * 异常
      */
     private final Exception     exception;
+
+
+    private static final AjaxMessage OK        = ok(SUCCESS_MSG, null);
+    private static final AjaxMessage NODATA    = nodata(NODATA_MSG, null);
+    private static final AjaxMessage FORBIDDEN = forbidden(null);
+    private static final AjaxMessage ERROR     = error(null);
+    private static final AjaxMessage FAILURE   = failure(null);
 
     /**
      * 构造函数
@@ -120,7 +127,7 @@ public class AjaxMessage<E> {
      * @return 消息内容
      */
     public static AjaxMessage ok() {
-        return ok(SUCCESS_MSG, null);
+        return OK;
     }
 
     /**
@@ -161,7 +168,7 @@ public class AjaxMessage<E> {
      * @return 消息内容
      */
     public static AjaxMessage nodata() {
-        return nodata(NODATA_MSG, null);
+        return NODATA;
     }
 
     /**
@@ -201,7 +208,11 @@ public class AjaxMessage<E> {
      * @return 消息内容
      */
     public static AjaxMessage forbidden() {
-        return forbidden(null);
+        return FORBIDDEN;
+    }
+
+    public static AjaxMessage error() {
+        return ERROR;
     }
 
     /**
@@ -245,6 +256,15 @@ public class AjaxMessage<E> {
      */
     public static <E> AjaxMessage error(String message, E data, Exception exception) {
         return new AjaxMessage<E>(data, message, MessageStatus.ERROR, exception);
+    }
+
+    /**
+     * 处理失败的消息，默认提示信息。
+     *
+     * @return 提示信息
+     */
+    public static AjaxMessage failure() {
+        return FAILURE;
     }
 
     /**
@@ -314,6 +334,15 @@ public class AjaxMessage<E> {
      */
     public String toJSON() {
         return JSON.toJSONString(this);
+    }
+
+    /**
+     * 获取错误异常.
+     *
+     * @return 异常信息.
+     */
+    public Exception getException() {
+        return exception;
     }
 
     /**

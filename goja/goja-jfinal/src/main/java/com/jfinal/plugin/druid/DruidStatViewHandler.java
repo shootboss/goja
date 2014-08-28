@@ -28,7 +28,7 @@ import com.jfinal.kit.StrKit;
 /**
  * 替代 StatViewServlet
  */
-public class DruidStatViewHandler extends Handler {
+public final class DruidStatViewHandler extends Handler {
 	
 	private IDruidStatViewAuth auth;
 	private String visitPath = "/druid";

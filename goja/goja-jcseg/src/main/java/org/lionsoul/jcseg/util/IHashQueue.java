@@ -73,7 +73,7 @@ public class IHashQueue<T extends IWord>
 	 * 	and you should make sure the size is larger than 0 by calling size()
 	 * before you invoke the method or you will just get null
 	 * 
-	 * @param	T
+	 * @return 	T
 	 */
 	public T remove()
 	{

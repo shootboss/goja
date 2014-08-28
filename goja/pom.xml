@@ -73,6 +73,7 @@
         <commons-jexl.version>2.1.1</commons-jexl.version>
 
         <zxing.version>3.1.0</zxing.version>
+        <xstream.version>1.4.7</xstream.version>
 
         <!-- the common service -->
         <mail.version>1.4.7</mail.version>
@@ -109,6 +110,7 @@
         <module>goja-mvt</module>
         <module>goja-uc</module>
         <module>goja-wxchat</module>
+        <module>goja-test</module>
         <module>goja-jcseg</module>
         <module>goja-qrcode</module>
     </modules>

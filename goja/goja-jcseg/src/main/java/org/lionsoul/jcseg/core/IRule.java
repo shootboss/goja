@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg.core;
 
 /**
@@ -20,5 +14,5 @@ public interface IRule {
 	 * @param chunks
 	 * @return IChunk[]
 	 */
-	public IChunk[] call(IChunk[] chunks);
+	public IChunk[] call( IChunk[] chunks );
 }

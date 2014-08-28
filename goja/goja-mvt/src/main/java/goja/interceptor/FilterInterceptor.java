@@ -11,9 +11,9 @@ import com.google.common.primitives.Ints;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import goja.AppConfig;
 import goja.StringPool;
 import goja.mvc.dtos.PageDto;
-import goja.init.ConfigProperties;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Enumeration;
@@ -39,7 +39,7 @@ import java.util.Enumeration;
 public class FilterInterceptor implements Interceptor {
     private static final String  SEARCH_PARAMS     = "sp_url";
     public static final  String  FILTER_PAGE       = "psf";
-    public static final  Integer DEFAULT_PAGE_SIZE = Ints.tryParse(ConfigProperties.getProperty("app.page.size", "15"));
+    public static final  Integer DEFAULT_PAGE_SIZE = Ints.tryParse(AppConfig.getProperty("app.page.size", "15"));
 
     public void intercept(ActionInvocation ai) {
         final Controller controller = ai.getController();

@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg.util;
 
 import java.io.IOException;
@@ -35,7 +29,7 @@ public class IPushbackReader
 	 * and take the first item of the buffer as the result
 	 * 
 	 * @return	int
-	 * @throws	java.io.IOException
+	 * @throws	IOException 
 	 */
 	public int read() throws IOException
 	{
@@ -51,7 +45,7 @@ public class IPushbackReader
 	 * @see #read()
 	 * 
 	 * @return int
-	 * @throws java.io.IOException
+	 * @throws IOException 
 	 */
 	public int read( char[] cbuf, int off, int len ) throws IOException
 	{

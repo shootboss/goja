@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg.core;
 
 /**
@@ -110,7 +104,7 @@ public interface IWord extends Cloneable {
 	 * 
 	 * @param pos
 	 */
-	void setPosition(int pos);
+	void setPosition( int pos );
 	
 	/**
 	 * return the start position of the word.
@@ -131,7 +125,7 @@ public interface IWord extends Cloneable {
 	 */
 	public String[] getSyn();
 	
-	public void setSyn(String[] syn);
+	public void setSyn( String[] syn );
 	
 	/**
 	 * return the part of speech of the word.
@@ -140,35 +134,35 @@ public interface IWord extends Cloneable {
 	 */
 	public String[] getPartSpeech();
 	
-	public void setPartSpeech(String[] ps);
+	public void setPartSpeech( String[] ps );
 	
 	/**
 	 * set the pinying of the word
 	 * 
 	 * @param py
 	 */
-	public void setPinyin(String py);
+	public void setPinyin( String py );
 	
 	/**
 	 * add a new part to speech to the word.
 	 * 
 	 * @param ps
 	 */
-	public void addPartSpeech(String ps);
+	public void addPartSpeech( String ps );
 	
 	/**
 	 * add a new syn word to the word.
 	 * 
 	 * @param s
 	 */
-	public void addSyn(String s);
+	public void addSyn( String s );
 	
 	/**
 	 * I mean: you have to rewrite the equals method
 	 * 	cause the jcseg require it 
 	 */
 	@Override
-	public boolean equals(Object o);
+	public boolean equals( Object o );
 	
 	/**
 	 * make clone available

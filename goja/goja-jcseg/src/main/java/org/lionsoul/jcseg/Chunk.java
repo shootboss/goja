@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import org.lionsoul.jcseg.core.IChunk;
@@ -48,7 +42,7 @@ public class Chunk implements IChunk {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IChunk#getWords()
+	 * @see IChunk#getWords() 
 	 */
 	@Override
 	public IWord[] getWords() {
@@ -56,7 +50,7 @@ public class Chunk implements IChunk {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IChunk#getAverageWordsLength()
+	 * @see IChunk#getAverageWordsLength() 
 	 */
 	@Override
 	public double getAverageWordsLength() {
@@ -67,7 +61,7 @@ public class Chunk implements IChunk {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IChunk#getWordsVariance()
+	 * @see IChunk#getWordsVariance() 
 	 */
 	@Override
 	public double getWordsVariance() {
@@ -84,7 +78,7 @@ public class Chunk implements IChunk {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IChunk#getSingleWordsMorphemicFreedom()
+	 * @see IChunk#getSingleWordsMorphemicFreedom()
 	 */
 	@Override
 	public double getSingleWordsMorphemicFreedom() {
@@ -103,7 +97,7 @@ public class Chunk implements IChunk {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IChunk#getLength()
+	 * @see IChunk#getLength() 
 	 */
 	@Override
 	public int getLength() {

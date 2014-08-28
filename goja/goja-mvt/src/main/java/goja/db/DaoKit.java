@@ -16,7 +16,7 @@ import goja.StringPool;
 import goja.mvc.datatables.core.ColumnDef;
 import goja.mvc.datatables.core.DatatablesCriterias;
 import goja.mvc.dtos.PageDto;
-import goja.plugin.sqlinxml.SqlKit;
+import goja.plugins.sqlinxml.SqlKit;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import org.lionsoul.jcseg.core.IWord;
@@ -39,7 +33,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getValue()
+	 * @see IWord#getValue() 
 	 */
 	@Override
 	public String getValue() 
@@ -48,7 +42,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getLength()
+	 * @see IWord#getLength() 
 	 */
 	@Override
 	public int getLength() 
@@ -57,7 +51,7 @@ public class Word implements IWord,Cloneable
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getFrequency()
+	 * @see IWord#getFrequency() 
 	 */
 	@Override
 	public int getFrequency() 
@@ -66,7 +60,7 @@ public class Word implements IWord,Cloneable
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getType()
+	 * @see IWord#getType() 
 	 */
 	@Override
 	public int getType() 
@@ -75,7 +69,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#setPosition(int)
+	 * @see IWord#setPosition(int)
 	 */
 	@Override
 	public void setPosition( int pos ) 
@@ -84,7 +78,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getPosition()
+	 * @see IWord#getPosition()
 	 */
 	public int getPosition() 
 	{
@@ -92,7 +86,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getPinying()
+	 * @see IWord#getPinying() 
 	 */
 	@Override
 	public String getPinyin() 
@@ -101,7 +95,7 @@ public class Word implements IWord,Cloneable
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getSyn()
+	 * @see IWord#getSyn() 
 	 */
 	@Override
 	public String[] getSyn() 
@@ -116,7 +110,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#getPartSpeech()
+	 * @see IWord#getPartSpeech() 
 	 */
 	@Override
 	public String[] getPartSpeech() 
@@ -131,7 +125,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#setPinying(String)
+	 * @see IWord#setPinying(String)
 	 */
 	public void setPinyin( String py ) 
 	{
@@ -139,7 +133,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#addPartSpeech( String );
+	 * @see IWord#addPartSpeech( String );
 	 */
 	@Override
 	public void addPartSpeech( String ps ) 
@@ -159,7 +153,7 @@ public class Word implements IWord,Cloneable
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.IWord#addSyn(String)
+	 * @see IWord#addSyn(String) 
 	 */
 	@Override
 	public void addSyn( String s ) 
@@ -180,7 +174,7 @@ public class Word implements IWord,Cloneable
 	
 	/**
 	 * @see Object#equals(Object) 
-	 * @see org.lionsoul.jcseg.core.IWord#equals(Object)
+	 * @see IWord#equals(Object)
 	 */
 	public boolean equals( Object o ) 
 	{

@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import java.util.HashMap;
@@ -42,7 +36,7 @@ public class Dictionary extends ADictionary {
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#match(int, String)
+	 * @see ADictionary#match(int, String)
 	 */
 	@Override
 	public boolean match(int t, String key) {
@@ -51,7 +45,7 @@ public class Dictionary extends ADictionary {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#add(int, String, int)
+	 * @see ADictionary#add(int, String, int) 
 	 */
 	@Override
 	public void add(int t, String key, int type) {
@@ -61,7 +55,7 @@ public class Dictionary extends ADictionary {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#add(int, String, int, int)
+	 * @see ADictionary#add(int, String, int, int) 
 	 */
 	@Override
 	public void add(int t, String key, int fre, int type) {
@@ -71,7 +65,7 @@ public class Dictionary extends ADictionary {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#get(int, String)
+	 * @see ADictionary#get(int, String) 
 	 */
 	@Override
 	public IWord get(int t, String key) {
@@ -80,7 +74,7 @@ public class Dictionary extends ADictionary {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#remove(int, String)
+	 * @see ADictionary#remove(int, String) 
 	 */
 	@Override
 	public void remove(int t, String key) {
@@ -89,7 +83,7 @@ public class Dictionary extends ADictionary {
 	}
 	
 	/**
-	 * @see org.lionsoul.jcseg.core.ADictionary#size(int)
+	 * @see ADictionary#size(int) 
 	 */
 	@Override
 	public int size(int t) {

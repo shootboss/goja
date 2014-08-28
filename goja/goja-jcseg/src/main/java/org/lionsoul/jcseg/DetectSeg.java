@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import java.io.BufferedReader;
@@ -48,7 +42,7 @@ public class DetectSeg implements ISegment
 	 * 
 	 * @param	config
 	 * @param	dic
-	 * @throws	java.io.IOException
+	 * @throws	IOException
 	 */
 	public DetectSeg(JcsegTaskConfig config, ADictionary dic)
 			throws IOException 
@@ -62,7 +56,7 @@ public class DetectSeg implements ISegment
 	 * @param	input
 	 * @param	config
 	 * @param	dic
-	 * @throws	java.io.IOException
+	 * @throws	IOException
 	 */
 	public DetectSeg(Reader input, JcsegTaskConfig config, ADictionary dic)
 			throws IOException 
@@ -75,7 +69,7 @@ public class DetectSeg implements ISegment
 	}
 
 	/**
-	 * @see	org.lionsoul.jcseg.core.ISegment#reset(java.io.Reader)
+	 * @see	ISegment#reset(Reader) 
 	 */
 	@Override
 	public void reset(Reader input) throws IOException 
@@ -86,7 +80,7 @@ public class DetectSeg implements ISegment
 	}
 
 	/**
-	 * @see	org.lionsoul.jcseg.core.ISegment#getStreamPosition()
+	 * @see	ISegment#getStreamPosition() 
 	 */
 	@Override
 	public int getStreamPosition() 
@@ -98,7 +92,7 @@ public class DetectSeg implements ISegment
 	 * read the next char from the current position
 	 * 
 	 * @return	int
-	 * @throws 	java.io.IOException
+	 * @throws 	IOException 
 	 */
 	protected int readNext() 
 			throws IOException 
@@ -112,7 +106,7 @@ public class DetectSeg implements ISegment
 	 * push back the data to the stream.
 	 * 
 	 * @param 	data
-	 * @throws	java.io.IOException
+	 * @throws	IOException 
 	 */
 	protected void pushBack( int data ) 
 			throws IOException 
@@ -154,7 +148,7 @@ public class DetectSeg implements ISegment
 	/**
 	 * get the current task config instance. <br /> 
 	 * 
-	 * @param	JcsegTaskConfig
+	 * @return	JcsegTaskConfig
 	 */
 	public JcsegTaskConfig getConfig() 
 	{
@@ -162,7 +156,7 @@ public class DetectSeg implements ISegment
 	}
 
 	/**
-	 * @see	org.lionsoul.jcseg.core.ISegment#next()
+	 * @see	ISegment#next()
 	 * 
 	 * @return	IWord or null
 	 */

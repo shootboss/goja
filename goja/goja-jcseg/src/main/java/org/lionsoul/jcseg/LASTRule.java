@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import org.lionsoul.jcseg.core.IChunk;
@@ -40,7 +34,7 @@ public class LASTRule implements ILastRule {
 	 * last rule interface.
 	 * here we simply return the first chunk.
 	 * 
-	 * @see org.lionsoul.jcseg.core.IRule#call(org.lionsoul.jcseg.core.IChunk[])
+	 * @see IRule#call(IChunk[])
 	 */
 	@Override
 	public IChunk call(IChunk[] chunks) {

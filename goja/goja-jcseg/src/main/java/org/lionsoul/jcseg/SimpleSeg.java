@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package org.lionsoul.jcseg;
 
 import java.io.IOException;
@@ -33,7 +27,7 @@ public class SimpleSeg extends ASegment {
 	}
 
 	/**
-	 * @see org.lionsoul.jcseg.ASegment#getBestCJKChunk(char[], int)
+	 * @see ASegment#getBestCJKChunk(char[], int) 
 	 */
 	@Override
 	public IChunk getBestCJKChunk(char[] chars, int index) {
