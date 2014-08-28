@@ -5,7 +5,7 @@
  */
 package goja.mvc;
 
-import goja.annotation.ControllerBind;
+import goja.annotation.Path;
 import com.google.common.base.Preconditions;
 import com.jfinal.config.Routes;
 import com.jfinal.kit.StrKit;
@@ -27,9 +27,9 @@ public class AutoBindRoutes extends Routes {
     public void config() {
         List<Class> controllerClasses = ClassBox.getInstance().getClasses(ClassType.CONTROLLER);
         if (controllerClasses != null && !controllerClasses.isEmpty()) {
-            ControllerBind controllerBind;
+            Path controllerBind;
             for (Class controller : controllerClasses) {
-                controllerBind = (ControllerBind) controller.getAnnotation(ControllerBind.class);
+                controllerBind = (Path) controller.getAnnotation(Path.class);
                 if (controllerBind == null) {
                     final String controllerKey = controllerKey(controller);
                     this.add(controllerKey, controller);

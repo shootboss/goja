@@ -29,7 +29,7 @@ import java.util.Locale;
  * @version 1.0 2014-06-24 22:08
  * @since JDK 1.6
  */
-public class I18n {
+public final class I18n {
 
 
     public static ThreadLocal<String> current = new ThreadLocal<String>();
