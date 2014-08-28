@@ -13,34 +13,22 @@ import goja.kits.format.PrintfFormat;
  */
 public class Printf {
 
-    // ---------------------------------------------------------------- primitives
-
-    /**
-     */
     public static String str(String format, byte value) {
         return new PrintfFormat(format).form(value);
     }
 
-    /**
-     */
     public static String str(String format, char value) {
         return new PrintfFormat(format).form(value);
     }
 
-    /**
-     */
     public static String str(String format, short value) {
         return new PrintfFormat(format).form(value);
     }
 
-    /**
-     */
     public static String str(String format, int value) {
         return new PrintfFormat(format).form(value);
     }
 
-    /**
-     */
     public static String str(String format, long value) {
         return new PrintfFormat(format).form(value);
     }
@@ -49,8 +37,6 @@ public class Printf {
         return new PrintfFormat(format).form(value);
     }
 
-    /**
-     */
     public static String str(String format, double value) {
         return new PrintfFormat(format).form(value);
     }

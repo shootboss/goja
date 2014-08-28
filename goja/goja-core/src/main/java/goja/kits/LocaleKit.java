@@ -26,7 +26,6 @@ import java.util.Map;
  */
 public class LocaleKit {
 
-
     protected static Map<String, LocaleData> locales = Maps.newHashMap();
 
 

@@ -5,13 +5,13 @@
  */
 package goja.kits;
 
-import goja.kits.lang.Reflect;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.plugin.IPlugin;
+import goja.kits.lang.Reflect;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class JfinalKit {
     private static Handlers      handlers;
 
     public static void init() {
-        Reflect reflect = Reflect.on("com.jfinal.core.Config");
+        final Reflect reflect = Reflect.on("com.jfinal.core.Config");
         constants = reflect.get("constants");
         routes = reflect.get("routes");
         plugins = reflect.get("plugins");
