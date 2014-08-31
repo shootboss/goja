@@ -32,7 +32,6 @@ import java.util.Currency;
  * <li>Money类实现了equals和hashCode方法。
  * </ul>
  * <p/>
- * TODO: 必须处理运算中的溢出情形
  */
 @SuppressWarnings("UnusedDeclaration")
 public class MoneyKit implements Serializable, Comparable<MoneyKit> {
@@ -734,7 +733,7 @@ public class MoneyKit implements Serializable, Comparable<MoneyKit> {
      * 将Money根据汇率表转换成为另外一种货币Money
      *
      * @param currency 币种
-     * @return
+     * @return 另外一种货币Money
      */
     public MoneyKit convertTo(Currency currency) {
         throw new UnsupportedOperationException();
@@ -742,6 +741,7 @@ public class MoneyKit implements Serializable, Comparable<MoneyKit> {
 
     /**
      * 将Money变为负数
+     * @return 负数
      */
     public MoneyKit negate() {
         return newMoneyWithSameCurrency(-cent);

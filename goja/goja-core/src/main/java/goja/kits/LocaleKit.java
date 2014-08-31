@@ -24,6 +24,7 @@ import java.util.Map;
  * @version 1.0 2014-01-31 18:17
  * @since JDK 1.6
  */
+@SuppressWarnings("UnusedDeclaration")
 public class LocaleKit {
 
     protected static Map<String, LocaleData> locales = Maps.newHashMap();

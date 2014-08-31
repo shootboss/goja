@@ -1,8 +1,8 @@
 package goja.test.ci;
 
-import com.github.sog.kit.lang.ObjectKit;
-import goja.StringPool;
 import com.google.common.collect.Lists;
+import goja.StringPool;
+import goja.lang.Lang;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -14,8 +14,7 @@ import static goja.StringPool.EMPTY;
 /**
  * 用来测试并统计线程执行时间的工具。
  * <p/>
- * Profiler.start(message),Profiler.release() 及
- * Profiler.enter(message),Profiler.release() 要成对出现
+ * Profiler.start(message),Profiler.release() 及 Profiler.enter(message),Profiler.release() 要成对出现
  * <p/>
  * <pre>
  * 	public void test_dump() throws InterruptedException {
@@ -106,11 +105,7 @@ public final class Profiler {
     }
 
     /**
-     * 清除计时器。
-     * <p/>
-     * <p>
-     * 清除以后必须再次调用<code>start</code>方可重新计时。
-     * </p>
+     * 清除计时器。 <p/> <p> 清除以后必须再次调用<code>start</code>方可重新计时。 </p>
      */
     public static void reset() {
         stepThreadLocal.set(null);
@@ -215,7 +210,7 @@ public final class Profiler {
         Step currentStep = getCurrentStep();
 
         if (currentStep != null) {
-            currentStep.release(e, loopCount, ObjectKit.getSize(resultSizeObject));
+            currentStep.release(e, loopCount, Lang.length(resultSizeObject));
         }
     }
 
@@ -323,7 +318,7 @@ public final class Profiler {
         private final long   startTime;
         DecimalFormat pecentageFormat = new DecimalFormat("##.#%");
         DecimalFormat numberFormat    = new DecimalFormat("##,###,###");
-        private       long   endTime;
+        private long      endTime;
         private long      loopCount;
         private Throwable exception;
         private int       resultSize;

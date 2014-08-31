@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  *
  * @author zozoh(zozohtnt@gmail.com)
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class Times {
 
     /**
@@ -23,9 +24,7 @@ public abstract class Times {
      * @return 给定年份是否是闰年
      */
     public static boolean leapYear(int year) {
-        if (year < 4)
-            return false;
-        return (year % 400 == 0) || (year % 100 != 0 && year % 4 == 0);
+        return year >= 4 && ((year % 400 == 0) || (year % 100 != 0 && year % 4 == 0));
     }
 
     /**
@@ -65,7 +64,7 @@ public abstract class Times {
      * @return 一天中的绝对秒数
      */
     public static int T(String ts) {
-        String[] tss = Strings.splitIgnoreBlank(ts, ":");
+        String[] tss = StringKit.splitIgnoreBlank(ts, ":");
         if (null != tss && tss.length == 3) {
             int hh = Integer.parseInt(tss[0]);
             int mm = Integer.parseInt(tss[1]);
@@ -88,7 +87,7 @@ public abstract class Times {
             + "(([ T])?"
             + "(\\d{1,2})(:)(\\d{1,2})(:)(\\d{1,2})"
             + "(([.])"
-            + "(\\d{1,}))?)?"
+            + "(\\d+))?)?"
             + "(([+-])(\\d{1,2})(:\\d{1,2})?)?"
             + "$");
 
@@ -104,8 +103,7 @@ public abstract class Times {
     }
 
     /**
-     * 根据字符串得到相对于 "UTC 1970-01-01 00:00:00" 的绝对毫秒数。
-     * 本函数假想给定的时间字符串是本地时间。所以计算出来结果后，还需要减去时差
+     * 根据字符串得到相对于 "UTC 1970-01-01 00:00:00" 的绝对毫秒数。 本函数假想给定的时间字符串是本地时间。所以计算出来结果后，还需要减去时差
      * <p/>
      * 支持的时间格式字符串为:
      * <p/>
@@ -166,7 +164,7 @@ public abstract class Times {
                     ms);
             SimpleDateFormat df = (SimpleDateFormat) DF_DATE_TIME_MS4.clone();
             // 那么用字符串中带有的时区信息 ...
-            if (null == tz && !Strings.isBlank(m.group(17))) {
+            if (null == tz && !StringKit.isBlank(m.group(17))) {
                 tz = TimeZone.getTimeZone(String.format("GMT%s%s:00",
                         m.group(18),
                         m.group(19)));
@@ -235,7 +233,7 @@ public abstract class Times {
     public static String mss(int ms) {
         int sec = ms / 1000;
         ms = ms - sec * 1000;
-        return secs((int) sec) + "." + Strings.alignRight(ms, 3, '0');
+        return secs(sec) + "." + StringKit.alignRight(ms, 3, '0');
     }
 
     /**
@@ -249,11 +247,11 @@ public abstract class Times {
         sec -= hh * 3600;
         int mm = sec / 60;
         sec -= mm * 60;
-        return Strings.alignRight(hh, 2, '0')
+        return StringKit.alignRight(hh, 2, '0')
                 + ":"
-                + Strings.alignRight(mm, 2, '0')
+                + StringKit.alignRight(mm, 2, '0')
                 + ":"
-                + Strings.alignRight(sec, 2, '0');
+                + StringKit.alignRight(sec, 2, '0');
 
     }
 
@@ -293,7 +291,7 @@ public abstract class Times {
 
     private static int _int(Matcher m, int index, int dft) {
         String s = m.group(index);
-        if (Strings.isBlank(s))
+        if (StringKit.isBlank(s))
             return dft;
         return Integer.parseInt(s);
     }
@@ -448,11 +446,11 @@ public abstract class Times {
      */
     public static String sT(int sec) {
         int[] ss = T(sec);
-        return Strings.alignRight(ss[0], 2, '0')
+        return StringKit.alignRight(ss[0], 2, '0')
                 + ":"
-                + Strings.alignRight(ss[1], 2, '0')
+                + StringKit.alignRight(ss[1], 2, '0')
                 + ":"
-                + Strings.alignRight(ss[2], 2, '0');
+                + StringKit.alignRight(ss[2], 2, '0');
     }
 
     /**
@@ -551,8 +549,14 @@ public abstract class Times {
      * 否则打印月份和年
      * </pre>
      *
-     * @param d
-     * @return
+     * @param d the date.
+     * @return <pre>
+     * 如果 1 分钟内，打印 Just Now
+     * 如果 1 小时内，打印多少分钟
+     * 如果 1 天之内，打印多少小时之前
+     * 如果是今年之内，打印月份和日期
+     * 否则打印月份和年
+     * </pre>
      */
     public static String formatForRead(Date d) {
         long ms = System.currentTimeMillis() - d.getTime();
@@ -562,17 +566,17 @@ public abstract class Times {
         }
         // 如果 1 小时内，打印多少分钟
         if (ms < (60 * 60000)) {
-            return "" + (ms / 60000) + "Min.";
+            return (ms / 60000) + "Min.";
         }
 
         // 如果 1 天之内，打印多少小时之前
         if (ms < (24 * 3600 * 1000)) {
-            return "" + (ms / 3600000) + "hr.";
+            return (ms / 3600000) + "hr.";
         }
 
         // 如果一周之内，打印多少天之前
         if (ms < (7 * 24 * 3600 * 1000)) {
-            return "" + (ms / (24 * 3600000)) + "Day";
+            return (ms / (24 * 3600000)) + "Day";
         }
 
         // 如果是今年之内，打印月份和日期

@@ -192,7 +192,7 @@ public class Mirror<T> {
      *             没有找到 Getter
      */
     public Method getGetter(String fieldName) throws NoSuchMethodException {
-        String fn = Strings.upperFirst(fieldName);
+        String fn = StringKit.upperFirst(fieldName);
         String _get = "get" + fn;
         String _is = "is" + fn;
         for (Method method : klass.getMethods()) {
@@ -263,11 +263,11 @@ public class Mirror<T> {
 
         // 是 getter
         if (name.startsWith("get") && method.getParameterTypes().length == 0) {
-            name = Strings.lowerFirst(name.substring(3));
+            name = StringKit.lowerFirst(name.substring(3));
             getter = method;
             // 寻找 setter
             try {
-                setter = method.getDeclaringClass().getMethod("set" + Strings.upperFirst(name),
+                setter = method.getDeclaringClass().getMethod("set" + StringKit.upperFirst(name),
                         method.getReturnType());
             }
             catch (Exception e) {}
@@ -277,22 +277,22 @@ public class Mirror<T> {
         else if (name.startsWith("is")
                 && Mirror.me(method.getReturnType()).isBoolean()
                 && method.getParameterTypes().length == 0) {
-            name = Strings.lowerFirst(name.substring(2));
+            name = StringKit.lowerFirst(name.substring(2));
             getter = method;
             // 寻找 setter
             try {
-                setter = method.getDeclaringClass().getMethod("set" + Strings.upperFirst(name),
+                setter = method.getDeclaringClass().getMethod("set" + StringKit.upperFirst(name),
                         method.getReturnType());
             }
             catch (Exception e) {}
         }
         // 是 setter
         else if (name.startsWith("set") && method.getParameterTypes().length == 1) {
-            name = Strings.lowerFirst(name.substring(3));
+            name = StringKit.lowerFirst(name.substring(3));
             setter = method;
             // 寻找 getter
             try {
-                getter = method.getDeclaringClass().getMethod("get" + Strings.upperFirst(name));
+                getter = method.getDeclaringClass().getMethod("get" + StringKit.upperFirst(name));
             }
             catch (Exception e) {}
 
@@ -358,7 +358,7 @@ public class Mirror<T> {
      */
     public Method getSetter(String fieldName, Class<?> paramType) throws NoSuchMethodException {
         try {
-            String setterName = "set" + Strings.upperFirst(fieldName);
+            String setterName = "set" + StringKit.upperFirst(fieldName);
             try {
                 return klass.getMethod(setterName, paramType);
             }
@@ -403,7 +403,7 @@ public class Mirror<T> {
      * @return 函数数组
      */
     public Method[] findSetters(String fieldName) {
-        String mName = "set" + Strings.upperFirst(fieldName);
+        String mName = "set" + StringKit.upperFirst(fieldName);
         List<Method> ms = new ArrayList<Method>();
         for (Method m : this.klass.getMethods()) {
             if (!Modifier.isStatic(m.getModifiers())
@@ -1555,7 +1555,7 @@ public class Mirror<T> {
         Matcher m = PTN.matcher(gts);
         if (m.find()) {
             String s = m.group(2);
-            String[] ss = Strings.splitIgnoreBlank(s);
+            String[] ss = StringKit.splitIgnoreBlank(s);
             if (ss.length > 0) {
                 Class<?>[] re = new Class<?>[ss.length];
                 try {

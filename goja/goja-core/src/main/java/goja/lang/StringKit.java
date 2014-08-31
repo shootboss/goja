@@ -23,9 +23,10 @@ import java.util.List;
  * @author bonyfish(mc02cxj@gmail.com)
  * @author pw(pangwu86@gmail.com)
  */
-public class Strings {
+@SuppressWarnings("UnusedDeclaration")
+public class StringKit {
 
-    protected Strings() {
+    protected StringKit() {
     }
 
     /**
@@ -36,16 +37,13 @@ public class Strings {
      */
     public static boolean isChineseCharacter(char c) {
         Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
-        if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+        return ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
                 || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
                 || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
                 || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
                 || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
                 || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
-                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION) {
-            return true;
-        }
-        return false;
+                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION;
     }
 
     /**
@@ -68,10 +66,7 @@ public class Strings {
         // 日文判断
         // 全角平假名 u3040 - u309F
         // 全角片假名 u30A0 - u30FF
-        if (c >= '\u3040' && c <= '\u30FF') {
-            return true;
-        }
-        return false;
+        return c >= '\u3040' && c <= '\u30FF';
     }
 
     /**
@@ -195,9 +190,7 @@ public class Strings {
         char c = s.charAt(0);
         if (Character.isLowerCase(c))
             return s.toString();
-        return new StringBuilder(len).append(Character.toLowerCase(c))
-                .append(s.subSequence(1, len))
-                .toString();
+        return String.valueOf(Character.toLowerCase(c)) + s.subSequence(1, len);
     }
 
     /**
@@ -215,9 +208,7 @@ public class Strings {
         char c = s.charAt(0);
         if (Character.isUpperCase(c))
             return s.toString();
-        return new StringBuilder(len).append(Character.toUpperCase(c))
-                .append(s.subSequence(1, len))
-                .toString();
+        return String.valueOf(Character.toUpperCase(c)) + s.subSequence(1, len);
     }
 
     /**
@@ -250,7 +241,7 @@ public class Strings {
      * @return 是否以特殊字符开头
      */
     public static boolean startsWithChar(String s, char c) {
-        return null != s ? (s.length() == 0 ? false : s.charAt(0) == c) : false;
+        return null != s && (s.length() != 0 && s.charAt(0) == c);
     }
 
     /**
@@ -261,7 +252,7 @@ public class Strings {
      * @return 是否以特殊字符结尾
      */
     public static boolean endsWithChar(String s, char c) {
-        return null != s ? (s.length() == 0 ? false : s.charAt(s.length() - 1) == c) : false;
+        return null != s && (s.length() != 0 && s.charAt(s.length() - 1) == c);
     }
 
     /**
@@ -329,7 +320,7 @@ public class Strings {
      * @return 紧凑的字符串
      */
     public static String brief(String str, int len) {
-        if (Strings.isBlank(str) || (str.length() + 3) <= len)
+        if (StringKit.isBlank(str) || (str.length() + 3) <= len)
             return str;
         int w = len / 2;
         int l = str.length();
@@ -343,7 +334,7 @@ public class Strings {
      * @return 字符串数组
      */
     public static String[] splitIgnoreBlank(String s) {
-        return Strings.splitIgnoreBlank(s, ",");
+        return StringKit.splitIgnoreBlank(s, ",");
     }
 
     /**
@@ -374,7 +365,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String fillDigit(int d, int width) {
-        return Strings.alignRight(String.valueOf(d), width, '0');
+        return StringKit.alignRight(String.valueOf(d), width, '0');
     }
 
     /**
@@ -385,7 +376,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String fillHex(int d, int width) {
-        return Strings.alignRight(Integer.toHexString(d), width, '0');
+        return StringKit.alignRight(Integer.toHexString(d), width, '0');
     }
 
     /**
@@ -396,7 +387,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String fillBinary(int d, int width) {
-        return Strings.alignRight(Integer.toBinaryString(d), width, '0');
+        return StringKit.alignRight(Integer.toBinaryString(d), width, '0');
     }
 
     /**
@@ -407,7 +398,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String toDigit(int d, int width) {
-        return Strings.cutRight(String.valueOf(d), width, '0');
+        return StringKit.cutRight(String.valueOf(d), width, '0');
     }
 
     /**
@@ -418,7 +409,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String toHex(int d, int width) {
-        return Strings.cutRight(Integer.toHexString(d), width, '0');
+        return StringKit.cutRight(Integer.toHexString(d), width, '0');
     }
 
     /**
@@ -429,7 +420,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String toBinary(int d, int width) {
-        return Strings.cutRight(Integer.toBinaryString(d), width, '0');
+        return StringKit.cutRight(Integer.toBinaryString(d), width, '0');
     }
 
     /**
@@ -447,7 +438,7 @@ public class Strings {
         if (len == width)
             return s;
         if (len < width)
-            return Strings.dup(c, width - len) + s;
+            return StringKit.dup(c, width - len) + s;
         return s.substring(len - width, len);
     }
 
@@ -466,7 +457,7 @@ public class Strings {
         if (len == width)
             return s;
         if (len < width)
-            return s + Strings.dup(c, width - len);
+            return s + StringKit.dup(c, width - len);
         return s.substring(0, width);
     }
 
@@ -485,7 +476,7 @@ public class Strings {
         int len = s.length();
         if (len >= width)
             return s;
-        return new StringBuilder().append(dup(c, width - len)).append(s).toString();
+        return dup(c, width - len) + s;
     }
 
     /**
@@ -503,7 +494,7 @@ public class Strings {
         int length = s.length();
         if (length >= width)
             return s;
-        return new StringBuilder().append(s).append(dup(c, width - length)).toString();
+        return s + dup(c, width - length);
     }
 
     /**
@@ -560,9 +551,7 @@ public class Strings {
      * @return 字符串是被左字符串和右字符串包裹
      */
     public static boolean isQuoteBy(String str, String l, String r) {
-        if (null == str || null == l || null == r)
-            return false;
-        return str.startsWith(l) && str.endsWith(r);
+        return !(null == str || null == l || null == r) && str.startsWith(l) && str.endsWith(r);
     }
 
     /**
@@ -637,7 +626,7 @@ public class Strings {
         if (null == obj)
             return def;
         String s = obj.toString();
-        return Strings.isBlank(s) ? def : s;
+        return StringKit.isBlank(s) ? def : s;
     }
 
     /**
@@ -676,7 +665,7 @@ public class Strings {
      * @return 新字符串
      */
     public static String removeFirst(String str, char c) {
-        return (Strings.isEmpty(str) || c != str.charAt(0)) ? str : str.substring(1);
+        return (StringKit.isEmpty(str) || c != str.charAt(0)) ? str : str.substring(1);
     }
 
     /**
@@ -687,7 +676,7 @@ public class Strings {
      * @return 是否包含
      */
     public static boolean isin(String[] ss, String s) {
-        if (null == ss || ss.length == 0 || Strings.isBlank(s))
+        if (null == ss || ss.length == 0 || StringKit.isBlank(s))
             return false;
         for (String w : ss)
             if (s.equals(w))
@@ -702,9 +691,7 @@ public class Strings {
      * @return true 如果是有效的邮箱地址
      */
     public static boolean isEmail(String input) {
-        if (Strings.isBlank(input))
-            return false;
-        return ValidatorKit.isEmail(input);
+        return !StringKit.isBlank(input) && ValidatorKit.isEmail(input);
     }
 
     /**

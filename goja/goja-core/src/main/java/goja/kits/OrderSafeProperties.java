@@ -32,8 +32,9 @@ import java.util.Set;
  */
 public class OrderSafeProperties extends java.util.Properties {
 
+    private static final long                  serialVersionUID = 4083738969812345117L;
     // set used to preserve key order
-    private final LinkedHashSet<Object> keys = new LinkedHashSet<Object>();
+    private final        LinkedHashSet<Object> keys             = new LinkedHashSet<Object>();
 
     @Override
     public void load(InputStream inputStream) throws IOException {
@@ -64,7 +65,7 @@ public class OrderSafeProperties extends java.util.Properties {
 
     @Override
     public Enumeration<Object> keys() {
-        return Collections.<Object>enumeration(keys);
+        return Collections.enumeration(keys);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class OrderSafeProperties extends java.util.Properties {
     }
 
     @Override
-    public void putAll(Map<? extends Object, ? extends Object> map) {
+    public void putAll(Map<?, ?> map) {
         keys.addAll(map.keySet());
         super.putAll(map);
     }

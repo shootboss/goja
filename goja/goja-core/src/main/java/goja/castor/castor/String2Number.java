@@ -5,7 +5,7 @@ package goja.castor.castor;
 import goja.castor.Castor;
 import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
-import goja.lang.Strings;
+import goja.lang.StringKit;
 
 /**
  * 根据一个字符串将其转换成 Number 类型。这里有几个规则
@@ -21,7 +21,7 @@ import goja.lang.Strings;
 public abstract class String2Number<T> extends Castor<String, T> {
 
     protected boolean _isNull(String str) {
-        return Strings.isBlank(str) || "null".equalsIgnoreCase(str);
+        return StringKit.isBlank(str) || "null".equalsIgnoreCase(str);
     }
 
     protected abstract T getPrimitiveDefaultValue();
@@ -30,7 +30,7 @@ public abstract class String2Number<T> extends Castor<String, T> {
 
     @Override
     public T cast(String src, Class<?> toType, String... args) {
-        if (Strings.isBlank(src) || "null".equalsIgnoreCase(src)) {
+        if (StringKit.isBlank(src) || "null".equalsIgnoreCase(src)) {
             return toType.isPrimitive() ? getPrimitiveDefaultValue() : null;
         }
         if (!toType.isPrimitive()

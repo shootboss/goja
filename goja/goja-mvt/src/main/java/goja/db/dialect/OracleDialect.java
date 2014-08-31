@@ -184,14 +184,14 @@ public class OracleDialect extends Dialect {
     public void fillStatement(PreparedStatement pst, List<Object> paras) throws SQLException {
         int size = paras.size();
         if (Goja.mode.isDev()) {
-            logger.debug("The sql paramters : {}", size == 0 ? "Empty" : size);
+            System.out.println("The sql paramters : " + (size == 0 ? "Empty" : size));
             for (int i = 0; i < size; i++) {
                 Object value = paras.get(i);
                 if (value instanceof java.sql.Date)
                     pst.setDate(i + 1, (java.sql.Date) value);
                 else
                     pst.setObject(i + 1, value);
-                logger.debug("The param index: {}, param type is {}, param value is {}", i, value.getClass().getSimpleName(), value);
+                System.out.println(String.format("The param index: %d, param type is %s, param value is %s", i, value.getClass().getSimpleName(), value));
             }
         } else {
             for (int i = 0; i < size; i++) {
@@ -207,14 +207,14 @@ public class OracleDialect extends Dialect {
     public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
         int size = paras.length;
         if (Goja.mode.isDev()) {
-            logger.debug("The sql paramters : {}", size == 0 ? "Empty" : size);
+            System.out.println("The sql paramters : " + (size == 0 ? "Empty" : size));
             for (int i = 0; i < size; i++) {
                 Object value = paras[i];
                 if (value instanceof java.sql.Date)
                     pst.setDate(i + 1, (java.sql.Date) value);
                 else
                     pst.setObject(i + 1, value);
-                logger.debug("The param index: {}, param type is {}, param value is {}", i, value.getClass().getSimpleName(), value);
+                System.out.println(String.format("The param index: %d, param type is %s, param value is %s", i, value.getClass().getSimpleName(), value));
             }
         } else {
             for (int i = 0; i < size; i++) {

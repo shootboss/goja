@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSON;
 import goja.castor.Castor;
 import goja.exceptions.FailToCastObjectException;
 import goja.lang.Lang;
-import goja.lang.Strings;
+import goja.lang.StringKit;
 
 public class String2Array extends Castor<String, Object> {
 
@@ -19,10 +19,10 @@ public class String2Array extends Castor<String, Object> {
     @Override
     public Object cast(String src, Class<?> toType, String... args)
             throws FailToCastObjectException {
-        if (Strings.isQuoteByIgnoreBlank(src, '[', ']')) {
+        if (StringKit.isQuoteByIgnoreBlank(src, '[', ']')) {
             return JSON.parseObject(src, toType);
         }
-        String[] ss = Strings.splitIgnoreBlank(src);
+        String[] ss = StringKit.splitIgnoreBlank(src);
         return Lang.array2array(ss, toType.getComponentType());
     }
 

@@ -31,7 +31,7 @@ public class JVMKit {
     /**
      * 得到当时进程PID,如果没有得到，返回-1
      *
-     * @return
+     * @return 进程PID
      */
     public static int getPid() {
         String name = ManagementFactory.getRuntimeMXBean().getName();

@@ -337,7 +337,7 @@ public class Goja extends JFinalConfig {
         final Map<String, Properties> dbConfig = GojaConfig.getDbConfig();
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
-            if (db_props != null && db_props.isEmpty()) {
+            if (db_props != null && !db_props.isEmpty()) {
                 configDatabasePlugins(db_config, plugins,
                         db_props.getProperty(InitConst.DB_URL),
                         db_props.getProperty(InitConst.DB_USERNAME),

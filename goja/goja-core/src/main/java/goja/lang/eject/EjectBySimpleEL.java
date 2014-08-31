@@ -9,7 +9,7 @@ package goja.lang.eject;
 import java.lang.reflect.Method;
 
 import goja.lang.Lang;
-import goja.lang.Strings;
+import goja.lang.StringKit;
 
 public class EjectBySimpleEL implements Ejecting {
 
@@ -18,7 +18,7 @@ public class EjectBySimpleEL implements Ejecting {
     private Method method;
 
     public EjectBySimpleEL(String by) {
-        if (Strings.isBlank(by))
+        if (StringKit.isBlank(by))
             throw new IllegalArgumentException("MUST NOT Null/Blank");
         if (by.indexOf('#') > 0) {
             try {

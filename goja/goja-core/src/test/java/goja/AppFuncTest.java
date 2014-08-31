@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package com.github.sog.kit.cst;
+package goja;
 
 import com.google.common.collect.Lists;
 import goja.Func;
