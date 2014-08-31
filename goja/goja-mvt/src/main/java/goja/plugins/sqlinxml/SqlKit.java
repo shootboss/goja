@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class SqlKit {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(com.github.sog.plugin.sqlinxml.SqlKit.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SqlKit.class);
 
     private static final Map<String, String> SQL_MAP = Maps.newHashMap();
 

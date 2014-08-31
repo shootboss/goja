@@ -20,8 +20,19 @@
     <dependencies>
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>jfinal-app</artifactId>
-            <version>0.0.9-SNAPSHOT</version>
+            <artifactId>goja-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sogyf</groupId>
+            <artifactId>goja-jfinal</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
