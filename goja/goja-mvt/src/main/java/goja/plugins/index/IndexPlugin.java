@@ -7,7 +7,7 @@
 package goja.plugins.index;
 
 import com.jfinal.plugin.IPlugin;
-import goja.AppConfig;
+import goja.GojaConfig;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class IndexPlugin implements IPlugin {
     @Override
     public boolean start() {
         try {
-            holder = IndexHolder.init(AppConfig.getProperty(INDEX_PATH));
+            holder = IndexHolder.init(GojaConfig.getProperty(INDEX_PATH));
         } catch (IOException e) {
             logger.error("the index plugin has error!", e);
             return false;

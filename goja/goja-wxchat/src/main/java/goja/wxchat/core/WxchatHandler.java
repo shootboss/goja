@@ -1,7 +1,7 @@
 package goja.wxchat.core;
 
 import com.jfinal.handler.Handler;
-import goja.AppConfig;
+import goja.GojaConfig;
 import goja.StringPool;
 import goja.wxchat.message.OutputMessage;
 import goja.wxchat.processor.Processor;
@@ -34,7 +34,7 @@ public class WxchatHandler extends Handler {
     private Processor processor;
 
     public WxchatHandler() {
-        String className = AppConfig.getProperty(Constants.WECHAT_PROCESSOR);
+        String className = GojaConfig.getProperty(Constants.WECHAT_PROCESSOR);
         createProcessor(className);
     }
 

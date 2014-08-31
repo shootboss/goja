@@ -5,7 +5,7 @@
  */
 package goja.plugins.redis;
 
-import goja.AppConfig;
+import goja.GojaConfig;
 import goja.StringPool;
 import goja.init.InitConst;
 import com.jfinal.plugin.IPlugin;
@@ -68,7 +68,7 @@ public class JedisPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        final Properties properties = AppConfig.getRedisConfig();
+        final Properties properties = GojaConfig.getRedisConfig();
         if (properties != null && !properties.isEmpty()) {
 
             Set<Entry<Object, Object>> entrySet = properties.entrySet();

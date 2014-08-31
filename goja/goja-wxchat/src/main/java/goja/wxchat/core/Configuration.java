@@ -1,6 +1,6 @@
 package goja.wxchat.core;
 
-import goja.AppConfig;
+import goja.GojaConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +26,9 @@ public class Configuration {
      * 创建配置信息
      */
     private Configuration() {
-        appid = AppConfig.getProperty(Constants.WECHAT_APPID);
-        appsecret = AppConfig.getProperty(Constants.WECHAT_APPSECRET);
-        token = AppConfig.getProperty(Constants.WECHAT_TOKEN);
+        appid = GojaConfig.getProperty(Constants.WECHAT_APPID);
+        appsecret = GojaConfig.getProperty(Constants.WECHAT_APPSECRET);
+        token = GojaConfig.getProperty(Constants.WECHAT_TOKEN);
     }
 
     public String getAppid() {

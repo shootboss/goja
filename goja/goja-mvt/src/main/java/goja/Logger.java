@@ -47,10 +47,10 @@ public class Logger {
      * Try to init stuff.
      */
     public static void init() {
-        String slf4jPath = AppConfig.getProperty(InitConst.LOGGER_PATH, "/logback.xml");
+        String slf4jPath = GojaConfig.getProperty(InitConst.LOGGER_PATH, "/logback.xml");
         URL slf4jConf = Logger.class.getResource(slf4jPath);
-        final String app_name = AppConfig.getProperty(APP, "app");
-        final String app_version = AppConfig.getProperty(APP_VERSION, "0.0.1");
+        final String app_name = GojaConfig.getProperty(APP, "app");
+        final String app_version = GojaConfig.getProperty(APP_VERSION, "0.0.1");
         if (slf4jConf == null) {
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 

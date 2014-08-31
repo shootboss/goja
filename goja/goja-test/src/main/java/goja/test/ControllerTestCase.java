@@ -6,7 +6,7 @@
 package goja.test;
 
 import com.alibaba.druid.util.JdbcUtils;
-import goja.AppConfig;
+import goja.GojaConfig;
 import goja.Goja;
 import goja.StringPool;
 import goja.init.ctxbox.ClassFinder;
@@ -86,7 +86,7 @@ public abstract class ControllerTestCase<T extends Goja> {
         if (configStarted) {
             return;
         }
-        final Properties configProps = AppConfig.getConfigProps();
+        final Properties configProps = GojaConfig.getConfigProps();
         runScriptInitDb(configProps);
         //Before starting JFinal, lookup class file on the classpath.
         ClassFinder.findWithTest();

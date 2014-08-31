@@ -17,7 +17,7 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.StatusManager;
-import goja.AppConfig;
+import goja.GojaConfig;
 import goja.Goja;
 import goja.init.InitConst;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +49,7 @@ public class AppLogConfigurator {
         ca.setName("console");
 
         final RollingFileAppender rfa = new RollingFileAppender();
-        final String filename = AppConfig.getProperty(InitConst.LOGGER_PATH, "../logs/" + Goja.appName + ".log");
+        final String filename = GojaConfig.getProperty(InitConst.LOGGER_PATH, "../logs/" + Goja.appName + ".log");
         rfa.setFile(filename);
         final TimeBasedRollingPolicy rollingPolicy = new TimeBasedRollingPolicy();
         rollingPolicy.setParent(rfa);
@@ -77,7 +77,7 @@ public class AppLogConfigurator {
         asyncAppender.setQueueSize(512);
         asyncAppender.setDiscardingThreshold(0);
 
-        final Level config_level = Level.toLevel(AppConfig.getProperty(InitConst.LOGGER_LEVEL), Level.INFO);
+        final Level config_level = Level.toLevel(GojaConfig.getProperty(InitConst.LOGGER_LEVEL), Level.INFO);
         final Level default_level = Goja.mode.isDev() ? Level.DEBUG : config_level;
         Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
         rootLogger.setLevel(default_level);

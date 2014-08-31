@@ -17,9 +17,9 @@ import java.util.Properties;
  * @version 1.0 2014-01-13 10:24
  * @since JDK 1.6
  */
-public class AppConfig {
+public class GojaConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(GojaConfig.class);
 
     public static final String REDIS_PREFIX = "redis";
     public static final String MONGO_PREFIX = "mongo";
