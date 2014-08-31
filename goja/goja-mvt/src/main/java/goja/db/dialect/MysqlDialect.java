@@ -11,7 +11,11 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import goja.Goja;
 import goja.StringPool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,23 +25,24 @@ import java.util.Set;
  * MysqlDialect.
  */
 public class MysqlDialect extends Dialect {
-	
-	public String forTableBuilderDoBuild(String tableName) {
-		return "SELECT * FROM `" + tableName + "` WHERE 1 = 2";
-	}
-	
-	public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
-		sql.append("insert into `").append(table.getName()).append("`(");
-		StringBuilder temp = new StringBuilder(") values(");
-		for (Entry<String, Object> e: attrs.entrySet()) {
-			String colName = e.getKey();
-			if (table.hasColumnLabel(colName)) {
-				if (paras.size() > 0) {
-					sql.append(", ");
-					temp.append(", ");
-				}
-				sql.append("`").append(colName).append("`");
-				temp.append("?");
+    private static final Logger logger = LoggerFactory.getLogger(MysqlDialect.class);
+
+    public String forTableBuilderDoBuild(String tableName) {
+        return "SELECT * FROM `" + tableName + "` WHERE 1 = 2";
+    }
+
+    public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
+        sql.append("insert into `").append(table.getName()).append("`(");
+        StringBuilder temp = new StringBuilder(") values(");
+        for (Entry<String, Object> e : attrs.entrySet()) {
+            String colName = e.getKey();
+            if (table.hasColumnLabel(colName)) {
+                if (paras.size() > 0) {
+                    sql.append(", ");
+                    temp.append(", ");
+                }
+                sql.append("`").append(colName).append("`");
+                temp.append("?");
 				paras.add(e.getValue());
 			}
 		}
@@ -146,4 +151,36 @@ public class MysqlDialect extends Dialect {
 		sql.append(sqlExceptSelect);
 		sql.append(" LIMIT ").append(offset).append(", ").append(pageSize);	// limit can use one or two '?' to pass paras
 	}
+
+    public void fillStatement(PreparedStatement pst, List<Object> paras) throws SQLException {
+        int size = paras.size();
+        if (Goja.mode.isDev()) {
+            logger.debug("The sql paramters : {}", size == 0 ? "Empty" : size);
+            for (int i=0; i<size; i++) {
+                final Object value = paras.get(i);
+                pst.setObject(i + 1, value);
+                logger.debug("The param index: {}, param type is {}, param value is {}", i, value.getClass().getSimpleName(), value);
+            }
+        } else {
+            for (int i=0; i<size; i++) {
+                pst.setObject(i + 1, paras.get(i));
+            }
+        }
+    }
+
+    public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
+        int size = paras.length;
+        if (Goja.mode.isDev()) {
+            logger.debug("The sql paramters : {}", size == 0 ? "Empty" : size);
+            for (int i=0; i<size; i++) {
+                final Object value = paras[i];
+                pst.setObject(i + 1, value);
+                logger.debug("The param index: {}, param type is {}, param value is {}", i, value.getClass().getSimpleName(), value);
+            }
+        } else {
+            for (int i=0; i<size; i++) {
+                pst.setObject(i + 1, paras[i]);
+            }
+        }
+    }
 }

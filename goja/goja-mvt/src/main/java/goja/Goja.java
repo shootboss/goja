@@ -20,10 +20,6 @@ import com.jfinal.config.Routes;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
-import com.jfinal.plugin.activerecord.DbKit;
-import com.jfinal.plugin.activerecord.dialect.OracleDialect;
-import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
-import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
@@ -35,6 +31,9 @@ import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
 import goja.db.dialect.DB2Dialect;
 import goja.db.dialect.H2Dialect;
+import goja.db.dialect.OracleDialect;
+import goja.db.dialect.PostgreSqlDialect;
+import goja.db.dialect.Sqlite3Dialect;
 import goja.exceptions.DatabaseException;
 import goja.init.AppLoadEvent;
 import goja.init.InitConst;
@@ -68,16 +67,14 @@ import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static goja.init.InitConst.APP;
 import static goja.init.InitConst.APP_VERSION;
 import static goja.init.InitConst.CACHE;
-import static goja.init.InitConst.DB_PASSWORD;
 import static goja.init.InitConst.DB_SQLINXML;
 import static goja.init.InitConst.DB_STAT_VIEW;
-import static goja.init.InitConst.DB_URL;
-import static goja.init.InitConst.DB_USERNAME;
 import static goja.init.InitConst.DEV_MODE;
 import static goja.init.InitConst.DOMAIN;
 import static goja.init.InitConst.INDEX_PATH;
@@ -190,13 +187,15 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void configPlugin(Plugins plugins) {
+
+        if (AppConfig.getPropertyToBoolean(CACHE, false)) {
+            plugins.add(new EhCachePlugin());
+        }
+
         initDataSource(plugins);
 
         if (AppConfig.getPropertyToBoolean(SECURITY, false)) {
             plugins.add(new ShiroPlugin(this._routes));
-        }
-        if (AppConfig.getPropertyToBoolean(CACHE, false)) {
-            plugins.add(new EhCachePlugin());
         }
 
         if (AppConfig.getPropertyToBoolean(JOB_QUARTZ, false)) {
@@ -318,6 +317,8 @@ public class Goja extends JFinalConfig {
         }
         JfinalKit.init();
         started = true;
+        // clear app config value.
+        AppConfig.clear();
     }
 
     @Override
@@ -331,18 +332,18 @@ public class Goja extends JFinalConfig {
      *
      * @param plugins plugin.
      */
-    private void initDataSource(Plugins plugins) {
+    private void initDataSource(final Plugins plugins) {
 
-        List<String> configNames = AppConfig.dbConfigNames();
-        if (configNames != null && !configNames.isEmpty()) {
-            for (String configName : configNames) {
-                configDatabasePlugins(configName, plugins,
-                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "url",
-                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "username",
-                        AppConfig.DB_PREFIX + StringPool.DOT + configName + StringPool.DOT + "password");
+        final Map<String, Properties> dbConfig = AppConfig.getDbConfig();
+        for (String db_config : dbConfig.keySet()) {
+            final Properties db_props = dbConfig.get(db_config);
+            if (db_props != null && db_props.isEmpty()) {
+                configDatabasePlugins(db_config, plugins,
+                        db_props.getProperty(InitConst.DB_URL),
+                        db_props.getProperty(InitConst.DB_USERNAME),
+                        db_props.getProperty(InitConst.DB_PASSWORD));
             }
         }
-        configDatabasePlugins(plugins, DB_URL, DB_USERNAME, DB_PASSWORD);
 
         if (AppConfig.getPropertyToBoolean(DB_SQLINXML, false)) {
             plugins.add(new SqlInXmlPlugin());
@@ -350,12 +351,16 @@ public class Goja extends JFinalConfig {
 
     }
 
-    private void configDatabasePlugins(Plugins plugins, String url_key, String username, String password) {
-        configDatabasePlugins(DbKit.MAIN_CONFIG_NAME, plugins, url_key, username, password);
-    }
-
-    private void configDatabasePlugins(String configName, Plugins plugins, String url_key, String username, String password) {
-        String db_url = AppConfig.getProperty(url_key);
+    /**
+     * The configuration database, specify the name of the database.
+     *
+     * @param configName the database config name.
+     * @param plugins    the jfinal plugins.
+     * @param db_url     the database connection url.
+     * @param username   the login username.
+     * @param password   the login password.
+     */
+    private void configDatabasePlugins(String configName, final Plugins plugins, String db_url, String username, String password) {
         if (!Strings.isNullOrEmpty(db_url)) {
             String dbtype = JdbcUtils.getDbType(db_url, StringUtils.EMPTY);
             String driverClassName;
@@ -364,11 +369,7 @@ public class Goja extends JFinalConfig {
             } catch (SQLException e) {
                 throw new DatabaseException(e.getMessage(), e);
             }
-            final DruidPlugin druidPlugin = new DruidPlugin(
-                    db_url,
-                    AppConfig.getProperty(username),
-                    AppConfig.getProperty(password),
-                    driverClassName);
+            final DruidPlugin druidPlugin = new DruidPlugin( db_url, username, password, driverClassName);
             druidPlugin.setFilters("stat,wall");
             final WallFilter wall = new WallFilter();
             wall.setDbType(JdbcConstants.MYSQL);
@@ -376,7 +377,7 @@ public class Goja extends JFinalConfig {
             plugins.add(druidPlugin);
 
             //  setting db table name like 'dev_info'
-            final AutoTableBindPlugin atbp = new AutoTableBindPlugin(druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
+            final AutoTableBindPlugin atbp = new AutoTableBindPlugin(configName,druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
 
             if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
                 if (StringUtils.equals(dbtype, JdbcConstants.ORACLE)) {

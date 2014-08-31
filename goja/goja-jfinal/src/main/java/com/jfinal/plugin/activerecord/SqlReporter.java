@@ -7,6 +7,7 @@
 package com.jfinal.plugin.activerecord;
 
 
+import com.jfinal.plugin.activerecord.util.SqlFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class SqlReporter implements InvocationHandler {
                 if (logger.isDebugEnabled()) {
 
                     String info = "Sql: " + args[0];
-                    logger.info("The Exec Sql is:  {} , And the params is {}", info, args);
+                    logger.debug("The Exec Sql is: \r\n {} ", SqlFormatter.format(info));
                 }
 
             }

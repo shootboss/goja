@@ -5,6 +5,7 @@
  */
 package goja.plugins.sqlinxml;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -72,7 +73,12 @@ public class SqlKit {
                     logger.warn("In file {} SQL id in XML for {} has been loaded", xmlfile.getAbsolutePath(), sql_name);
                     continue;
                 }
-                SQL_MAP.put(sql_name, sqlItem.value);
+                final String _val = sqlItem.value;
+                if(Strings.isNullOrEmpty(_val)){
+                    logger.warn("In file {} SQL id in XML for {} is empty", xmlfile.getAbsolutePath(), sql_name);
+                    continue;
+                }
+                SQL_MAP.put(sql_name, _val.replace('\r', ' ').replace('\n', ' ').replaceAll(" {2,}", " "));
             }
         }
         if (Logger.isDebugEnabled())

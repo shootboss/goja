@@ -31,13 +31,13 @@ import com.jfinal.plugin.activerecord.Table;
 public class OracleDialect extends Dialect {
 	
 	public String forTableBuilderDoBuild(String tableName) {
-		return "select * from " + tableName + " where rownum = 0";
+		return "SELECT * FROM " + tableName + " WHERE rownum = 0";
 	}
 	
 	// insert into table (id,name) values(seq.nextval, ？)
 	public void forModelSave(Table table, Map<String, Object> attrs, StringBuilder sql, List<Object> paras) {
-		sql.append("insert into ").append(table.getName()).append("(");
-		StringBuilder temp = new StringBuilder(") values(");
+		sql.append("INSERT INTO ").append(table.getName()).append("(");
+		StringBuilder temp = new StringBuilder(") VALUES(");
 		String pKey = table.getPrimaryKey();
 		int count = 0;
 		for (Entry<String, Object> e: attrs.entrySet()) {
@@ -62,15 +62,11 @@ public class OracleDialect extends Dialect {
 	
 	public String forModelDeleteById(Table table) {
 		String pKey = table.getPrimaryKey();
-		StringBuilder sql = new StringBuilder(45);
-		sql.append("delete from ");
-		sql.append(table.getName());
-		sql.append(" where ").append(pKey).append(" = ?");
-		return sql.toString();
+        return "DELETE FROM " + table.getName() + " WHERE " + pKey + " = ?";
 	}
 	
 	public void forModelUpdate(Table table, Map<String, Object> attrs, Set<String> modifyFlag, String pKey, Object id, StringBuilder sql, List<Object> paras) {
-		sql.append("update ").append(table.getName()).append(" set ");
+		sql.append("UPDATE ").append(table.getName()).append(" SET ");
 		for (Entry<String, Object> e : attrs.entrySet()) {
 			String colName = e.getKey();
 			if (!pKey.equalsIgnoreCase(colName) && modifyFlag.contains(colName) && table.hasColumnLabel(colName)) {
@@ -80,12 +76,12 @@ public class OracleDialect extends Dialect {
 				paras.add(e.getValue());
 			}
 		}
-		sql.append(" where ").append(pKey).append(" = ?");
+		sql.append(" WHERE ").append(pKey).append(" = ?");
 		paras.add(id);
 	}
 	
 	public String forModelFindById(Table table, String columns) {
-		StringBuilder sql = new StringBuilder("select ");
+		StringBuilder sql = new StringBuilder("SELECT ");
 		if (columns.trim().equals("*")) {
 			sql.append(columns);
 		}
@@ -97,14 +93,14 @@ public class OracleDialect extends Dialect {
 				sql.append(columnsArray[i].trim());
 			}
 		}
-		sql.append(" from ");
+		sql.append(" FROM ");
 		sql.append(table.getName());
-		sql.append(" where ").append(table.getPrimaryKey()).append(" = ?");
+		sql.append(" WHERE ").append(table.getPrimaryKey()).append(" = ?");
 		return sql.toString();
 	}
 	
 	public String forDbFindById(String tableName, String primaryKey, String columns) {
-		StringBuilder sql = new StringBuilder("select ");
+		StringBuilder sql = new StringBuilder("SELECT ");
 		if (columns.trim().equals("*")) {
 			sql.append(columns);
 		}
@@ -116,24 +112,21 @@ public class OracleDialect extends Dialect {
 				sql.append(columnsArray[i].trim());
 			}
 		}
-		sql.append(" from ");
+		sql.append(" FROM ");
 		sql.append(tableName.trim());
-		sql.append(" where ").append(primaryKey).append(" = ?");
+		sql.append(" WHERE ").append(primaryKey).append(" = ?");
 		return sql.toString();
 	}
 	
 	public String forDbDeleteById(String tableName, String primaryKey) {
-		StringBuilder sql = new StringBuilder("delete from ");
-		sql.append(tableName.trim());
-		sql.append(" where ").append(primaryKey).append(" = ?");
-		return sql.toString();
+        return "DELETE FROM " + tableName.trim() + " WHERE " + primaryKey + " = ?";
 	}
 	
 	public void forDbSave(StringBuilder sql, List<Object> paras, String tableName, Record record) {
-		sql.append("insert into ");
+		sql.append("INSERT INTO ");
 		sql.append(tableName.trim()).append("(");
 		StringBuilder temp = new StringBuilder();
-		temp.append(") values(");
+		temp.append(") VALUES(");
 		
 		int count = 0;
 		for (Entry<String, Object> e: record.getColumns().entrySet()) {
@@ -155,7 +148,7 @@ public class OracleDialect extends Dialect {
 	}
 	
 	public void forDbUpdate(String tableName, String primaryKey, Object id, Record record, StringBuilder sql, List<Object> paras) {
-		sql.append("update ").append(tableName.trim()).append(" set ");
+		sql.append("UPDATE ").append(tableName.trim()).append(" SET ");
 		for (Entry<String, Object> e: record.getColumns().entrySet()) {
 			String colName = e.getKey();
 			if (!primaryKey.equalsIgnoreCase(colName)) {
@@ -166,17 +159,17 @@ public class OracleDialect extends Dialect {
 				paras.add(e.getValue());
 			}
 		}
-		sql.append(" where ").append(primaryKey).append(" = ?");
+		sql.append(" WHERE ").append(primaryKey).append(" = ?");
 		paras.add(id);
 	}
 	
 	public void forPaginate(StringBuilder sql, int pageNumber, int pageSize, String select, String sqlExceptSelect) {
 		int satrt = (pageNumber - 1) * pageSize + 1;
 		int end = pageNumber * pageSize;
-		sql.append("select * from ( select row_.*, rownum rownum_ from (  ");
+		sql.append("SELECT * FROM ( SELECT row_.*, rownum rownum_ FROM (  ");
 		sql.append(select).append(" ").append(sqlExceptSelect);
-		sql.append(" ) row_ where rownum <= ").append(end).append(") table_alias");
-		sql.append(" where table_alias.rownum_ >= ").append(satrt);
+		sql.append(" ) row_ WHERE rownum <= ").append(end).append(") table_alias");
+		sql.append(" WHERE table_alias.rownum_ >= ").append(satrt);
 	}
 	
 	public boolean isOracle() {

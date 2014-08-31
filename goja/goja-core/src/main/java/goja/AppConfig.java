@@ -1,10 +1,13 @@
 package goja;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.jfinal.plugin.activerecord.DbKit;
 import goja.io.ResourceKit;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -16,6 +19,8 @@ import java.util.Properties;
  */
 public class AppConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
+
     public static final String REDIS_PREFIX = "redis";
     public static final String MONGO_PREFIX = "mongo";
     public static final String DB_PREFIX    = "db";
@@ -25,11 +30,13 @@ public class AppConfig {
     private static final ThreadLocal<Properties> configProps = new ThreadLocal<Properties>();
 
     private static final Properties APPLICATION_CONFIG = new Properties();
-    private static final Properties DATABASE_CONFIG    = new Properties();
     private static final Properties MONGODB_CONFIG     = new Properties();
     private static final Properties REDIS_CONFIG       = new Properties();
 
-    private static final List<String> DB_CONFIG_NAMES = Lists.newArrayListWithCapacity(3);
+    /**
+     * The Database Config In application.conf.
+     */
+    private static final Map<String, Properties> DB_CONFIG = Maps.newHashMapWithExpectedSize(1);
 
     static {
         readConf();
@@ -40,7 +47,14 @@ public class AppConfig {
      */
     public static void reload() {
         configProps.remove();
+        clear();
         readConf();
+    }
+
+    public static void clear() {
+        DB_CONFIG.clear();
+        REDIS_CONFIG.clear();
+        MONGODB_CONFIG.clear();
     }
 
     /**
@@ -60,16 +74,26 @@ public class AppConfig {
             } else if (StringUtils.startsWithIgnoreCase(_key, MONGO_PREFIX)) {
                 MONGODB_CONFIG.put(_key, value);
             } else if (StringUtils.startsWithIgnoreCase(_key, DB_PREFIX)) {
-                if (_key.endsWith("url")) {
-                    String config_name = _key.substring(0, _key.indexOf(StringPool.DOT) - 1);
-                    if (StringUtils.equalsIgnoreCase(config_name, "main")) {
-                        p.put(_key.replace(config_name + StringPool.DOT, StringPool.EMPTY), value);
+                int last_idx = _key.lastIndexOf(StringPool.DOT);
+                if (last_idx > 2) {
+                    String config_name = _key.substring(_key.indexOf(StringPool.DOT) + 1, last_idx);
+                    logger.debug("the db config is {}", config_name);
+                    Properties db_config_props = DB_CONFIG.get(config_name);
+                    if (db_config_props == null) {
+                        db_config_props = new Properties();
+                        DB_CONFIG.put(config_name, db_config_props);
                     }
-                    if (!DB_CONFIG_NAMES.contains(config_name)) {
-                        DB_CONFIG_NAMES.add(config_name);
+                    _key = _key.replace(StringPool.DOT + config_name, StringPool.EMPTY);
+                    db_config_props.put(_key, value);
+
+                } else {
+                    Properties db_main_props = DB_CONFIG.get(DbKit.MAIN_CONFIG_NAME);
+                    if (db_main_props == null) {
+                        db_main_props = new Properties();
+                        DB_CONFIG.put(DbKit.MAIN_CONFIG_NAME, db_main_props);
                     }
+                    db_main_props.put(_key, value);
                 }
-                DATABASE_CONFIG.put(_key, value);
             } else {
                 APPLICATION_CONFIG.put(_key, value);
             }
@@ -105,12 +129,8 @@ public class AppConfig {
         return MONGODB_CONFIG;
     }
 
-    public static Properties getDatabaseConfig() {
-        return DATABASE_CONFIG;
-    }
-
-    public static List<String> dbConfigNames() {
-        return DB_CONFIG_NAMES;
+    public static Map<String, Properties> getDbConfig() {
+        return DB_CONFIG;
     }
 
     public static Properties getApplicationConfig() {
