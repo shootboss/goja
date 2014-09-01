@@ -111,7 +111,7 @@
         <module>goja-uc</module>
         <module>goja-wxchat</module>
         <module>goja-test</module>
-        <module>goja-jcseg</module>
+        <module>goja-lucene</module>
         <module>goja-qrcode</module>
     </modules>
     <build>

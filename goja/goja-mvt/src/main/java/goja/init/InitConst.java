@@ -76,5 +76,5 @@ public interface InitConst {
     String POOL          = "japp.pool";
 
     String INDEX_PATH       = "index.path";
-    String INDEX_JCSEG_PATH = "index.jcseg.path";
+    String INDEX_SMART = "index.smart";
 }

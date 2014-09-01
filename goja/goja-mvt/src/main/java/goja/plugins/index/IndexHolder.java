@@ -6,6 +6,9 @@
 
 package goja.plugins.index;
 
+import goja.Goja;
+import goja.GojaConfig;
+import goja.init.InitConst;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -24,8 +27,8 @@ import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.lionsoul.jcseg.core.JcsegTaskConfig;
 import org.slf4j.Logger;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,9 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-08-24 0:17
@@ -45,8 +46,10 @@ import java.util.List;
 public class IndexHolder {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(IndexHolder.class);
 
-    private static final GojaJcsegAnalyzer4X ANALYZER  = new GojaJcsegAnalyzer4X(JcsegTaskConfig.COMPLEX_MODE);
-    private final static int                 MAX_COUNT = 1000;
+    private static final IKAnalyzer ANALYZER = new IKAnalyzer();
+
+    private final static int MAX_COUNT = 1000;
+
     private String indexPath;
 
     private IndexHolder() {
@@ -57,15 +60,6 @@ public class IndexHolder {
         return IndexPlugin.holder;
     }
 
-    protected IndexHolder(String idx_path) {
-        idx_path = FilenameUtils.normalize(idx_path);
-        File file = new File(idx_path);
-        if (!file.exists() || !file.isDirectory())
-            throw new RuntimeException("the index plugin is erro!, the index directory is not found.");
-        if (!idx_path.endsWith(File.separator))
-            idx_path += File.separator;
-        indexPath = idx_path;
-    }
 
     /**
      * 构造索引库管理实例
@@ -74,7 +68,8 @@ public class IndexHolder {
      * @return 索引库管理对象
      * @throws IOException
      */
-    public static IndexHolder init(String idx_path) throws IOException {
+    protected static IndexHolder init(String idx_path) throws IOException {
+        ANALYZER.setUseSmart(GojaConfig.getPropertyToBoolean(InitConst.INDEX_SMART, false));
         IndexHolder holder = new IndexHolder();
         idx_path = FilenameUtils.normalize(idx_path);
         File file = new File(idx_path);
@@ -103,8 +98,8 @@ public class IndexHolder {
     /**
      * 多个资料库的搜索
      *
-     * @param objClasses
-     * @return
+     * @param objClasses 对象数据类型
+     * @return 多个资料库的搜索对象
      * @throws IOException
      */
     private IndexSearcher getSearchers(List<Class<? extends Searchable>> objClasses) throws IOException {
@@ -120,7 +115,7 @@ public class IndexHolder {
     /**
      * 优化索引库
      *
-     * @param objClass
+     * @param objClass 对象数据
      * @throws IOException
      */
     public void optimize(Class<? extends Searchable> objClass) throws IOException {
@@ -137,13 +132,13 @@ public class IndexHolder {
     /**
      * 多库搜索
      *
-     * @param objClasses
-     * @param query
-     * @param filter
-     * @param sort
-     * @param page
-     * @param count
-     * @return
+     * @param objClasses 对象数据类型
+     * @param query      查询条件
+     * @param filter     过滤器
+     * @param sort       排序
+     * @param page       分页
+     * @param count      总条数
+     * @return 搜索结果
      * @throws IOException
      */
     public List<Searchable> find(List<Class<? extends Searchable>> objClasses, Query query, Filter filter, Sort sort, int page, int count) throws IOException {
@@ -154,13 +149,13 @@ public class IndexHolder {
     /**
      * 单库搜索
      *
-     * @param objClass
-     * @param query
-     * @param filter
-     * @param sort
-     * @param page
-     * @param count
-     * @return
+     * @param objClass 对象数据类型
+     * @param query    查询条件
+     * @param filter   过滤器
+     * @param sort     排序
+     * @param page     分页
+     * @param count    总条数
+     * @return 搜索结果
      * @throws IOException
      */
     public List<Long> find(Class<? extends Searchable> objClass, Query query, Filter filter, Sort sort, int page, int count) throws IOException {
@@ -177,10 +172,10 @@ public class IndexHolder {
     /**
      * 多库搜索
      *
-     * @param objClasses
-     * @param query
-     * @param filter
-     * @return
+     * @param objClasses 对象数据类型
+     * @param query      查询条件
+     * @param filter     过滤器
+     * @return 搜索结果
      * @throws IOException
      */
     public int count(List<Class<? extends Searchable>> objClasses, Query query, Filter filter) throws IOException {
@@ -191,10 +186,10 @@ public class IndexHolder {
     /**
      * 搜索
      *
-     * @param objClass
-     * @param query
-     * @param filter
-     * @return
+     * @param objClass 对象数据类型
+     * @param query    查询条件
+     * @param filter   过滤器
+     * @return 搜索结果
      * @throws IOException
      */
     public int count(Class<? extends Searchable> objClass, Query query, Filter filter) throws IOException {
@@ -205,13 +200,13 @@ public class IndexHolder {
     /**
      * 搜索
      *
-     * @param searcher
-     * @param query
-     * @param filter
-     * @param sort
-     * @param page
-     * @param count
-     * @return
+     * @param searcher 搜索条件
+     * @param query    查询条件
+     * @param filter   过滤器
+     * @param sort     排序
+     * @param page     分页
+     * @param count    总条数
+     * @return 搜索结果
      * @throws IOException
      */
     private List<Searchable> find(IndexSearcher searcher, Query query, Filter filter, Sort sort, int page, int count) throws IOException {
@@ -248,10 +243,10 @@ public class IndexHolder {
     /**
      * 根据查询条件统计搜索结果数
      *
-     * @param searcher
-     * @param query
-     * @param filter
-     * @return
+     * @param searcher 搜索条件
+     * @param query    查询条件
+     * @param filter   过滤器
+     * @return 结果数
      * @throws IOException
      */
     private int count(IndexSearcher searcher, Query query, Filter filter) throws IOException {
@@ -271,7 +266,7 @@ public class IndexHolder {
     /**
      * 批量添加索引
      *
-     * @param objs
+     * @param objs 对象数据类型
      * @throws IOException
      */
     public int add(List<? extends Searchable> objs) throws IOException {
@@ -296,7 +291,7 @@ public class IndexHolder {
     /**
      * 批量删除索引
      *
-     * @param docs
+     * @param objs 对象数据类型
      * @throws IOException
      */
     public int delete(List<? extends Searchable> objs) throws IOException {
@@ -320,7 +315,7 @@ public class IndexHolder {
     /**
      * 批量更新索引
      *
-     * @param objs
+     * @param objs 对象数据类型
      * @throws IOException
      */
     public void update(List<? extends Searchable> objs) throws IOException {

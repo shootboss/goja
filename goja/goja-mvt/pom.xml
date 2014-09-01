@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-jcseg</artifactId>
+            <artifactId>goja-lucene</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
