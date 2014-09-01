@@ -41,7 +41,7 @@ class QuickSortSet {
 	
 	/**
 	 * 向链表集合添加词元
-	 * @param lexeme
+	 * @param lexeme 词元
 	 */
 	boolean addLexeme(Lexeme lexeme){
 		Cell newCell = new Cell(lexeme); 
@@ -93,7 +93,7 @@ class QuickSortSet {
 	
 	/**
 	 * 返回链表头部元素
-	 * @return
+	 * @return 词元
 	 */
 	Lexeme peekFirst(){
 		if(this.head != null){
@@ -125,7 +125,7 @@ class QuickSortSet {
 	
 	/**
 	 * 返回链表尾部元素
-	 * @return
+	 * @return 词元
 	 */
 	Lexeme peekLast(){
 		if(this.tail != null){
@@ -159,7 +159,7 @@ class QuickSortSet {
 	
 	/**
 	 * 返回集合大小
-	 * @return
+	 * @return 大小
 	 */
 	int size(){
 		return this.size;
@@ -167,7 +167,7 @@ class QuickSortSet {
 	
 	/**
 	 * 判断集合是否为空
-	 * @return
+	 * @return 是否为空
 	 */
 	boolean isEmpty(){
 		return this.size == 0;
@@ -175,7 +175,7 @@ class QuickSortSet {
 	
 	/**
 	 * 返回lexeme链的头部
-	 * @return
+	 * @return 头部
 	 */
 	Cell getHead(){
 		return this.head;

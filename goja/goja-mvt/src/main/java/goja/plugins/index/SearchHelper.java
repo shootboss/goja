@@ -7,7 +7,9 @@
 package goja.plugins.index;
 
 import com.google.common.collect.Lists;
+import goja.StringPool;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.analysis.TokenStream;
@@ -28,51 +30,52 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.util.Version;
-import org.lionsoul.jcseg.analyzer.JcsegAnalyzer4X;
-import org.lionsoul.jcseg.core.ADictionary;
-import org.lionsoul.jcseg.core.DictionaryFactory;
-import org.lionsoul.jcseg.core.ISegment;
-import org.lionsoul.jcseg.core.IWord;
-import org.lionsoul.jcseg.core.JcsegException;
-import org.lionsoul.jcseg.core.JcsegTaskConfig;
-import org.lionsoul.jcseg.core.SegmentFactory;
 import org.slf4j.Logger;
+import org.wltea.analyzer.cfg.DefaultConfig;
+import org.wltea.analyzer.core.IKSegmenter;
+import org.wltea.analyzer.core.Lexeme;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 搜索工具类.
- * </p>
+ * <p> 搜索工具类. </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-08-24 0:25
  * @since JDK 1.6
  */
+@SuppressWarnings("UnusedDeclaration")
 public class SearchHelper {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(IndexHolder.class);
 
-    private static final JcsegAnalyzer4X ANALYZER = new JcsegAnalyzer4X(JcsegTaskConfig.COMPLEX_MODE);
+    private static final IKAnalyzer ANALYZER;
 
-    private final static BooleanQuery nullQuery             = new BooleanQuery();
-    private final static Formatter    highlighter_formatter = new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>");
+    private final static BooleanQuery nullQuery = new BooleanQuery();
+
+    private final static Formatter highlighter_formatter = new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>");
 
     public final static String FN_ID        = "___id";
     public final static String FN_CLASSNAME = "___class";
 
+    static {
+        ANALYZER = IndexHolder.getInstance().getAnalyzer();
+    }
 
     /**
      * 重整搜索关键短语
      *
      * @param key 关键词
-     * @return  关键短语
+     * @return 关键短语
      */
     public static String cleanupKey(String key) {
-
+        if (DefaultConfig.getInstance().getExtDictionarys().contains(key.trim().toLowerCase()))
+            return key;
         StringBuilder sb = new StringBuilder();
         List<String> keys = splitKeywords(key);
         for (String word : keys) {
@@ -88,24 +91,22 @@ public class SearchHelper {
      * 生成查询条件
      *
      * @param field field
-     * @param q q
+     * @param q     q
      * @param boost boost
      * @return query
      */
     public static Query makeQuery(String field, String q, float boost) {
         if (StringUtils.isBlank(q) || StringUtils.isBlank(field))
             return nullQuery;
-        QueryParser parser = new QueryParser(Version.LUCENE_4_9, field, ANALYZER);
+        final QueryParser parser = new QueryParser(Version.LUCENE_4_9, field, ANALYZER);
         parser.setDefaultOperator(QueryParser.AND_OPERATOR);
         try {
             Query querySinger = parser.parse(q);
             querySinger.setBoost(boost);
-            //System.out.println(querySinger.toString());
             return querySinger;
         } catch (Exception e) {
             TermQuery queryTerm = new TermQuery(new Term(field, q));
             queryTerm.setBoost(boost);
-            //System.out.println(queryTerm.toString());
             return queryTerm;
         }
     }
@@ -118,27 +119,22 @@ public class SearchHelper {
      * @return 返回分词结果
      */
     public static List<String> splitKeywords(String sentence) {
-
         List<String> keys = Lists.newArrayList();
-
 
         if (StringUtils.isNotBlank(sentence)) {
             StringReader reader = new StringReader(sentence);
-
-            JcsegTaskConfig config = new JcsegTaskConfig();
-            ADictionary dic = DictionaryFactory.createDefaultDictionary(config);
-            //依据 JcsegTaskConfig 配置中的信息加载全部 jcseg 词库.
+            IKSegmenter ikseg = new IKSegmenter(reader, true);
             try {
-                dic.loadFromLexiconDirectory(config.getLexiconPath()[0]);
-
-                ISegment seg = SegmentFactory.createJcseg(JcsegTaskConfig.COMPLEX_MODE, new Object[]{reader, config, dic});
-                IWord word;
-                while ((word = seg.next()) != null) {
-                    keys.add(word.getValue());
-                }
+                do {
+                    final Lexeme me = ikseg.next();
+                    if (me == null)
+                        break;
+                    String term = me.getLexemeText();
+                    if (DefaultConfig.getInstance().getExtStopWordDictionarys().contains(term.toLowerCase()))
+                        continue;
+                    keys.add(term);
+                } while (true);
             } catch (IOException e) {
-                logger.error("Unable to split keywords", e);
-            } catch (JcsegException e) {
                 logger.error("Unable to split keywords", e);
             }
         }
@@ -158,13 +154,13 @@ public class SearchHelper {
             return text;
         String result = null;
         try {
-            PhraseQuery pquery = new PhraseQuery();
+            final PhraseQuery pquery = new PhraseQuery();
             for (String sk : splitKeywords(key)) {
-                pquery.add(new Term("", QueryParser.escape(sk)));
+                pquery.add(new Term(StringPool.EMPTY, QueryParser.escape(sk)));
             }
-            QueryScorer scorer = new QueryScorer(pquery);
-            Highlighter hig = new Highlighter(highlighter_formatter, scorer);
-            TokenStream tokens = ANALYZER.tokenStream(null, new StringReader(text));
+            final QueryScorer scorer = new QueryScorer(pquery);
+            final Highlighter hig = new Highlighter(highlighter_formatter, scorer);
+            final TokenStream tokens = ANALYZER.tokenStream(null, new StringReader(text));
             result = hig.getBestFragment(tokens, text);
         } catch (Exception e) {
             logger.error("Unabled to hightlight text", e);

@@ -57,8 +57,8 @@ public final class IKTokenizer extends Tokenizer {
 	
 	/**
 	 * Lucene 4.0 Tokenizer适配器类构造函数
-	 * @param in
-	 * @param useSmart
+	 * @param in 输入字符流
+	 * @param useSmart 是否智能分词
 	 */
 	public IKTokenizer(Reader in , boolean useSmart){
 	    super(in);

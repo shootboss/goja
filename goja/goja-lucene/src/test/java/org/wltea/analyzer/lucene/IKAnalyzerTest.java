@@ -22,12 +22,12 @@ public class IKAnalyzerTest {
     @Test
     public void testAnalyzer() throws Exception {
         //构建IK分词器，使用smart分词模式
-        Analyzer analyzer = new IKAnalyzer();
+        Analyzer analyzer = new IKAnalyzer(true);
 
         //获取Lucene的TokenStream对象
         TokenStream ts = null;
         try {
-            ts = analyzer.tokenStream("myfield", new StringReader("这是一个中文分词的例子，你可以直接运行它！IKAnalyer can analysis english text too"));
+            ts = analyzer.tokenStream("myfield", new StringReader("这是一个中文要买入05建元1S，可口手机是个不错的信息,你可以直接运行它！IKAnalyer can analysis english text too"));
             //获取词元位置属性
             OffsetAttribute offset = ts.addAttribute(OffsetAttribute.class);
             //获取词元文本属性

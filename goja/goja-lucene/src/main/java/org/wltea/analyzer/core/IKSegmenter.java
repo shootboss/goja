@@ -34,7 +34,7 @@ public final class IKSegmenter {
 
 	/**
 	 * IK分词器构造函数
-	 * @param input 
+	 * @param input 输入字符流
 	 * @param useSmart 为true，使用智能分词策略
 	 * 
 	 * 非智能分词：细粒度输出所有可能的切分结果
@@ -49,7 +49,7 @@ public final class IKSegmenter {
 	
 	/**
 	 * IK分词器构造函数
-	 * @param input
+	 * @param input 输入字符流
 	 * @param cfg 使用自定义的Configuration构造分词器
 	 * 
 	 */
@@ -94,7 +94,7 @@ public final class IKSegmenter {
 	 * @throws java.io.IOException
 	 */
 	public synchronized Lexeme next()throws IOException{
-		Lexeme l = null;
+		Lexeme l;
 		while((l = context.getNextLexeme()) == null ){
 			/*
 			 * 从reader中读取数据，填充buffer
@@ -138,7 +138,7 @@ public final class IKSegmenter {
 
 	/**
      * 重置分词器到初始状态
-     * @param input
+     * @param input 输入字符流
      */
 	public synchronized void reset(Reader input) {
 		this.input = input;

@@ -6,7 +6,6 @@
 
 package goja.plugins.index;
 
-import goja.Goja;
 import goja.GojaConfig;
 import goja.init.InitConst;
 import org.apache.commons.io.FilenameUtils;
@@ -321,5 +320,14 @@ public class IndexHolder {
     public void update(List<? extends Searchable> objs) throws IOException {
         delete(objs);
         add(objs);
+    }
+
+    /**
+     * 获取分词器
+     *
+     * @return 分词器
+     */
+    public IKAnalyzer getAnalyzer() {
+        return ANALYZER;
     }
 }

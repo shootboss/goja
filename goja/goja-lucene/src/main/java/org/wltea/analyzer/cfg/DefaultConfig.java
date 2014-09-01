@@ -25,9 +25,10 @@
  */
 package org.wltea.analyzer.cfg;
 
+import com.google.common.collect.Lists;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Properties;
@@ -129,16 +130,14 @@ public class DefaultConfig implements Configuration {
      * @return List<String> 相对类加载器的路径
      */
     public List<String> getExtDictionarys() {
-        List<String> extDictFiles = new ArrayList<String>(2);
+        List<String> extDictFiles = Lists.newArrayListWithCapacity(2);
         String extDictCfg = props.getProperty(EXT_DICT);
         if (extDictCfg != null) {
             //使用;分割多个扩展字典配置
             String[] filePaths = extDictCfg.split(";");
-            if (filePaths != null) {
-                for (String filePath : filePaths) {
-                    if (filePath != null && !"".equals(filePath.trim())) {
-                        extDictFiles.add(filePath.trim());
-                    }
+            for (String filePath : filePaths) {
+                if (filePath != null && !"".equals(filePath.trim())) {
+                    extDictFiles.add(filePath.trim());
                 }
             }
         }
@@ -152,16 +151,14 @@ public class DefaultConfig implements Configuration {
      * @return List<String> 相对类加载器的路径
      */
     public List<String> getExtStopWordDictionarys() {
-        List<String> extStopWordDictFiles = new ArrayList<String>(2);
+        List<String> extStopWordDictFiles = Lists.newArrayListWithCapacity(2);
         String extStopWordDictCfg = props.getProperty(EXT_STOP);
         if (extStopWordDictCfg != null) {
             //使用;分割多个扩展字典配置
             String[] filePaths = extStopWordDictCfg.split(";");
-            if (filePaths != null) {
-                for (String filePath : filePaths) {
-                    if (filePath != null && !"".equals(filePath.trim())) {
-                        extStopWordDictFiles.add(filePath.trim());
-                    }
+            for (String filePath : filePaths) {
+                if (filePath != null && !"".equals(filePath.trim())) {
+                    extStopWordDictFiles.add(filePath.trim());
                 }
             }
         }
