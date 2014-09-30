@@ -7,6 +7,7 @@
 package goja.lang;
 
 import com.google.common.collect.Maps;
+import goja.StringPool;
 import goja.castor.Castors;
 import goja.exceptions.FailToCastObjectException;
 import goja.lang.util.Context;
@@ -35,6 +36,21 @@ import java.util.Map;
  * @since JDK 1.6
  */
 public abstract class Lang {
+
+
+    /**
+     * 在不足len位的数字前面自动补零
+     */
+    public static String limitLenStr(String str, int len) {
+        if (str == null) {
+            return StringPool.EMPTY;
+        }
+        while (str.length() < len) {
+            str = StringPool.ZERO + str;
+        }
+        return str;
+    }
+
     /**
      * 将一个对象添加成为一个数组的最后一个元素，从而生成一个新的数组
      *

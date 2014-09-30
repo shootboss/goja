@@ -9,6 +9,7 @@ package goja.job;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
 import goja.Goja;
+import goja.GojaConfig;
 import goja.Logger;
 import goja.annotation.Every;
 import goja.annotation.On;
@@ -19,7 +20,7 @@ import goja.exceptions.UnexpectedException;
 import goja.init.InitConst;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
-import goja.kits.PThreadFactory;
+import goja.libs.PThreadFactory;
 import goja.libs.Expression;
 import goja.libs.Time;
 
@@ -37,8 +38,8 @@ public class JobsPlugin implements IPlugin {
     public static List<Job>                   scheduledJobs = null;
 
     public JobsPlugin() {
-        int core = Integer.parseInt(Goja.configuration.getProperty(InitConst.JOB_POOL_SIZE, "10"));
-        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("japp-jobs"), new ThreadPoolExecutor.AbortPolicy());
+        int core = Integer.parseInt(GojaConfig.getProperty(InitConst.JOB_POOL_SIZE, "10"));
+        executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja-jobs"), new ThreadPoolExecutor.AbortPolicy());
 
     }
 

@@ -6,14 +6,15 @@
 
 package goja.init.ctxbox;
 
-import com.jfinal.handler.Handler;
-import com.jfinal.plugin.IPlugin;
-import goja.init.AppLoadEvent;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.Controller;
+import com.jfinal.handler.Handler;
+import com.jfinal.plugin.IPlugin;
 import com.jfinal.plugin.activerecord.Model;
+import goja.init.AppLoadEvent;
+import goja.interceptor.syslog.LogProcessor;
 import goja.job.Job;
 
 import java.util.List;
@@ -64,8 +65,10 @@ public class ClassBox {
             initClassWithType(cls, ClassType.AOP);
         } else if (IPlugin.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.PLUGIN);
-        }else if (Handler.class.isAssignableFrom(cls)) {
+        } else if (Handler.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.HANDLER);
+        } else if (LogProcessor.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.LOGPERCESSOR);
         }
     }
 

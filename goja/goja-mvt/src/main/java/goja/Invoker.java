@@ -10,8 +10,9 @@ import goja.exceptions.GojaException;
 import goja.exceptions.UnexpectedException;
 import goja.i18n.I18n;
 import goja.init.InitConst;
-import goja.kits.PThreadFactory;
-import goja.libs.F;
+import goja.libs.PThreadFactory;
+import goja.libs.Action;
+import goja.libs.Promise;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
@@ -26,12 +27,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static goja.libs.F.Promise;
 
 /**
- * <p>
- * .
- * </p>
+ * <p> . </p>
  *
  * @author sagyf yang
  * @version 1.0 2014-06-24 22:05
@@ -49,6 +47,7 @@ public class Invoker {
 
     /**
      * Run the code in a new thread took from a thread pool.
+     *
      * @param invocation The code to run
      * @return The future object, to know when the task is completed
      */
@@ -58,8 +57,9 @@ public class Invoker {
 
     /**
      * Run the code in a new thread after a delay
+     *
      * @param invocation The code to run
-     * @param millis The time to wait before, in milliseconds
+     * @param millis     The time to wait before, in milliseconds
      * @return The future object, to know when the task is completed
      */
     public static Future<?> invoke(final Invocation invocation, long millis) {
@@ -68,6 +68,7 @@ public class Invoker {
 
     /**
      * Run the code in the same thread than caller.
+     *
      * @param invocation The code to run
      */
     public static void invokeInThread(DirectInvocation invocation) {
@@ -98,7 +99,7 @@ public class Invoker {
 
         public static ThreadLocal<InvocationContext> current = new ThreadLocal<InvocationContext>();
         private final List<Annotation> annotations;
-        private final String invocationType;
+        private final String           invocationType;
 
         public static InvocationContext current() {
             return current.get();
@@ -151,8 +152,8 @@ public class Invoker {
         }
 
         /**
-         * Returns the InvocationType for this invocation - Ie: A plugin can use this to
-         * find out if it runs in the context of a background Job
+         * Returns the InvocationType for this invocation - Ie: A plugin can use this to find out if it runs in the
+         * context of a background Job
          */
         public String getInvocationType() {
             return invocationType;
@@ -178,15 +179,15 @@ public class Invoker {
 
         /**
          * Override this method
+         *
          * @throws Exception
          */
         public abstract void execute() throws Exception;
 
 
         /**
-         * Needs this method to do stuff *before* init() is executed.
-         * The different Invocation-implementations does a lot of stuff in init()
-         * and they might do it before calling super.init()
+         * Needs this method to do stuff *before* init() is executed. The different Invocation-implementations does a
+         * lot of stuff in init() and they might do it before calling super.init()
          */
         protected void preInit() {
             // clear language for this request - we're resolving it later when it is needed
@@ -218,8 +219,7 @@ public class Invoker {
         }
 
         /**
-         * Things to do after an Invocation.
-         * (if the Invocation code has not thrown any exception)
+         * Things to do after an Invocation. (if the Invocation code has not thrown any exception)
          */
         public void after() {
         }
@@ -242,6 +242,7 @@ public class Invoker {
 
         /**
          * The request is suspended
+         *
          * @param suspendRequest
          */
         public void suspend(Suspend suspendRequest) {
@@ -372,7 +373,7 @@ public class Invoker {
         public static <V> void waitFor(Future<V> task, final Invocation invocation) {
             if (task instanceof Promise) {
                 Promise<V> smartFuture = (Promise<V>) task;
-                smartFuture.onRedeem(new F.Action<Promise<V>>() {
+                smartFuture.onRedeem(new Action<Promise<V>>() {
                     public void invoke(Promise<V> result) {
                         executor.submit(invocation);
                     }
@@ -403,7 +404,7 @@ public class Invoker {
                     }
                     Thread.sleep(50);
                 } catch (InterruptedException ex) {
-                    logger.warn("While waiting for task completions",ex);
+                    logger.warn("While waiting for task completions", ex);
                 }
             }
         }

@@ -52,6 +52,8 @@ public class DefaultConfig implements Configuration {
     private static final String EXT_DICT  = "ext_dict";
     //配置属性——扩展停止词典
     private static final String EXT_STOP  = "ext_stopwords";
+    //配置属性——扩展同义词词典
+    private static final String EXT_SYNONYMS = "ext_synonyms";
 
 
     private Properties props;
@@ -165,5 +167,8 @@ public class DefaultConfig implements Configuration {
         return extStopWordDictFiles;
     }
 
-
+    @Override
+    public String getExtSynonymDictionarys() {
+        return props.getProperty(EXT_SYNONYMS);
+    }
 }

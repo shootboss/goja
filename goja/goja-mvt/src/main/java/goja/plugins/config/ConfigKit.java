@@ -7,7 +7,7 @@ package goja.plugins.config;
 
 import goja.Logger;
 import goja.StringPool;
-import goja.io.ResourceKit;
+import goja.kits.io.ResourceKit;
 import com.google.common.collect.Maps;
 import com.jfinal.kit.PathKit;
 

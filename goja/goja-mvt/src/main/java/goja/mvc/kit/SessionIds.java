@@ -28,7 +28,7 @@ public class SessionIds {
     private static final SessionIds me = new SessionIds();
     protected static Random  random;
     private static   boolean weakRandom;
-    private static volatile Object lock = new Object();
+    private static final Object lock = new Object();
 
     private SessionIds() {
         try {
@@ -36,7 +36,6 @@ public class SessionIds {
             // this page
             // for workaround suggestions:
             // http://docs.codehaus.org/display/JETTY/Connectors+slow+to+startup
-            System.out.println("Init SecureRandom.");
             random = new SecureRandom();
             weakRandom = false;
         } catch (Exception e) {

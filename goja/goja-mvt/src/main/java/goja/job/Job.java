@@ -9,6 +9,7 @@ package goja.job;
 import goja.Invoker;
 import goja.Logger;
 import goja.exceptions.GojaException;
+import goja.libs.Promise;
 import goja.libs.Time;
 
 import java.util.Date;
@@ -16,7 +17,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static goja.libs.F.Promise;
 
 /**
  * A job is an asynchronously executed unit of work
@@ -28,8 +28,8 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
     public static final String invocationType = "Job";
 
     protected ExecutorService executor;
-    protected long lastRun = 0;
-    protected boolean wasError = false;
+    protected long      lastRun       = 0;
+    protected boolean   wasError      = false;
     protected Throwable lastException = null;
 
     Date nextPlannedExecution = null;

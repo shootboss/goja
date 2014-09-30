@@ -13,6 +13,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import goja.GojaConfig;
 import goja.StringPool;
+import goja.init.InitConst;
 import goja.mvc.dtos.PageDto;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,12 +25,12 @@ import java.util.Enumeration;
  * <p/>
  * usage:
  * <code>
- *              <form>
- *                  <input type="text" name="s-username">
- *                  <input type="text" name="s-create-time-between">
- *                  <input type="text" name="s-create-time-and">
- *              </form>
- *  </code>
+ * <form>
+ * <input type="text" name="s-username">
+ * <input type="text" name="s-create-time-between">
+ * <input type="text" name="s-create-time-and">
+ * </form>
+ * </code>
  * </p>
  *
  * @author sagyf yang
@@ -37,15 +38,19 @@ import java.util.Enumeration;
  * @since JDK 1.6
  */
 public class FilterInterceptor implements Interceptor {
-    private static final String  SEARCH_PARAMS     = "sp_url";
-    public static final  String  FILTER_PAGE       = "psf";
-    public static final  Integer DEFAULT_PAGE_SIZE = Ints.tryParse(GojaConfig.getProperty("app.page.size", "15"));
+    private static final String SEARCH_PARAMS = "sp_url";
+    public static final  String FILTER_PAGE   = "psf";
+
+    public static final Integer DEFAULT_PAGE_SIZE = Ints.tryParse(GojaConfig.getProperty(InitConst.PAGE_SIZE, "15"));
+
+    public static final String P = "p";
+    public static final String S = "s";
 
     public void intercept(ActionInvocation ai) {
         final Controller controller = ai.getController();
         final Enumeration<String> paraNames = controller.getParaNames();
-        final int current_page = controller.getParaToInt("p", 1);
-        final int page_size = controller.getParaToInt("s", DEFAULT_PAGE_SIZE);
+        final int current_page = controller.getParaToInt(P, 1);
+        final int page_size = controller.getParaToInt(S, DEFAULT_PAGE_SIZE);
         final PageDto pageDto = new PageDto(current_page, page_size);
         StringBuilder sb = new StringBuilder();
 
@@ -55,7 +60,7 @@ public class FilterInterceptor implements Interceptor {
                 final String req_val = controller.getPara(p_key);
                 if (!Strings.isNullOrEmpty(req_val)) {
                     String[] param_array = StringUtils.split(p_key, "-");
-                    if (param_array.length >= 2) {
+                    if (param_array != null && param_array.length >= 2) {
 
                         String name = param_array[1];
                         String condition = param_array.length == 2 ? PageDto.Condition.EQ.toString() : param_array[2];
@@ -63,9 +68,9 @@ public class FilterInterceptor implements Interceptor {
                         if (StringUtils.equals(condition, PageDto.Condition.BETWEEN.toString())) {
                             String req_val2 = controller.getPara(StringUtils.replace(p_key, PageDto.Condition.BETWEEN.toString(), "AND"));
                             pageDto.putTwoVal(name, req_val, req_val2, condition);
-//                            if(ValidatorKit.isDate(req_val)){
-//                                pageDto.putTwoVal(name, DateTimeKit.parseYmd2LongSqlDate(req_val), DateTimeKit.parseYmd2LongSqlDate(req_val2), condition);
-//                            }
+                            //                            if(ValidatorKit.isDate(req_val)){
+                            //                                pageDto.putTwoVal(name, DateTimeKit.parseYmd2LongSqlDate(req_val), DateTimeKit.parseYmd2LongSqlDate(req_val2), condition);
+                            //                            }
                         } else {
                             pageDto.put(name, req_val, condition);
                         }

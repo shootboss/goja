@@ -11,7 +11,6 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.plugin.IPlugin;
-import goja.kits.lang.Reflect;
 
 import java.util.List;
 

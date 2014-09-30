@@ -10,7 +10,7 @@ import goja.GojaConfig;
 import goja.Goja;
 import goja.StringPool;
 import goja.init.ctxbox.ClassFinder;
-import goja.kits.lang.Reflect;
+import goja.kits.Reflect;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;

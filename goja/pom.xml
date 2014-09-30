@@ -62,15 +62,18 @@
         <commons-io.version>2.4</commons-io.version>
         <httpclient.version>4.3.5</httpclient.version>
         <httpcore.version>4.3.2</httpcore.version>
-        <guava.version>17.0</guava.version>
+        <!--the core util. -->
+        <guava.version>18.0</guava.version>
         <fastjson.version>1.1.41</fastjson.version>
+        <!-- the date time util. -->
         <joda-time.version>2.4</joda-time.version>
         <dom4j.version>1.6.1</dom4j.version>
-        <jsoup.version>1.7.3</jsoup.version>
         <activation.version>1.1</activation.version>
         <commons-email.version>1.3.3</commons-email.version>
         <commons-digester.version>2.1</commons-digester.version>
         <commons-jexl.version>2.1.1</commons-jexl.version>
+
+        <jsoup.version>1.8.1</jsoup.version>
 
         <zxing.version>3.1.0</zxing.version>
         <xstream.version>1.4.7</xstream.version>
@@ -83,12 +86,14 @@
         <lucene.version>4.9.0</lucene.version>
 
         <!-- the cache and database -->
-        <ehcache-core.version>2.6.8</ehcache-core.version>
-        <druid.version>1.0.8</druid.version>
+        <ehcache-core.version>2.6.9</ehcache-core.version>
+        <!-- The database connection poll util. -->
+        <druid.version>1.0.9</druid.version>
+        <!-- the database jdbc driver. -->
         <mysql-connector-java.version>5.1.32</mysql-connector-java.version>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version>
         <h2.version>1.3.175</h2.version>
-        <!-- utest -->
+        <!-- test -->
         <junit.version>4.11</junit.version>
         <!-- servlet and shiro -->
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
@@ -107,12 +112,11 @@
     <modules>
         <module>goja-jfinal</module>
         <module>goja-core</module>
-        <module>goja-mvt</module>
-        <module>goja-uc</module>
-        <module>goja-wxchat</module>
         <module>goja-test</module>
         <module>goja-lucene</module>
         <module>goja-qrcode</module>
+        <module>goja-mvt</module>
+        <module>goja-wxchat</module>
     </modules>
     <build>
         <finalName>goja</finalName>

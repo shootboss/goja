@@ -6,7 +6,7 @@
 
 package goja.encry;
 
-import goja.kits.lang.ExceptionKit;
+import goja.kits.ExceptionKit;
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;

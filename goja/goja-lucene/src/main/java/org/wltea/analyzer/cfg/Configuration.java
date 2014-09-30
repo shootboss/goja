@@ -76,4 +76,11 @@ public interface Configuration {
      */
     public List<String> getExtStopWordDictionarys();
 
+
+    /**
+     * 获取同义词词典
+     * @return
+     */
+    public String getExtSynonymDictionarys();
+
 }

@@ -16,7 +16,7 @@ import goja.StringPool;
 import goja.mvc.datatables.core.DataSet;
 import goja.mvc.datatables.core.DatatablesCriterias;
 import goja.mvc.datatables.core.DatatablesResponse;
-import goja.mvc.kit.Request;
+import goja.mvc.kit.Requests;
 import goja.mvc.render.*;
 
 import java.util.Collections;
@@ -195,7 +195,7 @@ public class Controller extends com.jfinal.core.Controller {
      * @return true the request is ajax request.
      */
     protected boolean isAjax() {
-        return Request.ajax(getRequest());
+        return Requests.ajax(getRequest());
     }
 
     /**

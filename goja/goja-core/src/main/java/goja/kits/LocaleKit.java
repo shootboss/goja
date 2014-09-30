@@ -8,7 +8,7 @@ package goja.kits;
 
 import com.google.common.collect.Maps;
 import goja.StringPool;
-import goja.kits.lang.CharKit;
+import goja.kits.base.CharKit;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;

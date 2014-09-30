@@ -17,16 +17,16 @@ package goja.init;
  */
 public interface InitConst {
     /*App Configurate*/
-    String APP         = "app";
-    String APP_VERSION = "app.version";
+    String APP             = "app";
+    String APP_VERSION     = "app.version";
     String APP_I18N_COOKIE = "app.i18n.cookie";
-    String DEV_MODE    = "dev.mode";
-    String DEV_SCAN    = "dev.scan";
-    String DOMAIN      = "domain";
-    String SECURITY    = "security";
-    String CACHE       = "cache";
-    String JOB         = "job";
-    String JOB_QUARTZ  = "job.quartz";
+    String DEV_MODE        = "dev.mode";
+    String DEV_SCAN        = "dev.scan";
+    String DOMAIN          = "domain";
+    String SECURITY        = "security";
+    String CACHE           = "cache";
+    String JOB             = "job";
+    String JOB_QUARTZ      = "job.quartz";
 
     /* View Configuration. */
     String VIEW_PATH = "view.path";
@@ -45,6 +45,9 @@ public interface InitConst {
     /* Logging Configuration. */
     String LOGGER_LEVEL = "logger";
     String LOGGER_PATH  = "app.log.path";
+
+    /* The database page config */
+    String PAGE_SIZE = "app.page.size";
 
 
     /* MongoDB Configuration */
@@ -72,9 +75,9 @@ public interface InitConst {
 
 
     /* JOB Config */
-    String JOB_POOL_SIZE = "japp.jobs.pool";
-    String POOL          = "japp.pool";
+    String JOB_POOL_SIZE = "goja.jobs.pool";
+    String POOL          = "goja.pool";
 
-    String INDEX_PATH       = "index.path";
+    String INDEX_PATH  = "index.path";
     String INDEX_SMART = "index.smart";
 }

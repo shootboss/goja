@@ -7,7 +7,7 @@
 package goja.kits;
 
 import goja.StringPool;
-import goja.kits.lang.CharKit;
+import goja.kits.base.CharKit;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 

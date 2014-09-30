@@ -54,5 +54,9 @@ public enum ClassType {
     /**
      * The handle class.
      */
-    HANDLER
+    HANDLER,
+    /**
+     * Syslog Analysis
+     */
+    LOGPERCESSOR
 }

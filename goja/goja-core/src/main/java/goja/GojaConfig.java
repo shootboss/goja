@@ -1,8 +1,10 @@
 package goja;
 
 import com.google.common.collect.Maps;
+import com.google.common.primitives.Ints;
 import com.jfinal.plugin.activerecord.DbKit;
-import goja.io.ResourceKit;
+import goja.kits.io.ResourceKit;
+import goja.lang.Lang;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,9 @@ public class GojaConfig {
         for (Object o : p.keySet()) {
             String _key = String.valueOf(o);
             Object value = p.get(o);
+            if (Lang.isEmpty(value)) {
+                continue;
+            }
             if (StringUtils.startsWithIgnoreCase(_key, REDIS_PREFIX)) {
                 REDIS_CONFIG.put(_key, value);
             } else if (StringUtils.startsWithIgnoreCase(_key, MONGO_PREFIX)) {
@@ -139,21 +144,30 @@ public class GojaConfig {
 
 
     public static String getProperty(String key) {
-        checkPropertyLoading();
-        return configProps.get().getProperty(key);
+        final Properties _p = configProps.get();
+        if (checkNullOrEmpty(_p)) {
+            return StringPool.EMPTY;
+        }
+        return _p.getProperty(key);
     }
 
     public static String getProperty(String key, String defaultValue) {
-        checkPropertyLoading();
-        return configProps.get().getProperty(key, defaultValue);
+        final Properties _p = configProps.get();
+        if (checkNullOrEmpty(_p)) {
+            return defaultValue;
+        }
+        return _p.getProperty(key, defaultValue);
     }
 
     public static Integer getPropertyToInt(String key) {
-        checkPropertyLoading();
         Integer resultInt = null;
-        String resultStr = configProps.get().getProperty(key);
+        final Properties _p = configProps.get();
+        if (checkNullOrEmpty(_p)) {
+            return null;
+        }
+        String resultStr = _p.getProperty(key);
         if (resultStr != null)
-            resultInt = Integer.parseInt(resultStr);
+            resultInt = Ints.tryParse(resultStr);
         return resultInt;
     }
 
@@ -162,9 +176,12 @@ public class GojaConfig {
         return result != null ? result : defaultValue;
     }
 
-    public static boolean getPropertyToBoolean(String key) {
-        checkPropertyLoading();
-        String resultStr = configProps.get().getProperty(key);
+    public static Boolean getPropertyToBoolean(String key) {
+        final Properties _p = configProps.get();
+        if (checkNullOrEmpty(_p)) {
+            return null;
+        }
+        String resultStr = _p.getProperty(key);
         boolean resultBool = false;
         if (resultStr != null) {
             if (resultStr.trim().equalsIgnoreCase("true"))
@@ -178,10 +195,5 @@ public class GojaConfig {
     public static boolean getPropertyToBoolean(String key, boolean defaultValue) {
         Boolean result = getPropertyToBoolean(key);
         return result != null ? result : defaultValue;
-    }
-
-    private static void checkPropertyLoading() {
-        if (configProps.get() == null)
-            throw new RuntimeException("You must load properties file by invoking loadPropertyFile(String) method in configConstant(Constants) method before.");
     }
 }

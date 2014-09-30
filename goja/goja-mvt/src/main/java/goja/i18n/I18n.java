@@ -9,7 +9,7 @@ package goja.i18n;
 import com.google.common.base.Strings;
 import goja.Goja;
 import goja.Logger;
-import goja.mvc.kit.Request;
+import goja.mvc.kit.Requests;
 import goja.init.InitConst;
 
 import javax.servlet.http.Cookie;
@@ -92,7 +92,7 @@ public final class I18n {
         if (set(closestLocale)) {
             if (response != null) {
                 // We have a current response in scope - set the language-cookie to store the selected language for the next requests
-                Request.setCookie(request, response, Goja.configuration.getProperty("application.lang.cookie", "JAPP_LANG"), locale, 0, true);
+                Requests.setCookie(request, response, Goja.configuration.getProperty("application.lang.cookie", "JAPP_LANG"), locale, 0, true);
             }
         }
 
@@ -158,7 +158,7 @@ public final class I18n {
     private static void resolvefrom(HttpServletRequest request, HttpServletResponse response) {
         // Check a cookie
         String cn = Goja.configuration.getProperty(InitConst.APP_I18N_COOKIE, Goja.appName + ".lang");
-        final Cookie locale_cookie = Request.getCookie(request, cn);
+        final Cookie locale_cookie = Requests.getCookie(request, cn);
         if (locale_cookie != null) {
             final String localeFromCookie = locale_cookie.getValue();
             if (!Strings.isNullOrEmpty(localeFromCookie)) {
@@ -166,11 +166,11 @@ public final class I18n {
                     // we're using locale from cookie
                     return;
                 }
-                Request.setCookie(request, response, cn, "", 0);
+                Requests.setCookie(request, response, cn, "", 0);
             }
         }
 
-        String closestLocaleMatch = findClosestMatch(Request.acceptLanguage(request));
+        String closestLocaleMatch = findClosestMatch(Requests.acceptLanguage(request));
         if (closestLocaleMatch != null) {
             set(closestLocaleMatch);
         } else {

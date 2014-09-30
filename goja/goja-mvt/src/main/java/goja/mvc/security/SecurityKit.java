@@ -13,7 +13,7 @@ import com.google.common.base.Function;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.ehcache.CacheKit;
 import goja.StringPool;
-import goja.mvc.kit.Request;
+import goja.mvc.kit.Requests;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -96,7 +96,7 @@ public class SecurityKit {
      */
     public static <T extends Model> void logout(HttpServletRequest req, HttpServletResponse response) {
         CookieUser cookie_user = getUserFromCookie(req);
-        Request.deleteCookie(req, response, COOKIE_LOGIN, true);
+        Requests.deleteCookie(req, response, COOKIE_LOGIN, true);
         // 清理Cache
         if (cookie_user != null) {
             CacheKit.remove(LOGIN_CACHE_SESSION, LOGIN_CACHE_SESSION + cookie_user.getId());
@@ -198,10 +198,10 @@ public class SecurityKit {
      */
     public static <T extends Model> void saveMemberInCookie(T user, boolean save,
                                                             HttpServletRequest request, HttpServletResponse response) {
-        String new_value = getLoginKey(user, Request.remoteAddr(request), request.getHeader("user-agent"));
+        String new_value = getLoginKey(user, Requests.remoteAddr(request), request.getHeader("user-agent"));
         int max_age = save ? MAX_AGE : -1;
-        Request.deleteCookie(request, response, COOKIE_LOGIN, true);
-        Request.setCookie(request, response, COOKIE_LOGIN, new_value, max_age, true);
+        Requests.deleteCookie(request, response, COOKIE_LOGIN, true);
+        Requests.setCookie(request, response, COOKIE_LOGIN, new_value, max_age, true);
     }
 
     /**
@@ -255,7 +255,7 @@ public class SecurityKit {
      */
     private static CookieUser getUserFromCookie(HttpServletRequest req) {
         try {
-            Cookie cookie = Request.getCookie(req, COOKIE_LOGIN);
+            Cookie cookie = Requests.getCookie(req, COOKIE_LOGIN);
             if (cookie != null && StringUtils.isNotBlank(cookie.getValue())) {
                 return userForCookie(cookie.getValue(), req);
             }

@@ -37,10 +37,10 @@ import goja.db.dialect.Sqlite3Dialect;
 import goja.exceptions.DatabaseException;
 import goja.init.AppLoadEvent;
 import goja.init.InitConst;
-import goja.init.autoscan.AutoOnLoadInterceptor;
+import goja.interceptor.AutoOnLoadInterceptor;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
-import goja.interceptor.SystemLogProcessor;
+import goja.interceptor.syslog.LogProcessor;
 import goja.interceptor.syslog.SysLogInterceptor;
 import goja.job.JobsPlugin;
 import goja.kits.JfinalKit;
@@ -250,16 +250,25 @@ public class Goja extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors interceptors) {
         try {
-            URL config_url = com.google.common.io.Resources.getResource("syslog.json");
-            if (config_url != null) {
-                SysLogInterceptor sysLogInterceptor = new SysLogInterceptor();
-                sysLogInterceptor = sysLogInterceptor.setLogProcesser(new SystemLogProcessor(), config_url.getPath());
-                if (sysLogInterceptor != null) {
-                    interceptors.add(sysLogInterceptor);
+            final List<Class> log_precess = ClassBox.getInstance().getClasses(ClassType.LOGPERCESSOR);
+            if (log_precess != null && !log_precess.isEmpty()) {
+                Class log_percess_impl_cls = log_precess.get(0);
+                URL config_url = com.google.common.io.Resources.getResource("syslog.json");
+                if (config_url != null) {
+                    SysLogInterceptor sysLogInterceptor = new SysLogInterceptor();
+                    sysLogInterceptor = sysLogInterceptor.setLogProcesser((LogProcessor) log_percess_impl_cls.newInstance(), config_url.getPath());
+                    if (sysLogInterceptor != null) {
+                        interceptors.add(sysLogInterceptor);
+                    }
                 }
             }
-        } catch (IllegalArgumentException ignored) {
-            // ingored.
+
+        } catch (IllegalArgumentException e) {
+            logger.error("Enable the system operation log interceptor abnormalities.", e);
+        } catch (InstantiationException e) {
+            logger.error("Enable the system operation log interceptor abnormalities.", e);
+        } catch (IllegalAccessException e) {
+            logger.error("Enable the system operation log interceptor abnormalities.", e);
         }
 
         new AutoOnLoadInterceptor(interceptors).load();
@@ -290,9 +299,9 @@ public class Goja extends JFinalConfig {
                     try {
                         handlers.add((com.jfinal.handler.Handler) handler.newInstance());
                     } catch (InstantiationException e) {
-                        Logger.error("The Handler instance is error!", e);
+                        logger.error("The Handler instance is error!", e);
                     } catch (IllegalAccessException e) {
-                        Logger.error("The Handler instance is error!", e);
+                        logger.error("The Handler instance is error!", e);
                     }
                 }
             }
@@ -308,10 +317,11 @@ public class Goja extends JFinalConfig {
                 AppLoadEvent event;
                 try {
                     event = (AppLoadEvent) appCliass.newInstance();
-                    event.load();
+                    if (event != null) {
+                        event.load();
+                    }
                 } catch (Throwable t) {
                     logger.error("load event is error!", t);
-                    // ingore
                 }
             }
         }
@@ -369,7 +379,7 @@ public class Goja extends JFinalConfig {
             } catch (SQLException e) {
                 throw new DatabaseException(e.getMessage(), e);
             }
-            final DruidPlugin druidPlugin = new DruidPlugin( db_url, username, password, driverClassName);
+            final DruidPlugin druidPlugin = new DruidPlugin(db_url, username, password, driverClassName);
             druidPlugin.setFilters("stat,wall");
             final WallFilter wall = new WallFilter();
             wall.setDbType(JdbcConstants.MYSQL);
@@ -377,7 +387,7 @@ public class Goja extends JFinalConfig {
             plugins.add(druidPlugin);
 
             //  setting db table name like 'dev_info'
-            final AutoTableBindPlugin atbp = new AutoTableBindPlugin(configName,druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
+            final AutoTableBindPlugin atbp = new AutoTableBindPlugin(configName, druidPlugin, SimpleNameStyles.LOWER_UNDERLINE);
 
             if (!StringUtils.equals(dbtype, JdbcConstants.MYSQL)) {
                 if (StringUtils.equals(dbtype, JdbcConstants.ORACLE)) {
