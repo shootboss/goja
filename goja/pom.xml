@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,7 +9,7 @@
 
     <groupId>com.github.sogyf</groupId>
     <artifactId>goja</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.0.10</version>
     <packaging>pom</packaging>
 
     <name>goja</name>
@@ -37,7 +36,8 @@
         <url>https://github.com/sogyf/goja</url>
         <connection>scm:git:git@github.com:sogyf/goja.git</connection>
         <developerConnection>scm:git:git@github.com:sogyf/goja.git</developerConnection>
-    </scm>
+      <tag>goja-0.0.10</tag>
+  </scm>
 
     <issueManagement>
         <system>Github</system>
