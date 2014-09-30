@@ -1,4 +1,4 @@
-#jfinal-app
+# Goja
 
 > 感谢：[@JFinal](http://git.oschina.net/jfinal/jfinal) [@JFinal-ext](http://git.oschina.net/zhouleib1412/jfinal-ext)
 
