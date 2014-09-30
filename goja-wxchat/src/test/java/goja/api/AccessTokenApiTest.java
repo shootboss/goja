@@ -15,9 +15,9 @@ public class AccessTokenApiTest {
 
     @Test
     public void testGetAccessToken() {
-        AccessToken accessToken = AccessTokenApi.getAccessToken(DefaultApp.AppId, DefaultApp.AppSecret);
-        System.out.println(accessToken.getAccess_token());
-        System.out.println(accessToken.getExpires_in());
+        // AccessToken accessToken = AccessTokenApi.getAccessToken(DefaultApp.AppId, DefaultApp.AppSecret);
+        // System.out.println(accessToken.getAccess_token());
+        // System.out.println(accessToken.getExpires_in());
     }
 
 }

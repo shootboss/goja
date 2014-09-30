@@ -36,12 +36,6 @@
         </dependency>
         <dependency>
             <groupId>com.github.sogyf</groupId>
-            <artifactId>goja-uc</artifactId>
-            <version>0.0.10</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sogyf</groupId>
             <artifactId>goja-wxchat</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
