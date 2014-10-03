@@ -35,12 +35,18 @@ public interface InitConst {
     String VIEW_500  = "view.500";
 
     /* Database Configuration. */
-    String DB_URL         = "db.url";
-    String DB_USERNAME    = "db.username";
-    String DB_PASSWORD    = "db.password";
-    String DB_SQLINXML    = "db.sqlinxml";
-    String DB_SCRIPT_PATH = "db.script.path";
-    String DB_STAT_VIEW   = "db.druid.url";
+    String DB_URL                           = "db.url";
+    String DB_USERNAME                      = "db.username";
+    String DB_PASSWORD                      = "db.password";
+    String DB_INITIAL_SIZE                  = "db.initial.size";
+    String DB_INITIAL_MINIDLE               = "db.initial.minidle";
+    String DB_INITIAL_MAXWAIT               = "db.initial.maxwait";
+    String DB_TIMEBETWEENEVICTIONRUNSMILLIS = "db.timeBetweenEvictionRunsMillis";
+    String DB_MINEVICTABLEIDLETIMEMILLIS    = "db.minEvictableIdleTimeMillis";
+    String DB_INITIAL_ACTIVE                = "db.initial.active";
+    String DB_SQLINXML                      = "db.sqlinxml";
+    String DB_SCRIPT_PATH                   = "db.script.path";
+    String DB_STAT_VIEW                     = "db.druid.url";
 
     /* Logging Configuration. */
     String LOGGER_LEVEL = "logger";

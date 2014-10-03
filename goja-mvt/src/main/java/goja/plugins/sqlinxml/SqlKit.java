@@ -10,24 +10,24 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
+import com.jfinal.kit.PathKit;
 import goja.Goja;
-import goja.Logger;
 import goja.StringPool;
 import goja.kits.map.JaxbKit;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class SqlKit {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SqlKit.class);
+    private static final Logger logger = LoggerFactory.getLogger(SqlKit.class);
 
     private static final Map<String, String> SQL_MAP = Maps.newHashMap();
 
@@ -48,11 +48,11 @@ public class SqlKit {
 
 
     static void init() {
-        final URL resource = SqlKit.class.getClassLoader().getResource(StringPool.EMPTY);
-        if (resource == null) {
+        final String resource = PathKit.getRootClassPath();
+        if (Strings.isNullOrEmpty(resource)) {
             throw new NullPointerException("the resources is null.");
         }
-        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(resource.getFile()));
+        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
         final List<File> files = Lists.newArrayList();
         for (File f : iterable) {
             if (f.getName().endsWith(CONFIG_SUFFIX)) {
@@ -74,15 +74,15 @@ public class SqlKit {
                     continue;
                 }
                 final String _val = sqlItem.value;
-                if(Strings.isNullOrEmpty(_val)){
+                if (Strings.isNullOrEmpty(_val)) {
                     logger.warn("In file {} SQL id in XML for {} is empty", xmlfile.getAbsolutePath(), sql_name);
                     continue;
                 }
                 SQL_MAP.put(sql_name, _val.replace('\r', ' ').replace('\n', ' ').replaceAll(" {2,}", " "));
             }
         }
-        if (Logger.isDebugEnabled())
-            Logger.debug("SQL_MAP" + SQL_MAP);
+        if (logger.isDebugEnabled())
+            logger.debug("SQL_MAP" + SQL_MAP);
         if (Goja.mode.isDev()) {
             // 启动文件监控
             runWatch();
@@ -90,13 +90,10 @@ public class SqlKit {
     }
 
     private static void runWatch() {
-        final URL resource = SqlKit.class.getClassLoader().getResource(StringPool.EMPTY);
-        if (resource == null) {
-            return;
-        }
+        final String path = PathKit.getRootClassPath();
+        logger.info("Start the SQL configuration file scanning monitoring mechanism! path is {}", path);
         // 轮询间隔 3 秒
         long interval = TimeUnit.SECONDS.toMillis(3);
-        final String path = resource.getPath();
 
         File config_file = new File(path);
         List<FileAlterationObserver> observerList = Lists.newArrayList();
@@ -125,7 +122,7 @@ public class SqlKit {
         try {
             monitor.start();
         } catch (Exception e) {
-            Logger.error("file monitor is error!", e);
+            logger.error("file monitor is error!", e);
         }
 
     }

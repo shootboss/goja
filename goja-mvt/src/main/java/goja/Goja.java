@@ -6,6 +6,7 @@
 
 package goja;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
@@ -135,6 +136,20 @@ public class Goja extends JFinalConfig {
 
     public static File applicationPath = null;
 
+    /**
+     * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用
+     */
+    static void initWithTest(){
+
+        // set config propertis.
+        configuration = GojaConfig.getConfigProps();
+        initlization = true;
+
+        // dev_mode
+        final boolean dev_mode = GojaConfig.getPropertyToBoolean(DEV_MODE, false);
+        mode = dev_mode ? Mode.DEV : Mode.PROD;
+        Logger.init();
+    }
 
     @Override
     public void configConstant(Constants constants) {
@@ -380,7 +395,16 @@ public class Goja extends JFinalConfig {
                 throw new DatabaseException(e.getMessage(), e);
             }
             final DruidPlugin druidPlugin = new DruidPlugin(db_url, username, password, driverClassName);
-            druidPlugin.setFilters("stat,wall");
+            druidPlugin.addFilter(new StatFilter());
+
+
+            druidPlugin.setInitialSize(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_SIZE, 10));
+            druidPlugin.setMinIdle(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_MINIDLE, 10));
+            druidPlugin.setMaxActive(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_ACTIVE, 100));
+            druidPlugin.setMaxWait(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_MAXWAIT, 60000));
+            druidPlugin.setTimeBetweenEvictionRunsMillis(GojaConfig.getPropertyToInt(InitConst.DB_TIMEBETWEENEVICTIONRUNSMILLIS, 120000));
+            druidPlugin.setMinEvictableIdleTimeMillis(GojaConfig.getPropertyToInt(InitConst.DB_MINEVICTABLEIDLETIMEMILLIS, 120000));
+
             final WallFilter wall = new WallFilter();
             wall.setDbType(JdbcConstants.MYSQL);
             druidPlugin.addFilter(wall);
