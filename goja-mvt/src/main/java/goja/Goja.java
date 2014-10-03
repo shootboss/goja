@@ -137,7 +137,9 @@ public class Goja extends JFinalConfig {
     public static File applicationPath = null;
 
     /**
-     * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用
+     * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制
+     * <p/>
+     *  Reflect.on(Goja.class).call("initWithTest");
      */
     static void initWithTest(){
 
