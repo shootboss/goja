@@ -101,13 +101,9 @@ public class SqlKit {
         if (childrenfiles != null) {
             for (File child : childrenfiles) {
                 if (child.isDirectory()) {
-                    final FileAlterationObserver observer = new FileAlterationObserver(
-                            child.getAbsolutePath(),
-                            FileFilterUtils.and(
-                                    FileFilterUtils.fileFileFilter(),
-                                    FileFilterUtils.suffixFileFilter(CONFIG_SUFFIX)),
-                            null
-                    );
+                    final FileAlterationObserver observer = new FileAlterationObserver(child.getAbsolutePath()
+                            , FileFilterUtils.and(FileFilterUtils.fileFileFilter(), FileFilterUtils.suffixFileFilter(CONFIG_SUFFIX)
+                    ), null);
 
                     observer.addListener(new SqlXmlFileListener(SQL_MAP));
                     observerList.add(observer);

@@ -163,24 +163,24 @@ public final class JFinal {
 		server.stop();
 	}
 	
-	/**
-	 * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
-	 * args example: WebRoot 80 / 5
-	 */
-	public static void main(String[] args) {
-		if (args == null || args.length == 0) {
-			server = ServerFactory.getServer();
-			server.start();
-		}
-		else {
-			String webAppDir = args[0];
-			int port = Integer.parseInt(args[1]);
-			String context = args[2];
-			int scanIntervalSeconds = Integer.parseInt(args[3]);
-			server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-			server.start();
-		}
-	}
+//	/**
+//	 * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
+//	 * args example: WebRoot 80 / 5
+//	 */
+//	public static void main(String[] args) {
+//		if (args == null || args.length == 0) {
+//			server = ServerFactory.getServer();
+//			server.start();
+//		}
+//		else {
+//			String webAppDir = args[0];
+//			int port = Integer.parseInt(args[1]);
+//			String context = args[2];
+//			int scanIntervalSeconds = Integer.parseInt(args[3]);
+//			server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+//			server.start();
+//		}
+//	}
 	
 	public List<String> getAllActionKeys() {
 		return actionMapping.getAllActionKeys();

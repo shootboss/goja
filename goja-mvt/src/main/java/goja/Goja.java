@@ -38,9 +38,9 @@ import goja.db.dialect.Sqlite3Dialect;
 import goja.exceptions.DatabaseException;
 import goja.init.AppLoadEvent;
 import goja.init.InitConst;
-import goja.interceptor.AutoOnLoadInterceptor;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
+import goja.interceptor.AutoOnLoadInterceptor;
 import goja.interceptor.syslog.LogProcessor;
 import goja.interceptor.syslog.SysLogInterceptor;
 import goja.job.JobsPlugin;
@@ -139,9 +139,9 @@ public class Goja extends JFinalConfig {
     /**
      * 为方便测试用例的使用，这个提供一个手动初始化的方法为测试用例使用,调用采用反射机制
      * <p/>
-     *  Reflect.on(Goja.class).call("initWithTest");
+     * Reflect.on(Goja.class).call("initWithTest");
      */
-    static void initWithTest(){
+    static void initWithTest() {
 
         // set config propertis.
         configuration = GojaConfig.getConfigProps();
@@ -482,6 +482,11 @@ public class Goja extends JFinalConfig {
          */
         PROD;
 
+        /**
+         * 判断当前的运行模式是否为开发模式
+         *
+         * @return 如果返回 真 则表示为开发模式，否则为正式运行环境。
+         */
         public boolean isDev() {
             return this == DEV;
         }
