@@ -87,9 +87,9 @@ public abstract class Dialect {
             for (int i = 0; i < param_size; i++) {
                 final Object param = paras.get(i);
                 pst.setObject(i + 1, param);
-                logger.debug("   param index: {}, param type is {}, param value is {}. ", i + 1, param.getClass().getSimpleName(), param);
+                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, param.getClass().getSimpleName(), param);
             }
-            logger.debug(" Sql param end!");
+            logger.debug("Sql param end!");
         } else {
             for (int i = 0; i < param_size; i++) {
                 pst.setObject(i + 1, paras.get(i));
@@ -108,9 +108,9 @@ public abstract class Dialect {
             for (int i = 0; i < param_size; i++) {
                 final Object param = paras[i];
                 pst.setObject(i + 1, param);
-                logger.debug("   param index: {}, param type is {}, param value is {}. ", i + 1, param.getClass().getSimpleName(), param);
+                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, param.getClass().getSimpleName(), param);
             }
-            logger.debug(" Sql param end!");
+            logger.debug("Sql param end!");
         } else {
             for (int i = 0; i < param_size; i++) {
                 pst.setObject(i + 1, paras[i]);
