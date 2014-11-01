@@ -27,6 +27,7 @@ import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
+import com.jfinal.weixin.sdk.api.ApiConfig;
 import freemarker.template.Configuration;
 import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
@@ -94,6 +95,10 @@ import static goja.init.InitConst.VIEW_404;
 import static goja.init.InitConst.VIEW_500;
 import static goja.init.InitConst.VIEW_PATH;
 import static goja.init.InitConst.VIEW_TYPE;
+import static goja.init.InitConst.WX_APPID;
+import static goja.init.InitConst.WX_SECRET;
+import static goja.init.InitConst.WX_TOKEN;
+import static goja.init.InitConst.WX_URL;
 
 /**
  * <p> The core of goja. </p>
@@ -174,6 +179,18 @@ public class Goja extends JFinalConfig {
 
         // init logger.
         Logger.init();
+
+        // init wxchat config
+
+        final String wx_url = GojaConfig.getProperty(WX_URL);
+        if (!Strings.isNullOrEmpty(wx_url)) {
+            // Config Wx Api
+            ApiConfig.setDevMode(dev_mode);
+            ApiConfig.setUrl(wx_url);
+            ApiConfig.setToken(GojaConfig.getProperty(WX_TOKEN));
+            ApiConfig.setAppId(GojaConfig.getProperty(WX_APPID));
+            ApiConfig.setAppSecret(GojaConfig.getProperty(WX_SECRET));
+        }
 
         domain = GojaConfig.getProperty(DOMAIN, DEFAULT_DOMAIN);
         String view_type = GojaConfig.getProperty(VIEW_TYPE);

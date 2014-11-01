@@ -84,6 +84,13 @@ public interface InitConst {
     String JOB_POOL_SIZE = "goja.jobs.pool";
     String POOL          = "goja.pool";
 
+    /* index config*/
     String INDEX_PATH  = "index.path";
     String INDEX_SMART = "index.smart";
+
+    /* weixin Config */
+    String WX_URL = "wx.url";
+    String WX_TOKEN = "wx.token";
+    String WX_APPID = "wx.appid";
+    String WX_SECRET = "wx.secret";
 }
