@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
 import goja.Goja;
 import goja.GojaConfig;
-import goja.Logger;
 import goja.annotation.Every;
 import goja.annotation.On;
 import goja.annotation.OnApplicationStart;
@@ -20,9 +19,11 @@ import goja.exceptions.UnexpectedException;
 import goja.init.InitConst;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
-import goja.libs.PThreadFactory;
+import goja.lang.Lang;
 import goja.libs.Expression;
+import goja.libs.PThreadFactory;
 import goja.libs.Time;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -34,13 +35,14 @@ import java.util.concurrent.TimeUnit;
 
 public class JobsPlugin implements IPlugin {
 
-    public static ScheduledThreadPoolExecutor executor      = null;
-    public static List<Job>                   scheduledJobs = null;
+    public static ScheduledThreadPoolExecutor executor;
+    public static List<Job> scheduledJobs = null;
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JobsPlugin.class);
 
     public JobsPlugin() {
         int core = Integer.parseInt(GojaConfig.getProperty(InitConst.JOB_POOL_SIZE, "10"));
         executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja-jobs"), new ThreadPoolExecutor.AbortPolicy());
-
     }
 
 
@@ -52,18 +54,23 @@ public class JobsPlugin implements IPlugin {
         if (cron.startsWith("cron.")) {
             cron = Goja.configuration.getProperty(cron);
         }
-        cron = Expression.evaluate(cron, cron).toString();
-        if (cron == null || "".equals(cron) || "never".equalsIgnoreCase(cron)) {
-            Logger.info("Skipping job %s, cron expression is not defined", job.getClass().getName());
+        final Object eval = Expression.evaluate(cron, cron);
+        if (Lang.isEmpty(eval)) {
+            logger.error("the jon cron is null.");
+            return;
+        }
+        cron = eval.toString();
+        if (Lang.isEmpty(cron) || "never".equalsIgnoreCase(cron)) {
+            logger.info("Skipping job %s, cron expression is not defined", job.getClass().getName());
             return;
         }
         try {
             Date now = new Date();
-            cron = Expression.evaluate(cron, cron).toString();
+            cron = eval.toString();
             Time.CronExpression cronExp = new Time.CronExpression(cron);
             Date nextDate = cronExp.getNextValidTimeAfter(now);
             if (nextDate == null) {
-                Logger.warn("The cron expression for job %s doesn't have any match in the future, will never be executed", job.getClass().getName());
+                logger.warn("The cron expression for job %s doesn't have any match in the future, will never be executed", job.getClass().getName());
                 return;
             }
             if (nextDate.equals(job.nextPlannedExecution)) {
@@ -84,7 +91,12 @@ public class JobsPlugin implements IPlugin {
     @Override
     public boolean start() {
         List<Class<?>> jobs = Lists.newArrayList();
-        for (Class clazz : ClassBox.getInstance().getClasses(ClassType.JOB)) {
+        // fixed: If the configuration to start the JOB, but there is no JOB class, not to start.
+        final List<Class> job_classes = ClassBox.getInstance().getClasses(ClassType.JOB);
+        if (Lang.isEmpty(job_classes)) {
+            return false;
+        }
+        for (Class clazz : job_classes) {
             if (Job.class.isAssignableFrom(clazz)) {
                 jobs.add(clazz);
             }
@@ -174,7 +186,7 @@ public class JobsPlugin implements IPlugin {
     public boolean stop() {
 
         List<Class> jobs = ClassBox.getInstance().getClasses(ClassType.JOB);
-        if(scheduledJobs == null){
+        if (scheduledJobs == null) {
             scheduledJobs = Lists.newArrayList();
         }
         for (final Class clazz : jobs) {

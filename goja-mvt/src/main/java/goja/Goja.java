@@ -116,7 +116,7 @@ public class Goja extends JFinalConfig {
     // the application configuration.
     public static Properties configuration;
 
-    //
+    // run mode.
     public static Mode mode;
 
     // the application view path.
@@ -132,7 +132,7 @@ public class Goja extends JFinalConfig {
     /**
      * The list of supported locales
      */
-    public static List<String> langs = Lists.newArrayListWithCapacity(16);
+    public static final List<String> langs = Lists.newArrayListWithCapacity(16);
 
     public static File applicationPath = null;
 
@@ -474,7 +474,7 @@ public class Goja extends JFinalConfig {
     public enum Mode {
 
         /**
-         * Enable development-specific features, e.g. view the documentation at the URL {@literal "/@documentation"}.
+         * Enable development-specific features.
          */
         DEV,
         /**
