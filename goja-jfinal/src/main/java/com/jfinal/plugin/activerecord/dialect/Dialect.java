@@ -110,7 +110,7 @@ public abstract class Dialect {
                 pst.setObject(i + 1, param);
                 logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, param.getClass().getSimpleName(), param);
             }
-            logger.debug("Sql param end!");
+            logger.debug("Sql param end!\n");
         } else {
             for (int i = 0; i < param_size; i++) {
                 pst.setObject(i + 1, paras[i]);

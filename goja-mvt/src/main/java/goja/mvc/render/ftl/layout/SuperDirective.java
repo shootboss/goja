@@ -12,6 +12,7 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import goja.mvc.render.ftl.kit.DirectiveKit;
+import goja.mvc.render.ftl.kit.TemplateDirectiveBodyOverrideWraper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -34,8 +35,8 @@ public class SuperDirective implements TemplateDirectiveModel {
                         Map params, TemplateModel[] loopVars,
                         TemplateDirectiveBody body) throws TemplateException, IOException {
 
-        OverrideDirective.TemplateDirectiveBodyOverrideWraper current =
-                (OverrideDirective.TemplateDirectiveBodyOverrideWraper) env.getVariable(DirectiveKit.OVERRIDE_CURRENT_NODE);
+        TemplateDirectiveBodyOverrideWraper current =
+                (TemplateDirectiveBodyOverrideWraper) env.getVariable(DirectiveKit.OVERRIDE_CURRENT_NODE);
         if (current == null) {
             throw new TemplateException("<@super/> direction must be child of override", env);
         }

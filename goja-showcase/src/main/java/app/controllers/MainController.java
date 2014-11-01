@@ -6,6 +6,7 @@
 
 package app.controllers;
 
+import goja.Logger;
 import goja.mvc.Controller;
 
 /**
@@ -24,6 +25,7 @@ public class MainController extends Controller {
      * the url /main
      */
     public void index() {
+        Logger.info("haha");
         render("/main.ftl");
     }
 

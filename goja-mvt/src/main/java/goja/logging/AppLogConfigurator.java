@@ -17,11 +17,13 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.status.InfoStatus;
 import ch.qos.logback.core.status.StatusManager;
-import goja.GojaConfig;
 import goja.Goja;
+import goja.GojaConfig;
 import goja.init.InitConst;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
+
+import static goja.init.InitConst.*;
 
 /**
  * <p>
@@ -34,7 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AppLogConfigurator {
 
-    final static AppLogConfigurator SINGLETON_LOGGER = new AppLogConfigurator();
 
     private AppLogConfigurator() {
     }
@@ -49,7 +50,7 @@ public class AppLogConfigurator {
         ca.setName("console");
 
         final RollingFileAppender rfa = new RollingFileAppender();
-        final String filename = GojaConfig.getProperty(InitConst.LOGGER_PATH, "../logs/" + Goja.appName + ".log");
+        final String filename = GojaConfig.getProperty(LOGGER_PATH, "../logs/" + Goja.appName + ".log");
         rfa.setFile(filename);
         final TimeBasedRollingPolicy rollingPolicy = new TimeBasedRollingPolicy();
         rollingPolicy.setParent(rfa);
@@ -77,8 +78,9 @@ public class AppLogConfigurator {
         asyncAppender.setQueueSize(512);
         asyncAppender.setDiscardingThreshold(0);
 
-        final Level config_level = Level.toLevel(GojaConfig.getProperty(InitConst.LOGGER_LEVEL), Level.INFO);
-        final Level default_level = Goja.mode.isDev() ? Level.DEBUG : config_level;
+        final Level config_level = Level.toLevel(GojaConfig.getProperty(LOGGER_LEVEL), Level.INFO);
+        final boolean mode = GojaConfig.getPropertyToBoolean(DEV_MODE, false);
+        final Level default_level = mode ? Level.DEBUG : config_level;
         Logger rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME);
         rootLogger.setLevel(default_level);
         rootLogger.addAppender(ca);
@@ -88,6 +90,15 @@ public class AppLogConfigurator {
         appLogger.setLevel(default_level);
         appLogger.addAppender(ca);
         appLogger.addAppender(asyncAppender);
+
+        if (mode) {
+            Logger gojaLogger = lc.getLogger("goja");
+            gojaLogger.setLevel(Level.DEBUG);
+            gojaLogger.addAppender(ca);
+            Logger jfinalLogger = lc.getLogger("com.jfinal");
+            jfinalLogger.setLevel(Level.DEBUG);
+            jfinalLogger.addAppender(ca);
+        }
     }
 
     public static void configureDefaultContext() {

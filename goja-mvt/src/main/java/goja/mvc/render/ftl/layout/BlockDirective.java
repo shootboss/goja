@@ -12,6 +12,7 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import goja.mvc.render.ftl.kit.DirectiveKit;
+import goja.mvc.render.ftl.kit.TemplateDirectiveBodyOverrideWraper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,14 +36,14 @@ public class BlockDirective implements TemplateDirectiveModel {
                         Map params, TemplateModel[] loopVars,
                         TemplateDirectiveBody body) throws TemplateException, IOException {
         String name = DirectiveKit.getRequiredParam(params, "name");
-        OverrideDirective.TemplateDirectiveBodyOverrideWraper overrideBody = DirectiveKit.getOverrideBody(env, name);
+        TemplateDirectiveBodyOverrideWraper overrideBody = DirectiveKit.getOverrideBody(env, name);
         if (overrideBody == null) {
             if (body != null) {
                 body.render(env.getOut());
             }
         } else {
             DirectiveKit.setTopBodyForParentBody(
-                    new OverrideDirective.TemplateDirectiveBodyOverrideWraper(body, env),
+                    new TemplateDirectiveBodyOverrideWraper(body, env),
                     overrideBody);
             overrideBody.render(env.getOut());
         }
