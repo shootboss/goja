@@ -25,11 +25,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class Job<V> extends Invoker.Invocation implements Callable<V> {
 
-    public static final String invocationType = "Job";
+    public static final String invocationType = "Goja_invocation";
 
     protected ExecutorService executor;
-    protected long      lastRun       = 0;
-    protected boolean   wasError      = false;
+
+    protected long    lastRun  = 0;
+    protected boolean wasError = false;
+
     protected Throwable lastException = null;
 
     Date nextPlannedExecution = null;
@@ -137,6 +139,7 @@ public class Job<V> extends Invoker.Invocation implements Callable<V> {
         call();
     }
 
+    @Override
     public V call() {
         try {
             if (init()) {

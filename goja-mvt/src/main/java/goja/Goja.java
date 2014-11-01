@@ -120,11 +120,10 @@ public class Goja extends JFinalConfig {
     public static Mode mode;
 
     // the application view path.
-    public static String  viewPath;
-    public static String  domain;
-    public static boolean setViewPath;
-    public static String  appName;
-    public static String  appVersion;
+    public static String viewPath;
+    public static String domain;
+    public static String appName;
+    public static String appVersion;
 
     private Routes _routes;
 
@@ -166,12 +165,10 @@ public class Goja extends JFinalConfig {
         final boolean dev_mode = GojaConfig.getPropertyToBoolean(DEV_MODE, false);
         mode = dev_mode ? Mode.DEV : Mode.PROD;
         constants.setDevMode(dev_mode);
+        // fixed: render view has views//xxx.ftl
+        viewPath = GojaConfig.getProperty(VIEW_PATH, File.separator + "WEB-INF" + File.separator + "views");
+        constants.setBaseViewPath(viewPath);
 
-        viewPath = GojaConfig.getProperty(VIEW_PATH, File.separator + "WEB-INF" + File.separator + "views" + File.separator);
-        if (!StrKit.isBlank(viewPath)) {
-            setViewPath = true;
-            constants.setBaseViewPath(viewPath);
-        }
         appName = GojaConfig.getProperty(APP, "app");
         appVersion = GojaConfig.getProperty(APP_VERSION, "0.0.1");
 
@@ -293,11 +290,12 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void configHandler(Handlers handlers) {
-        //访问路径是/admin/monitor
+        //访问路径是/druid/monitor
 
         final String view_url = GojaConfig.getProperty(DB_STAT_VIEW, "/druid/monitor");
 
         final DruidStatViewHandler dvh = new DruidStatViewHandler(view_url, new IDruidStatViewAuth() {
+            @Override
             public boolean isPermitted(HttpServletRequest request) {
                 return true;
             }

@@ -1,0 +1,29 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ */
+
+package app.controllers;
+
+import goja.mvc.Controller;
+
+/**
+ * <p>
+ * .
+ * </p>
+ *
+ * @author sagyf yang
+ * @version 1.0 2014-11-01 14:42
+ * @since JDK 1.6
+ */
+public class LoginController extends Controller {
+
+    /**
+     * The index route.
+     */
+    public void index() {
+        render("index.ftl");
+    }
+
+}

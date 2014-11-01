@@ -117,6 +117,7 @@
         <module>goja-qrcode</module>
         <module>goja-mvt</module>
         <module>goja-wxchat</module>
+        <module>goja-showcase</module>
     </modules>
     <build>
         <finalName>goja</finalName>

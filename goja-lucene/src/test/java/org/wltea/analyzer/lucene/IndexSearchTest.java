@@ -49,15 +49,15 @@ public class IndexSearchTest {
         Analyzer analyzer = new IKAnalyzer(true);
 
         Directory directory = null;
-        IndexWriter iwriter = null;
+        IndexWriter iwriter;
         IndexReader ireader = null;
-        IndexSearcher isearcher = null;
+        IndexSearcher isearcher;
         try {
             //建立内存索引对象
             directory = new RAMDirectory();
 
             //配置IndexWriterConfig
-            IndexWriterConfig iwConfig = new IndexWriterConfig(Version.LUCENE_40 , analyzer);
+            IndexWriterConfig iwConfig = new IndexWriterConfig(Version.LUCENE_4_9 , analyzer);
             iwConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
             iwriter = new IndexWriter(directory , iwConfig);
             //写入索引
@@ -75,7 +75,7 @@ public class IndexSearchTest {
 
             String keyword = "中文分词工具包";
             //使用QueryParser查询分析器构造Query对象
-            QueryParser qp = new QueryParser(Version.LUCENE_40, fieldName,  analyzer);
+            QueryParser qp = new QueryParser(Version.LUCENE_4_9, fieldName,  analyzer);
             qp.setDefaultOperator(QueryParser.AND_OPERATOR);
             Query query = qp.parse(keyword);
             System.out.println("Query = " + query);

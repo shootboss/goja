@@ -20,35 +20,35 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class AjaxMessage<E> {
 
-    private static final String SUCCESS_MSG   = "您好，请求以筋斗云的速度请求成功，恭喜你！";
+    private static final String SUCCESS_MSG   = "Hello, request to somersault cloud speed request is successful, congratulations!";
     /**
-     * 没有权限访问的提示语
+     * Don't have permission to access the clues
      */
-    private static final String FORBIDDEN_MSG = "403,无权访问！";
+    private static final String FORBIDDEN_MSG = "You have no right to access this path!";
     /**
-     * 没有权限访问的提示语
+     * There is no data of the clues
      */
-    private static final String NODATA_MSG    = "您好，你所请求的内容为空!";
+    private static final String NODATA_MSG    = "Hello, what you request is empty!";
     /**
-     * 没有登录的提示语
+     * Not logged in the clues
      */
-    private static final String NOLOGIN_MSG   = "您好，你是不是没有登录?只有登录后才能访问。";
+    private static final String NOLOGIN_MSG   = "Hello, you are not logged in? Only logged in can access.";
 
 
     /**
-     * 返回带的消息数据
+     * Returns the message data
      */
     private final E             data;
     /**
-     * 消息提示语
+     * News clues
      */
     private final String        message;
     /**
-     * 消息状态
+     * Message State Machine.
      */
     private final MessageStatus status;
     /**
-     * 异常
+     * Exception
      */
     private final Exception     exception;
 
@@ -203,6 +203,17 @@ public final class AjaxMessage<E> {
     }
 
     /**
+     * 返回禁止访问消息内容
+     *
+     * @param data 消息数据
+     * @param <E>  数据泛型类型
+     * @return 消息内容
+     */
+    public static <E> AjaxMessage forbidden(String message, E data) {
+        return new AjaxMessage<E>(data, message, MessageStatus.FORBIDDEN);
+    }
+
+    /**
      * 返回禁止访问的消息内容
      *
      * @return 消息内容
@@ -275,6 +286,16 @@ public final class AjaxMessage<E> {
      */
     public static AjaxMessage failure(String message) {
         return failure(message, null, null);
+    }
+
+    /**
+     * 返回处理失败的消息内容
+     *
+     * @param data data
+     * @return 消息内容
+     */
+    public static <E> AjaxMessage failure(E data) {
+        return failure(null, data, null);
     }
 
     /**
