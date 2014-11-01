@@ -6,6 +6,7 @@
 
 package goja.mvc.render.ftl.shiro;
 
+import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleHash;
 import goja.mvc.render.ftl.shiro.auth.AuthenticatedTag;
 import goja.mvc.render.ftl.shiro.auth.GuestTag;
@@ -29,11 +30,13 @@ import goja.mvc.render.ftl.shiro.role.LacksRoleTag;
  */
 public class ShiroTags extends SimpleHash {
 
+    private static final long serialVersionUID = -7857361083450860303L;
+
     /**
      * Constructs an empty hash that uses the default wrapper set in
-     * {@link freemarker.template.WrappingTemplateModel#setDefaultObjectWrapper(freemarker.template.ObjectWrapper)}.
      */
-    public ShiroTags() {
+    public ShiroTags(ObjectWrapper wrapper) {
+        super(wrapper);
         put("authenticated", new AuthenticatedTag());
         put("guest", new GuestTag());
         put("hasAnyRoles", new HasAnyRolesTag());

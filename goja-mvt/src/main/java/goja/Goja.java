@@ -47,11 +47,11 @@ import goja.interceptor.syslog.SysLogInterceptor;
 import goja.job.JobsPlugin;
 import goja.kits.JfinalKit;
 import goja.mvc.AutoBindRoutes;
-import goja.mvc.render.ftl.BlockDirective;
-import goja.mvc.render.ftl.ExtendsDirective;
-import goja.mvc.render.ftl.OverrideDirective;
 import goja.mvc.render.ftl.PrettyTimeDirective;
-import goja.mvc.render.ftl.SuperDirective;
+import goja.mvc.render.ftl.layout.BlockDirective;
+import goja.mvc.render.ftl.layout.ExtendsDirective;
+import goja.mvc.render.ftl.layout.OverrideDirective;
+import goja.mvc.render.ftl.layout.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
 import goja.mvc.security.SecurityUserData;
 import goja.plugins.index.IndexPlugin;
@@ -492,9 +492,9 @@ public class Goja extends JFinalConfig {
         config.setSharedVariable("override", new OverrideDirective());
         config.setSharedVariable("super", new SuperDirective());
         // 增加日期美化指令（类似 几分钟前）
-        config.setSharedVariable("prettyTime", new PrettyTimeDirective());
+        config.setSharedVariable("prettytime", new PrettyTimeDirective());
         if (GojaConfig.getPropertyToBoolean(InitConst.SECURITY, true)) {
-            config.setSharedVariable("shiro", new ShiroTags());
+            config.setSharedVariable("shiro", new ShiroTags(config.getObjectWrapper()));
         }
     }
 

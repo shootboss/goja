@@ -68,6 +68,9 @@ public class GojaInitializer implements ServletContainerInitializer {
         }
         // init logger
         goja.Logger.init();
+        //logger context destroy listener.
+        ctx.addListener("ch.qos.logback.classic.selector.servlet.ContextDetachingSCL");
+
         //Before starting JFinal, lookup class file on the classpath.
         ClassFinder.find();
 

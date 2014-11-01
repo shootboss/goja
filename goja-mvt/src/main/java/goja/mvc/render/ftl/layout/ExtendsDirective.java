@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.mvc.render.ftl;
+package goja.mvc.render.ftl.layout;
 
 import freemarker.cache.TemplateCache;
 import freemarker.core.Environment;
@@ -16,6 +16,7 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import goja.StringPool;
+import goja.mvc.render.ftl.kit.DirectiveKit;
 
 import java.io.IOException;
 import java.util.Map;
@@ -39,9 +40,13 @@ public class ExtendsDirective implements TemplateDirectiveModel {
     @Override
     public void execute(Environment env, Map params,
                         TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
-        String name = DirectiveUtils.getRequiredParam(params, "name");
+        String name = DirectiveKit.getRequiredParam(params, "name");
         params.remove("name");
-        String encoding = DirectiveUtils.getParam(params, "encoding", StringPool.UTF_8);
+
+        if(!name.endsWith(".ftl")){
+            name = name + ".ftl";
+        }
+        String encoding = DirectiveKit.getParam(params, "encoding", StringPool.UTF_8);
         String includeTemplateName = TemplateCache.getFullTemplatePath(env, getTemplatePath(env), name);
         Configuration configuration = env.getConfiguration();
         final Template template = configuration.getTemplate(includeTemplateName, env.getLocale(), encoding, true);

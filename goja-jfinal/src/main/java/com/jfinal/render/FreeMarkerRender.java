@@ -17,6 +17,7 @@
 package com.jfinal.render;
 
 import com.google.common.collect.Maps;
+import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
@@ -91,7 +92,7 @@ public class FreeMarkerRender extends Render {
         // - Set update dealy to 0 for now, to ease debugging and testing.
         //   Higher value should be used in production environment.
 
-        config.setIncompatibleImprovements(new Version(2, 3, 20));
+        config.setIncompatibleImprovements(Configuration.VERSION_2_3_21);
         if (getDevMode()) {
             config.setTemplateUpdateDelay(0);
         } else {
@@ -103,7 +104,7 @@ public class FreeMarkerRender extends Render {
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         // - Use beans wrapper (recommmended for most applications)
-        config.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
+        config.setObjectWrapper(new BeansWrapperBuilder(Configuration.VERSION_2_3_21).build());
         // - Set the default charset of the template files
         config.setDefaultEncoding(encoding);        // config.setDefaultEncoding("ISO-8859-1");
         // - Set the charset of the output. This is actually just a hint, that

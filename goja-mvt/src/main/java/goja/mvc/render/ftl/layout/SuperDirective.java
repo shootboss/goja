@@ -4,13 +4,14 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.mvc.render.ftl;
+package goja.mvc.render.ftl.layout;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
+import goja.mvc.render.ftl.kit.DirectiveKit;
 
 import java.io.IOException;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class SuperDirective implements TemplateDirectiveModel {
                         TemplateDirectiveBody body) throws TemplateException, IOException {
 
         OverrideDirective.TemplateDirectiveBodyOverrideWraper current =
-                (OverrideDirective.TemplateDirectiveBodyOverrideWraper) env.getVariable(DirectiveUtils.OVERRIDE_CURRENT_NODE);
+                (OverrideDirective.TemplateDirectiveBodyOverrideWraper) env.getVariable(DirectiveKit.OVERRIDE_CURRENT_NODE);
         if (current == null) {
             throw new TemplateException("<@super/> direction must be child of override", env);
         }

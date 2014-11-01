@@ -4,12 +4,16 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.mvc.render.ftl;
+package goja.mvc.render.ftl.kit;
 
 import freemarker.core.Environment;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModelException;
+import goja.mvc.render.ftl.layout.BlockDirective;
+import goja.mvc.render.ftl.layout.ExtendsDirective;
+import goja.mvc.render.ftl.layout.OverrideDirective;
+import goja.mvc.render.ftl.layout.SuperDirective;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -23,7 +27,7 @@ import java.util.Map;
  * @version 1.0 2012-04-20 上午7:30
  * @since JDK 1.5
  */
-public class DirectiveUtils {
+public class DirectiveKit {
 
     /** override的标记 */
     public static final String BLOCK                 = "__ftl_override__";
@@ -55,7 +59,7 @@ public class DirectiveUtils {
      * @throws freemarker.template.TemplateException 异常，如果key不存在params中则会出现异常
      */
     @SuppressWarnings("rawtypes")
-    static String getRequiredParam(Map params, String key) throws TemplateException {
+    public static String getRequiredParam(Map params, String key) throws TemplateException {
         Object value = params.get(key);
         if (value == null || StringUtils.isEmpty(value.toString())) {
             throw new TemplateModelException("not found required parameter:" + key + " for directive");
@@ -72,7 +76,7 @@ public class DirectiveUtils {
      * @return 对应Key的值，不存在返回默认
      */
     @SuppressWarnings("rawtypes")
-    static String getParam(Map params, String key, String defaultValue) {
+    public static String getParam(Map params, String key, String defaultValue) {
         Object value = params.get(key);
         return value == null ? defaultValue : value.toString();
     }
@@ -85,10 +89,10 @@ public class DirectiveUtils {
      * @return 覆盖内容渲染器
      * @throws freemarker.template.TemplateModelException 模板模型异常
      */
-    static OverrideDirective.TemplateDirectiveBodyOverrideWraper getOverrideBody(Environment env, String name)
+    public static TemplateDirectiveBodyOverrideWraper getOverrideBody(Environment env, String name)
             throws TemplateModelException {
-        return (OverrideDirective.TemplateDirectiveBodyOverrideWraper)
-                env.getVariable(DirectiveUtils.getOverrideVariableName(name));
+        return (TemplateDirectiveBodyOverrideWraper)
+                env.getVariable(DirectiveKit.getOverrideVariableName(name));
     }
 
     /**
@@ -97,9 +101,9 @@ public class DirectiveUtils {
      * @param topBody      内容渲染器
      * @param overrideBody 需要覆盖的内容渲染器
      */
-    static void setTopBodyForParentBody(OverrideDirective.TemplateDirectiveBodyOverrideWraper topBody,
-                                        OverrideDirective.TemplateDirectiveBodyOverrideWraper overrideBody) {
-        OverrideDirective.TemplateDirectiveBodyOverrideWraper parent = overrideBody;
+    public static void setTopBodyForParentBody(TemplateDirectiveBodyOverrideWraper topBody,
+                                               TemplateDirectiveBodyOverrideWraper overrideBody) {
+        TemplateDirectiveBodyOverrideWraper parent = overrideBody;
         while (parent.parentBody != null) {
             parent = parent.parentBody;
         }
