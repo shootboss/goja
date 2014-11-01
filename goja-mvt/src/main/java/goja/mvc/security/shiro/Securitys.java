@@ -50,6 +50,18 @@ public class Securitys {
     public static boolean isLogin() {
         Subject subject = getSubject();
 
+        return subject.getPrincipal() != null;
+    }
+
+    /**
+     * Whether the logged and through authentication
+     *
+     * @return true logged and auth.
+     */
+    public static boolean isLoginAndAuth() {
+
+        Subject subject = getSubject();
+
         return subject.getPrincipal() != null && subject.isAuthenticated();
     }
 

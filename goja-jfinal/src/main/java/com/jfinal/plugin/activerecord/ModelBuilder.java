@@ -58,7 +58,11 @@ public class ModelBuilder {
 				else
 					value = rs.getObject(i);
 				
-				attrs.put(labelNames[i], value);
+				/* # edit by sogyf. */
+				/* @description:  labelNames[i] lowcase*/
+				attrs.put(labelNames[i].toLowerCase(), value);
+				/* # end edited. */
+				//attrs.put(labelNames[i], value);
 			}
 			result.add((T)ar);
 		}

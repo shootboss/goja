@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.Model;
 import goja.init.AppLoadEvent;
 import goja.interceptor.syslog.LogProcessor;
 import goja.job.Job;
+import goja.mvc.security.SecurityUserData;
 
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,8 @@ public class ClassBox {
             initClassWithType(cls, ClassType.HANDLER);
         } else if (LogProcessor.class.isAssignableFrom(cls)) {
             initClassWithType(cls, ClassType.LOGPERCESSOR);
+        } else if (SecurityUserData.class.isAssignableFrom(cls)) {
+            initClassWithType(cls, ClassType.SECURITY_DATA);
         }
     }
 

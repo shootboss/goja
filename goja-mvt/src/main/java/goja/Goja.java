@@ -53,6 +53,7 @@ import goja.mvc.render.ftl.OverrideDirective;
 import goja.mvc.render.ftl.PrettyTimeDirective;
 import goja.mvc.render.ftl.SuperDirective;
 import goja.mvc.render.ftl.shiro.ShiroTags;
+import goja.mvc.security.SecurityUserData;
 import goja.plugins.index.IndexPlugin;
 import goja.plugins.monogo.MongoPlugin;
 import goja.plugins.quartz.QuartzPlugin;
@@ -132,6 +133,8 @@ public class Goja extends JFinalConfig {
 
     private Routes _routes;
 
+    public static SecurityUserData securityUserData;
+
 
     /**
      * The list of supported locales
@@ -181,7 +184,6 @@ public class Goja extends JFinalConfig {
         Logger.init();
 
         // init wxchat config
-
         final String wx_url = GojaConfig.getProperty(WX_URL);
         if (!Strings.isNullOrEmpty(wx_url)) {
             // Config Wx Api
@@ -190,6 +192,19 @@ public class Goja extends JFinalConfig {
             ApiConfig.setToken(GojaConfig.getProperty(WX_TOKEN));
             ApiConfig.setAppId(GojaConfig.getProperty(WX_APPID));
             ApiConfig.setAppSecret(GojaConfig.getProperty(WX_SECRET));
+        }
+
+        if (GojaConfig.getPropertyToBoolean(SECURITY, true)) {
+            final List<Class> security_user = ClassBox.getInstance().getClasses(ClassType.SECURITY_DATA);
+            if (security_user != null && security_user.size() == 1) {
+                try {
+                    securityUserData = (SecurityUserData) security_user.get(0).newInstance();
+                } catch (InstantiationException e) {
+                    logger.error("the security user data has error!", e);
+                } catch (IllegalAccessException e) {
+                    logger.error("the security user data has error!", e);
+                }
+            }
         }
 
         domain = GojaConfig.getProperty(DOMAIN, DEFAULT_DOMAIN);
@@ -225,7 +240,7 @@ public class Goja extends JFinalConfig {
 
         initDataSource(plugins);
 
-        if (GojaConfig.getPropertyToBoolean(SECURITY, false)) {
+        if (GojaConfig.getPropertyToBoolean(SECURITY, true)) {
             plugins.add(new ShiroPlugin(this._routes));
         }
 
@@ -498,9 +513,9 @@ public class Goja extends JFinalConfig {
         PROD;
 
         /**
-         * 判断当前的运行模式是否为开发模式
+         * Determine whether the current operation mode for the development pattern
          *
-         * @return 如果返回 真 则表示为开发模式，否则为正式运行环境。
+         * @return If returns true then said to development mode, or as an official running environment.
          */
         public boolean isDev() {
             return this == DEV;

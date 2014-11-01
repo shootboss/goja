@@ -58,5 +58,10 @@ public enum ClassType {
     /**
      * Syslog Analysis
      */
-    LOGPERCESSOR
+    LOGPERCESSOR,
+
+    /**
+     * The shiro security data.
+     */
+    SECURITY_DATA
 }

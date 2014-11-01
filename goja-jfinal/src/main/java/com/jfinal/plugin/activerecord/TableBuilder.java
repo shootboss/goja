@@ -55,7 +55,11 @@ class TableBuilder {
 
         for (int i = 1; i <= rsmd.getColumnCount(); i++) {
             String colName = rsmd.getColumnName(i);
-            columns.add(colName);
+            /* # edit by sogyf. */
+            /* @description: the table column field lower case. */
+            columns.add(colName.toLowerCase());
+//            columns.add(colName);
+            /* # end edited. */
             String colClassName = rsmd.getColumnClassName(i);
             if ("java.lang.String".equals(colClassName)) {
                 // varchar, char, enum, set, text, tinytext, mediumtext, longtext

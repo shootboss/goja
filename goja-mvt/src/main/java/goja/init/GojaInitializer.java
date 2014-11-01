@@ -91,7 +91,7 @@ public class GojaInitializer implements ServletContainerInitializer {
     private void runScriptInitDb(final Properties p) {
         try {
 
-            String script_path = p.getProperty(DB_SCRIPT_PATH, "msic/sql/");
+            String script_path = p.getProperty(DB_SCRIPT_PATH, "misc/sql/");
             Preconditions.checkArgument(!Strings.isNullOrEmpty(script_path)
                     , "The Database init database script init!");
             final String real_script_path = PathKit.getRootClassPath() + File.separator + script_path;
@@ -119,8 +119,11 @@ public class GojaInitializer implements ServletContainerInitializer {
                     sql_exec.setPrint(true);
                     sql_exec.setProject(new Project());
                     sql_exec.setSrc(list_script_file);
-                    sql_exec.execute();
-
+                    try {
+                        sql_exec.execute();
+                    }catch (Exception e){
+                        logger.error("the init database has already ok!", e);
+                    }
                 }
             }
         } catch (SQLException e) {

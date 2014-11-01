@@ -12,7 +12,6 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.IPlugin;
-import goja.StringPool;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -27,6 +26,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+import static goja.StringPool.SLASH;
+
 /**
  * Shiro插件，启动时加载所有Shiro访问控制注解。
  *
@@ -35,7 +36,6 @@ import java.util.concurrent.ConcurrentMap;
 @SuppressWarnings("unchecked")
 public class ShiroPlugin implements IPlugin {
 
-    private static final String SLASH = StringPool.SLASH;
 
     /**
      * Shiro的几种访问控制注解
@@ -95,8 +95,7 @@ public class ShiroPlugin implements IPlugin {
                     //获取方法的所有Shiro注解。
                     List<Annotation> methodAnnotations = getAuthzAnnotations(method);
                     //依据Controller的注解和方法的注解来生成访问控制处理器。
-                    AuthzHandler authzHandler = createAuthzHandler(
-                            controllerAnnotations, methodAnnotations);
+                    AuthzHandler authzHandler = createAuthzHandler( controllerAnnotations, methodAnnotations);
                     //生成访问控制处理器成功。
                     if (authzHandler != null) {
                         //构建ActionKey，参考ActionMapping中实现

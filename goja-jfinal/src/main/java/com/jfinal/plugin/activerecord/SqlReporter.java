@@ -1,9 +1,3 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
- */
-
 package com.jfinal.plugin.activerecord;
 
 
@@ -23,6 +17,7 @@ import java.sql.Connection;
 public class SqlReporter implements InvocationHandler {
 
     private final Connection conn;
+
     private static final Logger logger = LoggerFactory.getLogger(SqlReporter.class);
 
     SqlReporter(Connection conn) {
@@ -39,11 +34,12 @@ public class SqlReporter implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
             if (method.getName().equals("prepareStatement")) {
-                if (logger.isDebugEnabled()) {
-
-                    String info = "Sql: " + args[0];
-                    logger.debug("The Exec Sql is: \r\n {} ", SqlFormatter.format(info));
+                /* # edit by sogyf. */
+                /* @description: add sql format print. */
+                if (logger.isDebugEnabled() && DbKit.getConfig().isShowSql()) {
+                    logger.debug("The Exec Sql is: \r\n {} ", SqlFormatter.format(String.valueOf(args[0])));
                 }
+                /* # end edited. */
 
             }
             return method.invoke(conn, args);

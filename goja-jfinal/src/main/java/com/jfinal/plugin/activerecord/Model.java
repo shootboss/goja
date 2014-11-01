@@ -515,7 +515,7 @@ public abstract class Model<M extends Model> implements Serializable {
      * @return this Model
      */
     public M setAttrs(M model) {
-        return setAttrs(model.getAttrs());
+        return (M) setAttrs(model.getAttrs());
     }
 
     /**

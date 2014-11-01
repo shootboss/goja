@@ -26,4 +26,6 @@ public class MainController extends Controller {
     public void index() {
         render("/main.ftl");
     }
+
+
 }

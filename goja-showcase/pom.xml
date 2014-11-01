@@ -45,4 +45,7 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>goja-showcase</finalName>
+    </build>
 </project>
