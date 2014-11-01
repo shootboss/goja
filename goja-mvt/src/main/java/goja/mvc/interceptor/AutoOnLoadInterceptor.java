@@ -1,4 +1,4 @@
-package goja.interceptor;
+package goja.mvc.interceptor;
 
 import goja.annotation.AppInterceptor;
 import goja.init.ctxbox.ClassBox;

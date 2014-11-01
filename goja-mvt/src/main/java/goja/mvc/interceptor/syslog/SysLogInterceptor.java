@@ -3,12 +3,12 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.interceptor.syslog;
+package goja.mvc.interceptor.syslog;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import goja.StringPool;
-import goja.interceptor.syslog.config.LogPathConfig;
+import goja.mvc.interceptor.syslog.config.LogPathConfig;
 import goja.mvc.kit.Servlets;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;

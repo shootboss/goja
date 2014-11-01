@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.interceptor;
+package goja.mvc.interceptor;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;

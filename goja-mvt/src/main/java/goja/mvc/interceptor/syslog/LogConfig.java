@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
-package goja.interceptor.syslog;
+package goja.mvc.interceptor.syslog;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;

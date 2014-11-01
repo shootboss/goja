@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.interceptor.syslog.config;
+package goja.mvc.interceptor.syslog.config;
 
 import java.util.Map;
 

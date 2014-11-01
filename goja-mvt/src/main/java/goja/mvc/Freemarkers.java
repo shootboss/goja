@@ -6,15 +6,15 @@
 
 package goja.mvc;
 
-import goja.Goja;
 import com.jfinal.kit.PathKit;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;
 import freemarker.cache.StringTemplateLoader;
+import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import goja.Goja;
 import goja.Logger;
 import goja.StringPool;
 
@@ -57,7 +57,7 @@ public class Freemarkers {
             try {
                 //设置模板路径
                 appConfig.setDirectoryForTemplateLoading(new File(PathKit.getWebRootPath() + Goja.viewPath));
-                appConfig.setObjectWrapper(new DefaultObjectWrapper());
+                appConfig.setObjectWrapper(new BeansWrapperBuilder(Configuration.VERSION_2_3_21).build());
 
             } catch (IOException e) {
                 // TODO log
@@ -97,7 +97,7 @@ public class Freemarkers {
      * @return 字符串形式的渲染结果
      */
     public static String renderStrTemplate(String strTemplat, Map<String, Object> renderParams) {
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
         StringTemplateLoader stringLoader = new StringTemplateLoader();
         stringLoader.putTemplate(UPDATE_RESPONSE_TEMPLATE, strTemplat);
         cfg.setTemplateLoader(stringLoader);
