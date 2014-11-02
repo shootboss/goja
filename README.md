@@ -7,24 +7,28 @@
 3. 通过`javax.servlet.ServletContainerInitializer`(需要`Servlet3.0`以上容器)的方式去掉了`web.xml`的配置
 
 
-## 一、`JFgen`（推荐）
+## 一、[Goja-Cli](https://github.com/GojaFramework/goja-cli)（推荐）
 
-一个为了方便使用idea和不喜欢`Maven`的脚本工具。可点击[这里](http://www.kuaipan.cn/file/id_8331287366505665.htm)进行下载。
+一个为了方便使用idea和不喜欢`Maven`的脚本工具。可点击[这里](https://github.com/GojaFramework/goja-cli/releases)进行下载。
 
-	$ jfgen help
-	~
-	~ JFinal App gen.
-	~ Usage: jfgen cmd application_name [-options]
-	~
-	~ with,  new      Create a new application
-	~        war      Export the application as a standalone WAR archive
-	~        help     Show jfgen help
-	
+        $ goja
+        ~
+        ~ Gaja Application.
+        ~ Usage: goja cmd application_name [-options]
+        ~
+        ~ with, new          Create a new application
+        ~       war          Export the application as a standalone WAR archive
+        ~       syncdb       Sync Database table to Jfinal Model
+        ~       idea         Convert the project to Intellij IDEA project
+        ~       pom          Generate Maven POM file, and comply with the standard configuration Goja-app
+        ~       upgrade      Upgrade Code To Goja.
+        ~       help         Show goja help
+        ~
 
 ## 更多信息
 
-可以点击 [JFinal-app GitHub Wiki](https://github.com/sogyf/jfinal-app/wiki) 查看更详细的信息。
+可以点击 [Goja Document](https://github.com/GojaFramework/goja-doc) 查看更详细的信息。
 
 ## 示例
 
-[jfinal-app-example](https://github.com/sogyf/jfinal-app-example)
+[jfinal-showcase](https://github.com/GojaFramework/goja/tree/master/goja-showcase)
