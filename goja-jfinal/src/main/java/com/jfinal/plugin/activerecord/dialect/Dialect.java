@@ -79,6 +79,8 @@ public abstract class Dialect {
     }
 
     public void fillStatement(PreparedStatement pst, List<Object> paras) throws SQLException {
+        /* # edit by sogyf. */
+        /* @description:  when dev model print sql parm*/
         boolean show_param = DbKit.getConfig().isShowSql() && logger.isDebugEnabled();
         final int param_size = paras.size();
         if (show_param) {
@@ -87,7 +89,7 @@ public abstract class Dialect {
             for (int i = 0; i < param_size; i++) {
                 final Object param = paras.get(i);
                 pst.setObject(i + 1, param);
-                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, param.getClass().getSimpleName(), param);
+                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
             }
             logger.debug("Sql param end!");
         } else {
@@ -95,11 +97,14 @@ public abstract class Dialect {
                 pst.setObject(i + 1, paras.get(i));
             }
         }
+        /* # end edited. */
 
 
     }
 
     public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
+        /* # edit by sogyf. */
+        /* @description: when dev model print sql parm */
         boolean show_param = DbKit.getConfig().isShowSql() && logger.isDebugEnabled();
         final int param_size = paras.length;
         if (show_param) {
@@ -108,7 +113,7 @@ public abstract class Dialect {
             for (int i = 0; i < param_size; i++) {
                 final Object param = paras[i];
                 pst.setObject(i + 1, param);
-                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, param.getClass().getSimpleName(), param);
+                logger.debug("   param index: {}, param type: {}, param value: {}. ", i + 1, (param == null ? "null" : param.getClass().getSimpleName()), param);
             }
             logger.debug("Sql param end!\n");
         } else {
@@ -116,6 +121,7 @@ public abstract class Dialect {
                 pst.setObject(i + 1, paras[i]);
             }
         }
+        /* # end edited. */
     }
 
     public String getDefaultPrimaryKey() {
