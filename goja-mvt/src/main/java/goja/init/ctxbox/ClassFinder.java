@@ -6,12 +6,13 @@
 
 package goja.init.ctxbox;
 
-import goja.StringPool;
-import goja.kits.reflect.Reflect;
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
+import goja.StringPool;
+import goja.kits.reflect.Reflect;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -28,12 +29,19 @@ import java.util.List;
  */
 public class ClassFinder {
 
+    public static final Predicate<File> CLASS_PREDICATE = new Predicate<File>() {
+        @Override
+        public boolean apply(File input) {
+            return StringUtils.equals("class", Files.getFileExtension(input.getAbsolutePath()));
+        }
+    };
+
     /**
      * find class files.
      */
     public static void find() {
         String class_path = PathKit.getRootClassPath();
-        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(class_path));
+        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(class_path)).filter(CLASS_PREDICATE);
         List<String> classFileList = findClassFile(iterable);
         for (String classFile : classFileList) {
             Class<?> classInFile = Reflect.on(classFile).get();
@@ -46,7 +54,7 @@ public class ClassFinder {
      */
     public static void findWithTest() {
         String testRoolClassPath = PathKit.getRootClassPath();
-        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(testRoolClassPath));
+        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(testRoolClassPath)).filter(CLASS_PREDICATE);
         List<String> classFileList = findTestClassFile(iterable);
         for (String classFile : classFileList) {
             Class<?> classInFile = Reflect.on(classFile).get();
@@ -54,7 +62,7 @@ public class ClassFinder {
         }
 
         String classPath = testRoolClassPath.replace("test-", StringPool.EMPTY);
-        iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(classPath));
+        iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(classPath)).filter(CLASS_PREDICATE);
         classFileList = findClassFile(iterable);
         for (String classFile : classFileList) {
             Class<?> classInFile = Reflect.on(classFile).get();

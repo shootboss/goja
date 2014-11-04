@@ -33,12 +33,15 @@ public class PoiKit {
 
     private static final int HEADER_ROW = 1;
     private static final int MAX_ROWS   = 65536;
-    private final List<?>  data;
+
+    private final List<?> data;
+
     private String sheetName = "new sheet";
     private int    cellWidth = 8000;
     private int headerRow;
+
     private String[] headers = new String[]{};
-    private       String[] columns;
+    private String[] columns;
 
     public PoiKit(List<?> data) {
         this.data = data;
