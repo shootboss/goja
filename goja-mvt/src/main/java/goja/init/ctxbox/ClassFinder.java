@@ -7,7 +7,7 @@
 package goja.init.ctxbox;
 
 import goja.StringPool;
-import goja.kits.Reflect;
+import goja.kits.reflect.Reflect;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;

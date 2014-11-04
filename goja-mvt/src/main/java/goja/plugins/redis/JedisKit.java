@@ -5,7 +5,7 @@
  */
 package goja.plugins.redis;
 
-import goja.kits.SerializableKit;
+import goja.kits.io.SerializableKit;
 import com.google.common.collect.Lists;
 import goja.Logger;
 import redis.clients.jedis.Jedis;

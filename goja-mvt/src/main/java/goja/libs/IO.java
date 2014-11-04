@@ -8,7 +8,7 @@ package goja.libs;
 
 import goja.StringPool;
 import goja.exceptions.UnexpectedException;
-import goja.kits.OrderSafeProperties;
+import goja.kits.io.OrderSafeProperties;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;

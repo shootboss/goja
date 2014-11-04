@@ -7,7 +7,7 @@
 package goja.plugins.sqlinxml;
 
 import goja.Goja;
-import goja.kits.Reflect;
+import goja.kits.reflect.Reflect;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -4,9 +4,10 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.kits;
+package goja.kits.io;
 
 import com.google.common.collect.Sets;
+import goja.StringPool;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -32,15 +33,16 @@ import java.util.Set;
  */
 public class OrderSafeProperties extends java.util.Properties {
 
-    private static final long                  serialVersionUID = 4083738969812345117L;
+    private static final long serialVersionUID = 4083738969812345117L;
+
     // set used to preserve key order
-    private final        LinkedHashSet<Object> keys             = new LinkedHashSet<Object>();
+    private final LinkedHashSet<Object> keys = new LinkedHashSet<Object>();
 
     @Override
     public void load(InputStream inputStream) throws IOException {
 
         // read all lines from file as utf-8
-        List<String> lines = IOUtils.readLines(inputStream, "utf-8");
+        List<String> lines = IOUtils.readLines(inputStream, StringPool.UTF_8);
         IOUtils.closeQuietly(inputStream);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -56,7 +58,7 @@ public class OrderSafeProperties extends java.util.Properties {
             String escapedLine = StringEscapeUtils.escapeJava(line) + "\n";
             // remove escaped backslashes
             escapedLine = escapedLine.replaceAll("\\\\\\\\", "\\\\");
-            out.write(escapedLine.getBytes("iso-8859-1"));
+            out.write(escapedLine.getBytes(StringPool.ISO_8859_1));
         }
 
         // read properties-file with regular java.util.Properties impl

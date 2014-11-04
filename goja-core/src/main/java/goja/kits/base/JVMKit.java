@@ -1,4 +1,4 @@
-package goja.kits;
+package goja.kits.base;
 
 import com.google.common.collect.Lists;
 import goja.StringPool;

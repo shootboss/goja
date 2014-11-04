@@ -4,11 +4,10 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.kits;
+package goja.kits.base;
 
 import com.google.common.collect.Maps;
 import goja.StringPool;
-import goja.kits.base.CharKit;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
@@ -137,6 +136,7 @@ public class LocaleKit {
     static class LocaleData {
         final Locale locale;
         NumberFormat numberFormat;
+
         LocaleData(Locale locale) {
             this.locale = locale;
         }

@@ -18,7 +18,7 @@ import java.util.TimerTask;
  */
 public class Timeout extends Promise<Timeout> {
 
-    static Timer timer = new Timer("F.Timeout", true);
+    static Timer timer = new Timer("Goja.Timeout", true);
     final public String token;
     final public long   delay;
 

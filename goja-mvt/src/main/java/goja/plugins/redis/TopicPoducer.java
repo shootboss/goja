@@ -6,7 +6,7 @@
 package goja.plugins.redis;
 
 import goja.Logger;
-import goja.kits.SerializableKit;
+import goja.kits.io.SerializableKit;
 import redis.clients.jedis.Transaction;
 import redis.clients.jedis.Tuple;
 

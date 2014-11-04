@@ -41,12 +41,11 @@ import goja.init.AppLoadEvent;
 import goja.init.InitConst;
 import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
+import goja.job.JobsPlugin;
+import goja.mvc.AutoBindRoutes;
 import goja.mvc.interceptor.AutoOnLoadInterceptor;
 import goja.mvc.interceptor.syslog.LogProcessor;
 import goja.mvc.interceptor.syslog.SysLogInterceptor;
-import goja.job.JobsPlugin;
-import goja.kits.JfinalKit;
-import goja.mvc.AutoBindRoutes;
 import goja.mvc.render.ftl.PrettyTimeDirective;
 import goja.mvc.render.ftl.layout.BlockDirective;
 import goja.mvc.render.ftl.layout.ExtendsDirective;
@@ -372,7 +371,6 @@ public class Goja extends JFinalConfig {
                 }
             }
         }
-        JfinalKit.init();
         started = true;
     }
 

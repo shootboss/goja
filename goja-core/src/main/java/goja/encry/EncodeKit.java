@@ -6,7 +6,7 @@
 
 package goja.encry;
 
-import goja.kits.ExceptionKit;
+import goja.kits.base.ExceptionKit;
 import com.jfinal.core.Const;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;

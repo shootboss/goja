@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.kits;
+package goja.kits.base;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
