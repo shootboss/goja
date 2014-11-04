@@ -1,7 +1,9 @@
 package goja;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import com.jfinal.plugin.activerecord.DbKit;
 import goja.kits.io.ResourceKit;
 import goja.lang.Lang;
@@ -31,10 +33,6 @@ public class GojaConfig {
 
     private static final ThreadLocal<Properties> configProps = new ThreadLocal<Properties>();
 
-    private static final Properties APPLICATION_CONFIG = new Properties();
-    private static final Properties MONGODB_CONFIG     = new Properties();
-    private static final Properties REDIS_CONFIG       = new Properties();
-
     /**
      * The Database Config In application.conf.
      */
@@ -55,8 +53,6 @@ public class GojaConfig {
 
     public static void clear() {
         DB_CONFIG.clear();
-        REDIS_CONFIG.clear();
-        MONGODB_CONFIG.clear();
     }
 
     /**
@@ -74,11 +70,7 @@ public class GojaConfig {
             if (Lang.isEmpty(value)) {
                 continue;
             }
-            if (StringUtils.startsWithIgnoreCase(_key, REDIS_PREFIX)) {
-                REDIS_CONFIG.put(_key, value);
-            } else if (StringUtils.startsWithIgnoreCase(_key, MONGO_PREFIX)) {
-                MONGODB_CONFIG.put(_key, value);
-            } else if (StringUtils.startsWithIgnoreCase(_key, DB_PREFIX)) {
+            if (StringUtils.startsWithIgnoreCase(_key, "db")) {
                 int last_idx = _key.lastIndexOf(StringPool.DOT);
                 if (last_idx > 2) {
                     String config_name = _key.substring(_key.indexOf(StringPool.DOT) + 1, last_idx);
@@ -99,8 +91,6 @@ public class GojaConfig {
                     }
                     db_main_props.put(_key, value);
                 }
-            } else {
-                APPLICATION_CONFIG.put(_key, value);
             }
         }
         configProps.set(p);
@@ -126,20 +116,8 @@ public class GojaConfig {
     }
 
 
-    public static Properties getRedisConfig() {
-        return REDIS_CONFIG;
-    }
-
-    public static Properties getMongodbConfig() {
-        return MONGODB_CONFIG;
-    }
-
     public static Map<String, Properties> getDbConfig() {
         return DB_CONFIG;
-    }
-
-    public static Properties getApplicationConfig() {
-        return APPLICATION_CONFIG;
     }
 
 
@@ -171,9 +149,24 @@ public class GojaConfig {
         return resultInt;
     }
 
+    public static Long getPropertyToLong(String key) {
+        Long resultInt = null;
+        final Properties _p = configProps.get();
+        if (checkNullOrEmpty(_p)) {
+            return null;
+        }
+        String resultStr = _p.getProperty(key);
+        if (resultStr != null)
+            resultInt = Longs.tryParse(resultStr);
+        return resultInt;
+    }
+
     public static int getPropertyToInt(String key, int defaultValue) {
-        Integer result = getPropertyToInt(key);
-        return result != null ? result : defaultValue;
+        return MoreObjects.firstNonNull(getPropertyToInt(key), defaultValue);
+    }
+
+    public static long getPropertyToLong(String key, long defaultValue) {
+        return MoreObjects.firstNonNull(getPropertyToLong(key), defaultValue);
     }
 
     public static Boolean getPropertyToBoolean(String key) {

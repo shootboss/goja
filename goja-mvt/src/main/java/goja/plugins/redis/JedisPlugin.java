@@ -5,41 +5,51 @@
  */
 package goja.plugins.redis;
 
-import goja.GojaConfig;
-import goja.StringPool;
-import goja.init.InitConst;
 import com.jfinal.plugin.IPlugin;
+import goja.StringPool;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.Protocol;
 
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
+import static goja.GojaConfig.getPropertyToBoolean;
+import static goja.GojaConfig.getPropertyToInt;
+import static goja.GojaConfig.getPropertyToLong;
+import static goja.init.InitConst.REDIS_MAXIDLE;
+import static goja.init.InitConst.REDIS_MAXTOTAL;
+import static goja.init.InitConst.REDIS_MINEVICTABLEIDLETIMEMILLIS;
+import static goja.init.InitConst.REDIS_MINIDLE;
+import static goja.init.InitConst.REDIS_NUMTESTSPEREVICTIONRUN;
+import static goja.init.InitConst.REDIS_SOFTMINEVICTABLEIDLETIMEMILLIS;
+import static goja.init.InitConst.REDIS_TESTONBORROW;
+import static goja.init.InitConst.REDIS_TESTONRETURN;
+import static goja.init.InitConst.REDIS_TESTWHILEIDLE;
+import static goja.init.InitConst.REDIS_TIMEBETWEENEVICTIONRUNSMILLIS;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_ON_BORROW;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_ON_RETURN;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_WHILE_IDLE;
+import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS;
+import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.DEFAULT_MAX_IDLE;
+import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.DEFAULT_MAX_TOTAL;
+import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.DEFAULT_MIN_IDLE;
 
 @SuppressWarnings("UnusedDeclaration")
 public class JedisPlugin implements IPlugin {
 
     public static final String DEFAULT_HOST = StringPool.LOCAL_HOST;
     public static final int    DEFAULT_PORT = Protocol.DEFAULT_PORT;
-    private final String host;
-    private final int    port;
-    private final int    timeout;
-    public JedisPool pool;
-    private String password;
-    private int     maxidle                        = GenericObjectPoolConfig.DEFAULT_MAX_IDLE;
-    private int     maxTotal                       = GenericObjectPoolConfig.DEFAULT_MAX_TOTAL;
-    private long    minevictableidletimemillis     = GenericObjectPoolConfig.DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
-    private int     minidle                        = GenericObjectPoolConfig.DEFAULT_MIN_IDLE;
-    private int     numtestsperevictionrun         = GenericObjectPoolConfig.DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
-    private long    softminevictableidletimemillis = GenericObjectPoolConfig.DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS;
-    private long    timebetweenevictionrunsmillis  = GenericObjectPoolConfig.DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS;
-    private boolean testwhileidle                  = GenericObjectPoolConfig.DEFAULT_TEST_WHILE_IDLE;
-    private boolean testonreturn                   = GenericObjectPoolConfig.DEFAULT_TEST_ON_RETURN;
-    private boolean testonborrow                   = GenericObjectPoolConfig.DEFAULT_TEST_ON_BORROW;
+
+    private final String    host;
+    private final int       port;
+    private final int       timeout;
+
+    public        JedisPool pool;
+    private       String    password;
+
 
     public JedisPlugin() {
         host = DEFAULT_HOST;
@@ -68,37 +78,31 @@ public class JedisPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        final Properties properties = GojaConfig.getRedisConfig();
-        if (properties != null && !properties.isEmpty()) {
 
-            Set<Entry<Object, Object>> entrySet = properties.entrySet();
-            for (Entry<Object, Object> entry : entrySet) {
-                parseSetting(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
-            }
-        }
         JedisShardInfo shardInfo = new JedisShardInfo(host, port, timeout);
         if (StringUtils.isNotBlank(password)) {
             shardInfo.setPassword(password);
         }
         JedisPoolConfig poolConfig = new JedisPoolConfig();
-        setPoolConfig(poolConfig);
-        pool = new JedisPool(poolConfig, shardInfo.getHost(), shardInfo.getPort(), shardInfo.getTimeout(),
+
+        poolConfig.setMaxIdle(getPropertyToInt(REDIS_MAXIDLE, DEFAULT_MAX_IDLE));
+        poolConfig.setMaxTotal(getPropertyToInt(REDIS_MAXTOTAL, DEFAULT_MAX_TOTAL));
+        poolConfig.setMinEvictableIdleTimeMillis(getPropertyToLong(REDIS_MINEVICTABLEIDLETIMEMILLIS, DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
+        poolConfig.setMinIdle(getPropertyToInt(REDIS_MINIDLE, DEFAULT_MIN_IDLE));
+        poolConfig.setNumTestsPerEvictionRun(getPropertyToInt(REDIS_NUMTESTSPEREVICTIONRUN, DEFAULT_NUM_TESTS_PER_EVICTION_RUN));
+        poolConfig.setSoftMinEvictableIdleTimeMillis(getPropertyToLong(REDIS_SOFTMINEVICTABLEIDLETIMEMILLIS, DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS));
+        poolConfig.setTimeBetweenEvictionRunsMillis(getPropertyToLong(REDIS_TIMEBETWEENEVICTIONRUNSMILLIS, DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS));
+        poolConfig.setTestWhileIdle(getPropertyToBoolean(REDIS_TESTWHILEIDLE, DEFAULT_TEST_WHILE_IDLE));
+        poolConfig.setTestOnReturn(getPropertyToBoolean(REDIS_TESTONRETURN, DEFAULT_TEST_ON_RETURN));
+        poolConfig.setTestOnBorrow(getPropertyToBoolean(REDIS_TESTONBORROW, DEFAULT_TEST_ON_BORROW));
+
+        pool = new JedisPool(poolConfig
+                , shardInfo.getHost()
+                , shardInfo.getPort()
+                , shardInfo.getTimeout(),
                 shardInfo.getPassword());
         JedisKit.init(pool);
         return true;
-    }
-
-    private void setPoolConfig(JedisPoolConfig poolConfig) {
-        poolConfig.setMaxIdle(maxidle);
-        poolConfig.setMaxTotal(maxTotal);
-        poolConfig.setMinEvictableIdleTimeMillis(minevictableidletimemillis);
-        poolConfig.setMinIdle(minidle);
-        poolConfig.setNumTestsPerEvictionRun(numtestsperevictionrun);
-        poolConfig.setSoftMinEvictableIdleTimeMillis(softminevictableidletimemillis);
-        poolConfig.setTimeBetweenEvictionRunsMillis(timebetweenevictionrunsmillis);
-        poolConfig.setTestWhileIdle(testwhileidle);
-        poolConfig.setTestOnReturn(testonreturn);
-        poolConfig.setTestOnBorrow(testonborrow);
     }
 
     @Override
@@ -112,29 +116,4 @@ public class JedisPlugin implements IPlugin {
         return true;
     }
 
-    private void parseSetting(String key, String value) {
-        if (InitConst.REDIS_PASSWORD.equalsIgnoreCase(key)) {
-            password = value;
-        } else if (InitConst.REDIS_MAXTOTAL.equalsIgnoreCase(key)) {
-            maxTotal = Integer.valueOf(value);
-        } else if (InitConst.REDIS_MAXIDLE.equalsIgnoreCase(key)) {
-            maxidle = Integer.valueOf(value);
-        } else if (InitConst.REDIS_MINEVICTABLEIDLETIMEMILLIS.equalsIgnoreCase(key)) {
-            minevictableidletimemillis = Long.valueOf(value);
-        } else if (InitConst.REDIS_MINIDLE.equalsIgnoreCase(key)) {
-            minidle = Integer.valueOf(value);
-        } else if (InitConst.REDIS_NUMTESTSPEREVICTIONRUN.equalsIgnoreCase(key)) {
-            numtestsperevictionrun = Integer.valueOf(value);
-        } else if (InitConst.REDIS_SOFTMINEVICTABLEIDLETIMEMILLIS.equalsIgnoreCase(key)) {
-            softminevictableidletimemillis = Long.valueOf(value);
-        } else if (InitConst.REDIS_TIMEBETWEENEVICTIONRUNSMILLIS.equalsIgnoreCase(key)) {
-            timebetweenevictionrunsmillis = Long.valueOf(value);
-        } else if (InitConst.REDIS_TESTWHILEIDLE.equalsIgnoreCase(key)) {
-            testwhileidle = Boolean.getBoolean(value);
-        } else if (InitConst.REDIS_TESTONRETURN.equalsIgnoreCase(key)) {
-            testonreturn = Boolean.getBoolean(value);
-        } else if (InitConst.REDIS_TESTONBORROW.equalsIgnoreCase(key)) {
-            testonborrow = Boolean.getBoolean(value);
-        }
-    }
 }

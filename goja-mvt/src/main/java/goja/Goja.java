@@ -374,8 +374,6 @@ public class Goja extends JFinalConfig {
         }
         JfinalKit.init();
         started = true;
-        // clear app config value.
-        GojaConfig.clear();
     }
 
     @Override
@@ -396,9 +394,9 @@ public class Goja extends JFinalConfig {
             final Properties db_props = dbConfig.get(db_config);
             if (db_props != null && !db_props.isEmpty()) {
                 configDatabasePlugins(db_config, plugins,
-                        db_props.getProperty(InitConst.DB_URL),
-                        db_props.getProperty(InitConst.DB_USERNAME),
-                        db_props.getProperty(InitConst.DB_PASSWORD));
+                        GojaConfig.getProperty(InitConst.DB_URL),
+                        GojaConfig.getProperty(InitConst.DB_USERNAME),
+                        GojaConfig.getProperty(InitConst.DB_PASSWORD));
             }
         }
 
