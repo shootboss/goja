@@ -6,6 +6,7 @@
 
 package goja.mvc.datatables.core;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -94,7 +95,7 @@ public class ColumnDef {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("name", name)
                 .add("sortable", sortable)
                 .add("sorted", sorted)

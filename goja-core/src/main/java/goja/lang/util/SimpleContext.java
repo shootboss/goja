@@ -6,6 +6,7 @@
 
 package goja.lang.util;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class SimpleContext extends AbstractContext {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("map", map)
                 .toString();
     }

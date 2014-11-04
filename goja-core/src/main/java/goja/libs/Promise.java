@@ -11,10 +11,10 @@ import goja.libs.either.E3;
 import goja.libs.either.E4;
 import goja.libs.either.E5;
 import goja.libs.either.Either;
-import goja.libs.tuple.T3;
-import goja.libs.tuple.T4;
-import goja.libs.tuple.T5;
-import goja.libs.tuple.Tuple;
+import goja.tuples.Pair;
+import goja.tuples.Quartet;
+import goja.tuples.Quintet;
+import goja.tuples.Triplet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +34,12 @@ import java.util.concurrent.TimeoutException;
  * @version 1.0 2014-09-11 13:19
  * @since JDK 1.6
  */
+@SuppressWarnings("unchecked")
 public class Promise<V> implements Future<V>, Action<V> {
 
     final CountDownLatch taskLock = new CountDownLatch(1);
 
-    boolean invoked   = false;
+    boolean invoked = false;
 
     List<Action<Promise<V>>> callbacks = Lists.newArrayList();
 
@@ -118,15 +119,15 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    public static <A, B> Promise<Tuple<A, B>> wait2(Promise<A> tA, Promise<B> tB) {
-        final Promise<Tuple<A, B>> result = new Promise<Tuple<A, B>>();
+    public static <A, B> Promise<Pair<A, B>> waitPair(Promise<A> tA, Promise<B> tB) {
+        final Promise<Pair<A, B>> result = new Promise<Pair<A, B>>();
         final Promise<List<Object>> t = waitAll(new Promise[]{tA, tB});
         t.onRedeem(new Action<Promise<List<Object>>>() {
 
             public void invoke(Promise<List<Object>> completed) {
                 List<Object> values = completed.getOrNull();
                 if (values != null) {
-                    result.invoke(new Tuple(values.get(0), values.get(1)));
+                    result.invoke(Pair.with((A) values.get(0), (B) values.get(1)));
                 } else {
                     result.invokeWithException(completed.exception);
                 }
@@ -135,15 +136,15 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    public static <A, B, C> Promise<T3<A, B, C>> wait3(Promise<A> tA, Promise<B> tB, Promise<C> tC) {
-        final Promise<T3<A, B, C>> result = new Promise<T3<A, B, C>>();
+    public static <A, B, C> Promise<Triplet<A, B, C>> waitTriplet(Promise<A> tA, Promise<B> tB, Promise<C> tC) {
+        final Promise<Triplet<A, B, C>> result = new Promise<Triplet<A, B, C>>();
         final Promise<List<Object>> t = waitAll(new Promise[]{tA, tB, tC});
         t.onRedeem(new Action<Promise<List<Object>>>() {
 
             public void invoke(Promise<List<Object>> completed) {
                 List<Object> values = completed.getOrNull();
                 if (values != null) {
-                    result.invoke(new T3((A) values.get(0), (B) values.get(1), (C) values.get(2)));
+                    result.invoke(Triplet.with((A) values.get(0), (B) values.get(1), (C) values.get(2)));
                 } else {
                     result.invokeWithException(completed.exception);
                 }
@@ -152,15 +153,15 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    public static <A, B, C, D> Promise<T4<A, B, C, D>> wait4(Promise<A> tA, Promise<B> tB, Promise<C> tC, Promise<D> tD) {
-        final Promise<T4<A, B, C, D>> result = new Promise<T4<A, B, C, D>>();
+    public static <A, B, C, D> Promise<Quartet<A, B, C, D>> waitQuartet(Promise<A> tA, Promise<B> tB, Promise<C> tC, Promise<D> tD) {
+        final Promise<Quartet<A, B, C, D>> result = new Promise<Quartet<A, B, C, D>>();
         final Promise<List<Object>> t = waitAll(new Promise[]{tA, tB, tC, tD});
         t.onRedeem(new Action<Promise<List<Object>>>() {
 
             public void invoke(Promise<List<Object>> completed) {
                 List<Object> values = completed.getOrNull();
                 if (values != null) {
-                    result.invoke(new T4((A) values.get(0), (B) values.get(1), (C) values.get(2), (D) values.get(3)));
+                    result.invoke(Quartet.with((A) values.get(0), (B) values.get(1), (C) values.get(2), (D) values.get(3)));
                 } else {
                     result.invokeWithException(completed.exception);
                 }
@@ -169,15 +170,15 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    public static <A, B, C, D, E> Promise<T5<A, B, C, D, E>> wait5(Promise<A> tA, Promise<B> tB, Promise<C> tC, Promise<D> tD, Promise<E> tE) {
-        final Promise<T5<A, B, C, D, E>> result = new Promise<T5<A, B, C, D, E>>();
+    public static <A, B, C, D, E> Promise<Quintet<A, B, C, D, E>> waitQuintet(Promise<A> tA, Promise<B> tB, Promise<C> tC, Promise<D> tD, Promise<E> tE) {
+        final Promise<Quintet<A, B, C, D, E>> result = new Promise<Quintet<A, B, C, D, E>>();
         final Promise<List<Object>> t = waitAll(new Promise[]{tA, tB, tC, tD, tE});
         t.onRedeem(new Action<Promise<List<Object>>>() {
 
             public void invoke(Promise<List<Object>> completed) {
                 List<Object> values = completed.getOrNull();
                 if (values != null) {
-                    result.invoke(new T5(values.get(0), (B) values.get(1), (C) values.get(2), (D) values.get(3), (E) values.get(4)));
+                    result.invoke(Quintet.with((A) values.get(0), (B) values.get(1), (C) values.get(2), (D) values.get(3), (E) values.get(4)));
                 } else {
                     result.invokeWithException(completed.exception);
                 }
@@ -186,14 +187,14 @@ public class Promise<V> implements Future<V>, Action<V> {
         return result;
     }
 
-    private static Promise<Tuple<Integer, Promise<Object>>> waitEitherInternal(final Promise<?>... futures) {
-        final Promise<Tuple<Integer, Promise<Object>>> result = new Promise<Tuple<Integer, Promise<Object>>>();
+    private static Promise<Pair<Integer, Promise<Object>>> waitEitherInternal(final Promise<?>... futures) {
+        final Promise<Pair<Integer, Promise<Object>>> result = new Promise<Pair<Integer, Promise<Object>>>();
         for (int i = 0; i < futures.length; i++) {
             final int index = i + 1;
             ((Promise<Object>) futures[i]).onRedeem(new Action<Promise<Object>>() {
 
                 public void invoke(Promise<Object> completed) {
-                    result.invoke(new Tuple(index, completed));
+                    result.invoke(Pair.with(index, completed));
                 }
             });
         }
@@ -202,18 +203,18 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     public static <A, B> Promise<Either<A, B>> waitEither(final Promise<A> tA, final Promise<B> tB) {
         final Promise<Either<A, B>> result = new Promise<Either<A, B>>();
-        final Promise<Tuple<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB);
+        final Promise<Pair<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB);
 
-        t.onRedeem(new Action<Promise<Tuple<Integer, Promise<Object>>>>() {
+        t.onRedeem(new Action<Promise<Pair<Integer, Promise<Object>>>>() {
 
-            public void invoke(Promise<Tuple<Integer, Promise<Object>>> completed) {
-                Tuple<Integer, Promise<Object>> value = completed.getOrNull();
-                switch (value.a) {
+            public void invoke(Promise<Pair<Integer, Promise<Object>>> completed) {
+                Pair<Integer, Promise<Object>> value = completed.getOrNull();
+                switch (value.getValue0()) {
                     case 1:
-                        result.invoke(Either.<A, B>_1((A) value.b.getOrNull()));
+                        result.invoke(Either.<A, B>_1((A) value.getValue1().getOrNull()));
                         break;
                     case 2:
-                        result.invoke(Either.<A, B>_2((B) value.b.getOrNull()));
+                        result.invoke(Either.<A, B>_2((B) value.getValue1().getOrNull()));
                         break;
                 }
 
@@ -225,21 +226,21 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     public static <A, B, C> Promise<E3<A, B, C>> waitEither(final Promise<A> tA, final Promise<B> tB, final Promise<C> tC) {
         final Promise<E3<A, B, C>> result = new Promise<E3<A, B, C>>();
-        final Promise<Tuple<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC);
+        final Promise<Pair<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC);
 
-        t.onRedeem(new Action<Promise<Tuple<Integer, Promise<Object>>>>() {
+        t.onRedeem(new Action<Promise<Pair<Integer, Promise<Object>>>>() {
 
-            public void invoke(Promise<Tuple<Integer, Promise<Object>>> completed) {
-                Tuple<Integer, Promise<Object>> value = completed.getOrNull();
-                switch (value.a) {
+            public void invoke(Promise<Pair<Integer, Promise<Object>>> completed) {
+                Pair<Integer, Promise<Object>> value = completed.getOrNull();
+                switch (value.getValue0()) {
                     case 1:
-                        result.invoke(E3.<A, B, C>_1((A) value.b.getOrNull()));
+                        result.invoke(E3.<A, B, C>_1((A) value.getValue1().getOrNull()));
                         break;
                     case 2:
-                        result.invoke(E3.<A, B, C>_2((B) value.b.getOrNull()));
+                        result.invoke(E3.<A, B, C>_2((B) value.getValue1().getOrNull()));
                         break;
                     case 3:
-                        result.invoke(E3.<A, B, C>_3((C) value.b.getOrNull()));
+                        result.invoke(E3.<A, B, C>_3((C) value.getValue1().getOrNull()));
                         break;
                 }
 
@@ -251,24 +252,24 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     public static <A, B, C, D> Promise<E4<A, B, C, D>> waitEither(final Promise<A> tA, final Promise<B> tB, final Promise<C> tC, final Promise<D> tD) {
         final Promise<E4<A, B, C, D>> result = new Promise<E4<A, B, C, D>>();
-        final Promise<Tuple<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC, tD);
+        final Promise<Pair<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC, tD);
 
-        t.onRedeem(new Action<Promise<Tuple<Integer, Promise<Object>>>>() {
+        t.onRedeem(new Action<Promise<Pair<Integer, Promise<Object>>>>() {
 
-            public void invoke(Promise<Tuple<Integer, Promise<Object>>> completed) {
-                Tuple<Integer, Promise<Object>> value = completed.getOrNull();
-                switch (value.a) {
+            public void invoke(Promise<Pair<Integer, Promise<Object>>> completed) {
+                Pair<Integer, Promise<Object>> value = completed.getOrNull();
+                switch (value.getValue0()) {
                     case 1:
-                        result.invoke(E4.<A, B, C, D>_1((A) value.b.getOrNull()));
+                        result.invoke(E4.<A, B, C, D>_1((A) value.getValue1().getOrNull()));
                         break;
                     case 2:
-                        result.invoke(E4.<A, B, C, D>_2((B) value.b.getOrNull()));
+                        result.invoke(E4.<A, B, C, D>_2((B) value.getValue1().getOrNull()));
                         break;
                     case 3:
-                        result.invoke(E4.<A, B, C, D>_3((C) value.b.getOrNull()));
+                        result.invoke(E4.<A, B, C, D>_3((C) value.getValue1().getOrNull()));
                         break;
                     case 4:
-                        result.invoke(E4.<A, B, C, D>_4((D) value.b.getOrNull()));
+                        result.invoke(E4.<A, B, C, D>_4((D) value.getValue1().getOrNull()));
                         break;
                 }
 
@@ -280,27 +281,27 @@ public class Promise<V> implements Future<V>, Action<V> {
 
     public static <A, B, C, D, E> Promise<E5<A, B, C, D, E>> waitEither(final Promise<A> tA, final Promise<B> tB, final Promise<C> tC, final Promise<D> tD, final Promise<E> tE) {
         final Promise<E5<A, B, C, D, E>> result = new Promise<E5<A, B, C, D, E>>();
-        final Promise<Tuple<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC, tD, tE);
+        final Promise<Pair<Integer, Promise<Object>>> t = waitEitherInternal(tA, tB, tC, tD, tE);
 
-        t.onRedeem(new Action<Promise<Tuple<Integer, Promise<Object>>>>() {
+        t.onRedeem(new Action<Promise<Pair<Integer, Promise<Object>>>>() {
 
-            public void invoke(Promise<Tuple<Integer, Promise<Object>>> completed) {
-                Tuple<Integer, Promise<Object>> value = completed.getOrNull();
-                switch (value.a) {
+            public void invoke(Promise<Pair<Integer, Promise<Object>>> completed) {
+                Pair<Integer, Promise<Object>> value = completed.getOrNull();
+                switch (value.getValue0()) {
                     case 1:
-                        result.invoke(E5.<A, B, C, D, E>_1((A) value.b.getOrNull()));
+                        result.invoke(E5.<A, B, C, D, E>_1((A) value.getValue1().getOrNull()));
                         break;
                     case 2:
-                        result.invoke(E5.<A, B, C, D, E>_2((B) value.b.getOrNull()));
+                        result.invoke(E5.<A, B, C, D, E>_2((B) value.getValue1().getOrNull()));
                         break;
                     case 3:
-                        result.invoke(E5.<A, B, C, D, E>_3((C) value.b.getOrNull()));
+                        result.invoke(E5.<A, B, C, D, E>_3((C) value.getValue1().getOrNull()));
                         break;
                     case 4:
-                        result.invoke(E5.<A, B, C, D, E>_4((D) value.b.getOrNull()));
+                        result.invoke(E5.<A, B, C, D, E>_4((D) value.getValue1().getOrNull()));
                         break;
                     case 5:
-                        result.invoke(E5.<A, B, C, D, E>_5((E) value.b.getOrNull()));
+                        result.invoke(E5.<A, B, C, D, E>_5((E) value.getValue1().getOrNull()));
                         break;
 
                 }
