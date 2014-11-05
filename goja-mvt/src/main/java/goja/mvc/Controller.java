@@ -6,7 +6,11 @@
 
 package goja.mvc;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
@@ -21,7 +25,12 @@ import goja.mvc.render.CaptchaRender;
 import goja.mvc.render.FreeMarkerXMLRender;
 import goja.mvc.render.JxlsRender;
 import goja.mvc.render.NotModified;
+import goja.mvc.security.SecurityKit;
+import goja.mvc.security.shiro.AppUser;
+import goja.mvc.security.shiro.Securitys;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
@@ -40,6 +49,8 @@ import static goja.StringPool.SLASH;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Controller extends com.jfinal.core.Controller {
+
+    public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {};
 
     /**
      * Render four string verification code.
@@ -408,8 +419,53 @@ public class Controller extends com.jfinal.core.Controller {
      * @param <M>        Generic parameter.
      * @return Modal.
      */
-    protected <M> M getModelByJson(Class<? extends Model> modelClass) {
-        String jsonData = getPara();
-        return null;
+    protected <M extends Model> Optional<M> getModelByJson(Class<? extends M> modelClass) {
+        try {
+            String jsonData = IOUtils.toString(getRequest().getInputStream());
+            if (Strings.isNullOrEmpty(jsonData)) {
+                return Optional.absent();
+            }
+            final Map<String, Object> data_map = JSON.parseObject(jsonData, MAP_TYPE_REFERENCE);
+            if (data_map == null) {
+                return Optional.absent();
+            }
+            M model = modelClass.newInstance();
+            for (String key : data_map.keySet()) {
+                model.set(key, data_map.get(key));
+            }
+            return Optional.of(model);
+        } catch (IOException e) {
+            Logger.error("parse request json has error!", e);
+        } catch (InstantiationException e) {
+            Logger.error("parse request json has error!", e);
+        } catch (IllegalAccessException e) {
+            Logger.error("parse request json has error!", e);
+        }
+        return Optional.absent();
+    }
+
+    /**
+     * For information on the logged in user.
+     * <p/>
+     * This access is through the way the Cookie and Session
+     *
+     * @param <M> Generic parameter.
+     * @return user model.
+     */
+    protected <M extends Model> M getLogin() {
+        return SecurityKit.getLoginUser(getRequest());
+    }
+
+    /**
+     * The current Shiro login user.
+     * <p/>
+     * If it opens the secruity function can call this method to obtain the logged in user.
+     *
+     * @param <L> Generic parameter.
+     * @param <U> Generic parameter.
+     * @return Shiro login user.
+     */
+    protected <L extends Model, U extends Model> AppUser<L, U> getPrincipal() {
+        return Securitys.getLogin();
     }
 }
