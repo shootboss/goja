@@ -30,6 +30,7 @@ import goja.mvc.security.shiro.AppUser;
 import goja.mvc.security.shiro.Securitys;
 import org.apache.commons.io.IOUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -50,6 +51,9 @@ import static goja.StringPool.SLASH;
 @SuppressWarnings("UnusedDeclaration")
 public class Controller extends com.jfinal.core.Controller {
 
+    /**
+     * Map Type reference.
+     */
     public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {};
 
     /**
@@ -452,8 +456,14 @@ public class Controller extends com.jfinal.core.Controller {
      * @param <M> Generic parameter.
      * @return user model.
      */
-    protected <M extends Model> M getLogin() {
-        return SecurityKit.getLoginUser(getRequest());
+    protected <M extends Model> Optional<M> getLogin() {
+        final HttpServletRequest request = getRequest();
+        if(SecurityKit.isLogin(request)){
+            final M user = SecurityKit.getLoginUser(request);
+            return Optional.of(user);
+        } else {
+            return Optional.absent();
+        }
     }
 
     /**
@@ -465,7 +475,11 @@ public class Controller extends com.jfinal.core.Controller {
      * @param <U> Generic parameter.
      * @return Shiro login user.
      */
-    protected <L extends Model, U extends Model> AppUser<L, U> getPrincipal() {
-        return Securitys.getLogin();
+    protected <L extends Model, U extends Model> Optional<AppUser<L, U>> getPrincipal() {
+        if(Securitys.isLogin()){
+            final AppUser<L, U> appUser = Securitys.getLogin();
+            return Optional.of(appUser);
+        }
+        return Optional.absent();
     }
 }
