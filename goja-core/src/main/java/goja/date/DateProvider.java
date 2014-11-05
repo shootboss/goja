@@ -13,6 +13,7 @@ public interface DateProvider {
     String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
 
     String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
     static final DateProvider DEFAULT = new DefaultDateProvider();
 
     Date getCurrentDate();

@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import goja.Goja;
 import goja.Logger;
+import goja.kits.base.DateKit;
 import goja.mvc.datatables.core.DataSet;
 import goja.mvc.datatables.core.DatatablesCriterias;
 import goja.mvc.datatables.core.DatatablesResponse;
@@ -29,6 +30,7 @@ import goja.mvc.security.SecurityKit;
 import goja.mvc.security.shiro.AppUser;
 import goja.mvc.security.shiro.Securitys;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -458,7 +460,7 @@ public class Controller extends com.jfinal.core.Controller {
      */
     protected <M extends Model> Optional<M> getLogin() {
         final HttpServletRequest request = getRequest();
-        if(SecurityKit.isLogin(request)){
+        if (SecurityKit.isLogin(request)) {
             final M user = SecurityKit.getLoginUser(request);
             return Optional.of(user);
         } else {
@@ -476,10 +478,64 @@ public class Controller extends com.jfinal.core.Controller {
      * @return Shiro login user.
      */
     protected <L extends Model, U extends Model> Optional<AppUser<L, U>> getPrincipal() {
-        if(Securitys.isLogin()){
+        if (Securitys.isLogin()) {
             final AppUser<L, U> appUser = Securitys.getLogin();
             return Optional.of(appUser);
         }
         return Optional.absent();
+    }
+
+
+    /**
+     * JodaTime time request
+     *
+     * @param name param.
+     *             the datetime format : yyyy-MM-dd
+     * @return datetime.
+     */
+    protected DateTime getDate(String name) {
+        return getDate(name, DateTime.now());
+    }
+
+    /**
+     * JodaTime time request
+     *
+     * @param name param.
+     *             the datetime format : yyyy-MM-dd
+     * @param defaultValue the default value.
+     * @return datetime.
+     */
+    protected DateTime getDate(String name, DateTime defaultValue) {
+        String value = getRequest().getParameter(name);
+        if (Strings.isNullOrEmpty(value))
+            return defaultValue;
+        return DateKit.parseDashYMDDateTime(value);
+    }
+
+
+    /**
+     * JodaTime time request
+     *
+     * @param name param.
+     *             the datetime format : yyyy-MM-dd HH:mm:ss
+     * @return datetime.
+     */
+    protected DateTime getDateTime(String name) {
+        return getDateTime(name, DateTime.now());
+    }
+
+    /**
+     * JodaTime time request
+     *
+     * @param name         param.
+     *                     the datetime format : yyyy-MM-dd HH:mm:ss
+     * @param defaultValue the default value.
+     * @return datetime.
+     */
+    protected DateTime getDateTime(String name, DateTime defaultValue) {
+        String value = getRequest().getParameter(name);
+        if (Strings.isNullOrEmpty(value))
+            return defaultValue;
+        return DateKit.parseDashYMDHMSDateTime(value);
     }
 }
