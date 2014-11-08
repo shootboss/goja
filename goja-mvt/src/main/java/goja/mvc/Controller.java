@@ -13,6 +13,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.jfinal.core.TypeConverter;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Table;
@@ -36,6 +37,7 @@ import org.joda.time.DateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
@@ -447,20 +449,27 @@ public class Controller extends com.jfinal.core.Controller {
     /**
      * According to the table fields to obtain values from the Request and converted to the Model
      *
-     * @param modelClass The model class.
+     * @param modelClass The convert class.
      * @param <M>        Generic parameter.
      * @return The modeal .
      */
-    protected <M extends Model> Optional<M> getModelByReuest(Class<? extends M> modelClass) {
+    protected <M> Optional<M> getModelByReuest(Class<?> modelClass) {
         final HttpServletRequest request = getRequest();
         final Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap.size() > 0) {
-            Table table = TableMapping.me().getTable(modelClass);
-            if (table == null) {
-                Logger.error("the model has note found!");
-            } else {
-                try {
-                    final M model = modelClass.newInstance();
+            Object model;
+            try {
+                model = modelClass.newInstance();
+            } catch (Exception e) {
+                Logger.error("instance the object has error!", e);
+                return Optional.absent();
+            }
+            if (model instanceof Model) {
+                final Model db_model = (Model) model;
+                Table table = TableMapping.me().getTable(db_model.getClass());
+                if (table == null) {
+                    Logger.error("the model has note found!");
+                } else {
                     final Map<String, Class<?>> columnTypeMap = table.getColumnTypeMap();
 
                     for (String label : columnTypeMap.keySet()) {
@@ -468,22 +477,39 @@ public class Controller extends com.jfinal.core.Controller {
                         final Class<?> column_type = columnTypeMap.get(label);
                         String[] paraValue = parameterMap.get(label);
                         try {
-                            // Object value = Converter.convert(colType, paraValue != null ? paraValue[0] : null);
                             Object value = paraValue[0] != null ? TypeConverter.convert(column_type, param_value) : null;
-                            model.set(label, value);
+                            db_model.set(label, value);
                         } catch (Exception ex) {
                             Logger.warn("Can not convert parameter: {}, {}, {}. ", label, param_value, column_type);
-                            model.set(label, param_value);
+                            db_model.set(label, param_value);
                         }
                     }
-                    return Optional.of(model);
-                } catch (InstantiationException e) {
-                    Logger.error("instance the model has error!", e);
-                } catch (IllegalAccessException e) {
-                    Logger.error("instance the model has error!", e);
+                    return Optional.of((M)db_model);
                 }
+            } else {
+                Method[] methods = modelClass.getMethods();
+                for (Method method : methods) {
+                    String methodName = method.getName();
+                    if (!methodName.startsWith("set"))	// only setter method
+                        continue;
 
+                    Class<?>[] types = method.getParameterTypes();
+                    if (types.length != 1)						// only one parameter
+                        continue;
+
+                    String attrName = methodName.substring(3);
+                    String value = request.getParameter(StrKit.firstCharToLowerCase(attrName));
+                    if (value != null) {
+                        try {
+                            method.invoke(model, TypeConverter.convert(types[0], value));
+                        } catch (Exception e) {
+                                throw new RuntimeException(e);
+                        }
+                    }
+                }
+                return Optional.of((M)model);
             }
+
         }
 
 
