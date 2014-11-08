@@ -87,7 +87,6 @@ public class FreeMarkerRender extends Render {
 		config.setServletContextForTemplateLoading(servletContext, "/");	// "WEB-INF/templates"
         // - Set update dealy to 0 for now, to ease debugging and testing.
         //   Higher value should be used in production environment.
-        
         if (getDevMode()) {
         	config.setTemplateUpdateDelay(0);
        	}

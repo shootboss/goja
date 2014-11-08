@@ -42,6 +42,7 @@ import goja.init.ctxbox.ClassBox;
 import goja.init.ctxbox.ClassType;
 import goja.job.JobsPlugin;
 import goja.mvc.AutoBindRoutes;
+import goja.mvc.error.GojaErrorRenderFactory;
 import goja.mvc.interceptor.AutoOnLoadInterceptor;
 import goja.mvc.interceptor.syslog.LogProcessor;
 import goja.mvc.interceptor.syslog.SysLogInterceptor;
@@ -116,6 +117,8 @@ public class Goja extends JFinalConfig {
 
     public static boolean initlization = false;
     public static boolean started      = false;
+
+    public static final String VERSION = "v0.1";
 
     // the application configuration.
     public static Properties configuration;
@@ -213,14 +216,7 @@ public class Goja extends JFinalConfig {
             constants.setFreeMarkerViewExtension(FTL_HTML_PREFIX);
             setFtlSharedVariable();
         }
-        String view_404 = GojaConfig.getProperty(VIEW_404);
-        if (!Strings.isNullOrEmpty(view_404)) {
-            constants.setError404View(view_404);
-        }
-        String view_500 = GojaConfig.getProperty(VIEW_500);
-        if (!Strings.isNullOrEmpty(view_500)) {
-            constants.setError500View(view_500);
-        }
+        constants.setErrorRenderFactory(new GojaErrorRenderFactory());
     }
 
     @Override

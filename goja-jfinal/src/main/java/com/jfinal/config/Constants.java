@@ -139,18 +139,18 @@ final public class Constants {
 	public void setFreeMarkerViewExtension(String freeMarkerViewExtension) {
 		this.freeMarkerViewExtension = freeMarkerViewExtension.startsWith(".") ? freeMarkerViewExtension : "." + freeMarkerViewExtension;
 	}
-	
-	public String getVelocityViewExtension() {
-		return velocityViewExtension;
-	}
-	
-	/**
-	 * Set Velocity view extension. The default value is ".vm"
-	 * @param velocityViewExtension the Velocity view extension
-	 */
-	public void setVelocityViewExtension(String velocityViewExtension) {
-		this.velocityViewExtension = velocityViewExtension.startsWith(".") ? velocityViewExtension : "." + velocityViewExtension;
-	}
+//
+//	public String getVelocityViewExtension() {
+//		return velocityViewExtension;
+//	}
+//
+//	/**
+//	 * Set Velocity view extension. The default value is ".vm"
+//	 * @param velocityViewExtension the Velocity view extension
+//	 */
+//	public void setVelocityViewExtension(String velocityViewExtension) {
+//		this.velocityViewExtension = velocityViewExtension.startsWith(".") ? velocityViewExtension : "." + velocityViewExtension;
+//	}
 	
 	/**
 	 * Set error 404 view.

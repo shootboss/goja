@@ -49,9 +49,9 @@ public class LoginController extends Controller {
             if (mask > 0) {
                 setAttr("error", (mask == 2) ? "用户名或者密码错误!" : "请输入登录账号和登录密码");
             }
-            render("/login.ftl");
+            render("/login.ftl.html");
         }
-        render("/login.ftl");
+        render("/login.ftl.html");
     }
 
 

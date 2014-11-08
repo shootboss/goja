@@ -100,6 +100,8 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
+			request.setAttribute("goja_error", e.getCause());
+			renderFactory.getErrorRender(500).setContext(request, response).render();
 		}
 		catch (ActionException e) {
 			int errorCode = e.getErrorCode();
@@ -119,6 +121,7 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, e);
 			}
+			request.setAttribute("goja_error", e.getCause());
 			e.getErrorRender().setContext(request, response).render();
 		}
 		catch (Throwable t) {
@@ -126,6 +129,7 @@ final class ActionHandler extends Handler {
 				String qs = request.getQueryString();
 				log.error(qs == null ? target : target + "?" + qs, t);
 			}
+			request.setAttribute("goja_error", t);
 			renderFactory.getErrorRender(500).setContext(request, response).render();
 		}
 	}

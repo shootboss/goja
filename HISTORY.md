@@ -6,7 +6,7 @@
 * 增加对 `user/index` 这样的路由，自动将渲染视图映射为`user.ftl`;
 * 补充 `Controller` 中对`AjaxMessage`的处理；
 * 升级`jFinal`为`1.9`版本；
-* 
+* 增加`Controller`中对JSON参数转换为`Model`和Rquest中直接封装为`Model`的方法；详见`goja.mvc.Controller#getModelByJson`和`goja.mvc.Controller#getModelByRequest`
 
 ## 0.0.10 (2014-10-01)
 

@@ -6,8 +6,10 @@
 
 package app.controllers;
 
+import com.jfinal.core.ActionKey;
 import goja.Logger;
 import goja.mvc.Controller;
+import goja.mvc.security.shiro.Securitys;
 
 /**
  * <p>
@@ -29,5 +31,10 @@ public class MainController extends Controller {
         render("/main.ftl");
     }
 
+
+    @ActionKey("/")
+    public void main(){
+        redirect(Securitys.isLogin() ? "/main" : "/login");
+    }
 
 }
