@@ -1,7 +1,17 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jfinal.plugin.activerecord;
@@ -431,7 +441,7 @@ public class DbPro {
 	
 	/**
 	 * Example: boolean succeed = DbPro.use().delete("user", user);
-	 * @see #delete(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #delete(String, String, Record)
 	 */
 	public boolean delete(String tableName, Record record) {
 		String defaultPrimaryKey = config.dialect.getDefaultPrimaryKey();
@@ -528,7 +538,7 @@ public class DbPro {
 	}
 	
 	/**
-	 * @see #save(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #save(String, String, Record)
 	 */
 	public boolean save(String tableName, Record record) {
 		return save(tableName, config.dialect.getDefaultPrimaryKey(), record);
@@ -571,14 +581,14 @@ public class DbPro {
 	
 	/**
 	 * Update Record. The primary key of the table is: "id".
-	 * @see #update(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #update(String, String, Record)
 	 */
 	public boolean update(String tableName, Record record) {
 		return update(tableName, config.dialect.getDefaultPrimaryKey(), record);
 	}
 	
 	/**
-	 * @see #execute(String, com.jfinal.plugin.activerecord.ICallback)
+	 * @see #execute(String, ICallback)
 	 */
 	public Object execute(ICallback callback) {
 		return execute(config, callback);
@@ -593,7 +603,7 @@ public class DbPro {
 		Connection conn = null;
 		try {
 			conn = config.getConnection();
-			return callback.run(conn);
+			return callback.call(conn);
 		} catch (Exception e) {
 			throw new ActiveRecordException(e);
 		} finally {
@@ -640,9 +650,9 @@ public class DbPro {
 		} catch (NestedTransactionHelpException e) {
 			if (conn != null) try {conn.rollback();} catch (Exception e1) {e1.printStackTrace();}
 			return false;
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			if (conn != null) try {conn.rollback();} catch (Exception e1) {e1.printStackTrace();}
-			throw e instanceof RuntimeException ? (RuntimeException)e : new ActiveRecordException(e);
+			throw t instanceof RuntimeException ? (RuntimeException)t : new ActiveRecordException(t);
 		} finally {
 			try {
 				if (conn != null) {
@@ -650,8 +660,8 @@ public class DbPro {
 						conn.setAutoCommit(autoCommit);
 					conn.close();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();	// can not throw exception here, otherwise the more important exception in previous catch block can not be thrown
+			} catch (Throwable t) {
+				t.printStackTrace();	// can not throw exception here, otherwise the more important exception in previous catch block can not be thrown
 			} finally {
 				config.removeThreadLocalConnection();	// prevent memory leak
 			}
@@ -664,7 +674,7 @@ public class DbPro {
 	
 	/**
 	 * Execute transaction with default transaction level.
-	 * @see #tx(int, com.jfinal.plugin.activerecord.IAtom)
+	 * @see #tx(int, IAtom)
 	 */
 	public boolean tx(IAtom atom) {
 		return tx(config, config.getTransactionLevel(), atom);
@@ -728,8 +738,14 @@ public class DbPro {
 		for (int i=0; i<paras.length; i++) {
 			for (int j=0; j<paras[i].length; j++) {
 				Object value = paras[i][j];
-				if (config.dialect.isOracle() && value instanceof java.sql.Date)
-					pst.setDate(j + 1, (java.sql.Date)value);
+				if (config.dialect.isOracle()) {
+					if (value instanceof java.sql.Date)
+						pst.setDate(j + 1, (java.sql.Date)value);
+					else if (value instanceof java.sql.Timestamp)
+						pst.setTimestamp(j + 1, (java.sql.Timestamp)value);
+					else
+						pst.setObject(j + 1, value);
+				}
 				else
 					pst.setObject(j + 1, value);
 			}
@@ -802,8 +818,14 @@ public class DbPro {
 			Map map = isModel ? ((Model)list.get(i)).getAttrs() : ((Record)list.get(i)).getColumns();
 			for (int j=0; j<columnArray.length; j++) {
 				Object value = map.get(columnArray[j]);
-				if (config.dialect.isOracle() && value instanceof java.sql.Date)
-					pst.setDate(j + 1, (java.sql.Date)value);
+				if (config.dialect.isOracle()) {
+					if (value instanceof java.sql.Date)
+						pst.setDate(j + 1, (java.sql.Date)value);
+					else if (value instanceof java.sql.Timestamp)
+						pst.setTimestamp(j + 1, (java.sql.Timestamp)value);
+					else
+						pst.setObject(j + 1, value);
+				}
 				else
 					pst.setObject(j + 1, value);
 			}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2014, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,15 @@ import com.jfinal.core.Controller;
  * Routes.
  */
 public abstract class Routes {
-
+	
 	private final Map<String, Class<? extends Controller>> map = new HashMap<String, Class<? extends Controller>>();
 	private final Map<String, String> viewPathMap = new HashMap<String, String>();
-
+	
 	/**
 	 * you must implement config method and use add method to config route
 	 */
 	public abstract void config();
-
+	
 	public Routes add(Routes routes) {
 		if (routes != null) {
 			routes.config();	// very important!!!
@@ -43,7 +43,7 @@ public abstract class Routes {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Add route
 	 * @param controllerKey A key can find controller
@@ -64,26 +64,26 @@ public abstract class Routes {
 			controllerKey = "/" + controllerKey;
 		if (map.containsKey(controllerKey))
 			throw new IllegalArgumentException("The controllerKey already exists: " + controllerKey);
-
+		
 		map.put(controllerKey, controllerClass);
-
+		
 		if (viewPath == null || "".equals(viewPath.trim()))	// view path is controllerKey by default
 			viewPath = controllerKey;
-
+		
 		viewPath = viewPath.trim();
 		if (!viewPath.startsWith("/"))					// "/" added to prefix
 			viewPath = "/" + viewPath;
-
+		
 		if (!viewPath.endsWith("/"))					// "/" added to postfix
 			viewPath = viewPath + "/";
-
+		
 		if (baseViewPath != null)						// support baseViewPath
 			viewPath = baseViewPath + viewPath;
-
+		
 		viewPathMap.put(controllerKey, viewPath);
 		return this;
 	}
-
+	
 	/**
 	 * Add url mapping to controller. The view path is controllerKey
 	 * @param controllerkey A key can find controller
@@ -92,17 +92,17 @@ public abstract class Routes {
 	public Routes add(String controllerkey, Class<? extends Controller> controllerClass) {
 		return add(controllerkey, controllerClass, controllerkey);
 	}
-
+	
 	public Set<Entry<String, Class<? extends Controller>>> getEntrySet() {
 		return map.entrySet();
 	}
-
+	
 	public String getViewPath(String key) {
 		return viewPathMap.get(key);
 	}
-
+	
 	private static String baseViewPath;
-
+	
 	/**
 	 * Set the base path for all views
 	 */
@@ -112,13 +112,13 @@ public abstract class Routes {
 		baseViewPath = baseViewPath.trim();
 		if ("".equals(baseViewPath))
 			throw new IllegalArgumentException("The baseViewPath can not be blank");
-
+		
 		if (! baseViewPath.startsWith("/"))			// add prefix "/"
 			baseViewPath = "/" + baseViewPath;
-
+		
 		if (baseViewPath.endsWith("/"))				// remove "/" in the end of baseViewPath
 			baseViewPath = baseViewPath.substring(0, baseViewPath.length() - 1);
-
+		
 		Routes.baseViewPath = baseViewPath;
 	}
 }

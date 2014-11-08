@@ -23,7 +23,6 @@ import goja.mvc.datatables.core.DatatablesResponse;
 import goja.mvc.kit.Requests;
 import goja.mvc.render.BadRequest;
 import goja.mvc.render.CaptchaRender;
-import goja.mvc.render.FreeMarkerXMLRender;
 import goja.mvc.render.JxlsRender;
 import goja.mvc.render.NotModified;
 import goja.mvc.security.SecurityKit;
@@ -111,14 +110,6 @@ public class Controller extends com.jfinal.core.Controller {
 
     }
 
-    /**
-     * Render data in XML format.
-     *
-     * @param view freemarket view.
-     */
-    protected void renderXml(String view) {
-        render(new FreeMarkerXMLRender(view));
-    }
 
     /**
      * Rendering errors information, in Json format.

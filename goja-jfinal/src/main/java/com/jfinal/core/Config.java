@@ -1,7 +1,17 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jfinal.core;
@@ -18,19 +28,20 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+//import com.jfinal.log.Logger;
+
 class Config {
 
-    private static final Logger logger = LoggerFactory.getLogger(Config.class);
-
-
     private static final Constants    constants    = new Constants();
+
     private static final Routes       routes       = new Routes() {
-        public void config() {
-        }
+        public void config() {}
     };
     private static final Plugins      plugins      = new Plugins();
     private static final Interceptors interceptors = new Interceptors();
     private static final Handlers     handlers     = new Handlers();
+
+    private static Logger log;
 
     // prevent new Config();
     private Config() {
@@ -49,7 +60,7 @@ class Config {
         jfinalConfig.configHandler(handlers);
     }
 
-    public static Constants getConstants() {
+    public static final Constants getConstants() {
         return constants;
     }
 
@@ -71,32 +82,34 @@ class Config {
 
     private static void startPlugins() {
         List<IPlugin> pluginList = plugins.getPluginList();
-        if (pluginList != null) {
-            for (IPlugin plugin : pluginList) {
-                try {
-                    // process ActiveRecordPlugin devMode
-                    if (plugin instanceof com.jfinal.plugin.activerecord.ActiveRecordPlugin) {
-                        com.jfinal.plugin.activerecord.ActiveRecordPlugin arp = (com.jfinal.plugin.activerecord.ActiveRecordPlugin) plugin;
-                        if (arp.getDevMode() == null)
-                            arp.setDevMode(constants.getDevMode());
-                    }
+        if (pluginList == null)
+            return;
 
-                    boolean success = plugin.start();
-                    if (!success) {
-                        String message = "Plugin start error: " + plugin.getClass().getName();
-                        logger.error(message);
-                        throw new RuntimeException(message);
-                    }
-                } catch (Exception e) {
-                    String message = "Plugin start error: " + plugin.getClass().getName() + ". \n" + e.getMessage();
-                    logger.error(message, e);
-                    throw new RuntimeException(message, e);
+        for (IPlugin plugin : pluginList) {
+            try {
+                // process ActiveRecordPlugin devMode
+                if (plugin instanceof com.jfinal.plugin.activerecord.ActiveRecordPlugin) {
+                    com.jfinal.plugin.activerecord.ActiveRecordPlugin arp = (com.jfinal.plugin.activerecord.ActiveRecordPlugin) plugin;
+                    if (arp.getDevMode() == null)
+                        arp.setDevMode(constants.getDevMode());
                 }
+
+                if (!plugin.start()) {
+                    String message = "Plugin start error: " + plugin.getClass().getName();
+                    log.error(message);
+                    throw new RuntimeException(message);
+                }
+            } catch (Exception e) {
+                String message = "Plugin start error: " + plugin.getClass().getName() + ". \n" + e.getMessage();
+                log.error(message, e);
+                throw new RuntimeException(message, e);
             }
         }
     }
 
     private static void initLoggerFactory() {
-        JFinalFilter.initLogger();
+        //		Logger.init();
+        log = LoggerFactory.getLogger(Config.class);
+//        JFinalFilter.initLogger();
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2014, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import com.jfinal.i18n.I18N;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.IPlugin;
 import com.jfinal.render.RenderFactory;
-import com.jfinal.server.IServer;
-import com.jfinal.server.ServerFactory;
+//import com.jfinal.server.IServer;
+//import com.jfinal.server.ServerFactory;
 import com.jfinal.token.ITokenCache;
 import com.jfinal.token.TokenManager;
 import com.jfinal.upload.OreillyCos;
@@ -42,7 +42,7 @@ public final class JFinal {
 	private ActionMapping actionMapping;
 	private Handler handler;
 	private ServletContext servletContext;
-	private static IServer server;
+
 	private String contextPath = "";
 	
 	Handler getHandler() {
@@ -149,20 +149,20 @@ public final class JFinal {
 		return this.servletContext;
 	}
 	
-	public static void start() {
-		server = ServerFactory.getServer();
-		server.start();
-	}
+//	public static void start() {
+//		server = ServerFactory.getServer();
+//		server.start();
+//	}
+//
+//	public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
+//		server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
+//		server.start();
+//	}
 	
-	public static void start(String webAppDir, int port, String context, int scanIntervalSeconds) {
-		server = ServerFactory.getServer(webAppDir, port, context, scanIntervalSeconds);
-		server.start();
-	}
-	
-	public static void stop() {
-		server.stop();
-	}
-	
+//	public static void stop() {
+//		server.stop();
+//	}
+//
 //	/**
 //	 * Run JFinal Server with Debug Configurations or Run Configurations in Eclipse JavaEE
 //	 * args example: WebRoot 80 / 5

@@ -10,14 +10,13 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
+import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.OracleDialect;
+import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import goja.Goja;
 import goja.GojaConfig;
-import goja.db.dialect.DB2Dialect;
-import goja.db.dialect.H2Dialect;
-import goja.db.dialect.OracleDialect;
-import goja.db.dialect.PostgreSqlDialect;
-import goja.db.dialect.Sqlite3Dialect;
 import goja.exceptions.DatabaseException;
 import goja.init.InitConst;
 import goja.init.ctxbox.ClassFinder;
@@ -117,10 +116,8 @@ public abstract class ModelTestCase {
                 activeRecord.setDialect(new OracleDialect());
             } else if (StringUtils.equals(dbtype, JdbcConstants.POSTGRESQL)) {
                 activeRecord.setDialect(new PostgreSqlDialect());
-            } else if (StringUtils.equals(dbtype, JdbcConstants.DB2)) {
-                activeRecord.setDialect(new DB2Dialect());
             } else if (StringUtils.equals(dbtype, JdbcConstants.H2)) {
-                activeRecord.setDialect(new H2Dialect());
+                activeRecord.setDialect(new AnsiSqlDialect());
             } else if (StringUtils.equals(dbtype, "sqlite")) {
                 activeRecord.setDialect(new Sqlite3Dialect());
             } else {

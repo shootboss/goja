@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2014, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,12 +98,10 @@ public abstract class Dialect {
             }
         }
         /* # end edited. */
-
-
     }
 
     public void fillStatement(PreparedStatement pst, Object... paras) throws SQLException {
-        /* # edit by sogyf. */
+       /* # edit by sogyf. */
         /* @description: when dev model print sql parm */
         boolean show_param = DbKit.getConfig().isShowSql() && logger.isDebugEnabled();
         final int param_size = paras.length;

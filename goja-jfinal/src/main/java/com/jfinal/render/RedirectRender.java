@@ -1,7 +1,17 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jfinal.render;
@@ -14,7 +24,6 @@ import com.jfinal.core.JFinal;
  */
 public class RedirectRender extends Render {
 	
-	private static final long serialVersionUID = 1812102713097864255L;
 	private String url;
 	private boolean withQueryString;
 	private static final String contextPath = getContxtPath();
@@ -35,13 +44,13 @@ public class RedirectRender extends Render {
 	}
 	
 	public void render() {
-		if (contextPath != null && !url.contains("://"))
+		if (contextPath != null && url.indexOf("://") == -1)
 			url = contextPath + url;
 		
 		if (withQueryString) {
 			String queryString = request.getQueryString();
 			if (queryString != null)
-				if (!url.contains("?"))
+				if (url.indexOf("?") == -1)
 					url = url + "?" + queryString;
 				else
 					url = url + "&" + queryString;

@@ -1,7 +1,23 @@
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jfinal.plugin.ehcache;
 
 import java.util.List;
-
+//import com.jfinal.log.Logger;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -12,38 +28,39 @@ import org.slf4j.LoggerFactory;
  * CacheKit. Useful tool box for EhCache.
  */
 public class CacheKit {
-    private static final Logger logger = LoggerFactory.getLogger(CacheKit.class);
 
-    private static volatile CacheManager cacheManager;
+	private static volatile CacheManager cacheManager;
 
-    static void init(CacheManager cacheManager) {
-        CacheKit.cacheManager = cacheManager;
-    }
+	private static final Logger log = LoggerFactory.getLogger(CacheKit.class);
 
-    public static CacheManager getCacheManager() {
-        return cacheManager;
-    }
+	static void init(CacheManager cacheManager) {
+		CacheKit.cacheManager = cacheManager;
+	}
 
-    static Cache getOrAddCache(String cacheName) {
-        Cache cache = cacheManager.getCache(cacheName);
-        if (cache == null) {
-            synchronized (cacheManager) {
-                cache = cacheManager.getCache(cacheName);
-                if (cache == null) {
-                    logger.warn("Could not find cache config [" + cacheName + "], using default.");
+	public static CacheManager getCacheManager() {
+		return cacheManager;
+	}
+
+	static Cache getOrAddCache(String cacheName) {
+		Cache cache = cacheManager.getCache(cacheName);
+		if (cache == null) {
+			synchronized (cacheManager) {
+				cache = cacheManager.getCache(cacheName);
+				if (cache == null) {
+					log.warn("Could not find cache config [" + cacheName + "], using default.");
 					cacheManager.addCacheIfAbsent(cacheName);
 					cache = cacheManager.getCache(cacheName);
-                    logger.debug("Cache [" + cacheName + "] started.");
+					log.debug("Cache [" + cacheName + "] started.");
 				}
 			}
 		}
 		return cache;
 	}
-	
+
 	public static void put(String cacheName, Object key, Object value) {
 		getOrAddCache(cacheName).put(new Element(key, value));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> T get(String cacheName, Object key) {
 		Element element = getOrAddCache(cacheName).get(key);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2014, James Zhan 詹波 (jfinal@126.com).
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ final class ModelInjector {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static final <T> T inject(Class<?> modelClass, String modelName, HttpServletRequest request, boolean skipConvertError) {
-		Object model;
+		Object model = null;
 		try {
 			model = modelClass.newInstance();
 		} catch (Exception e) {
@@ -58,7 +58,7 @@ final class ModelInjector {
 		Method[] methods = modelClass.getMethods();
 		for (Method method : methods) {
 			String methodName = method.getName();
-			if (!methodName.startsWith("set"))	// only setter method
+			if (methodName.startsWith("set") == false)	// only setter method
 				continue;
 			
 			Class<?>[] types = method.getParameterTypes();
@@ -71,7 +71,7 @@ final class ModelInjector {
 				try {
 					method.invoke(model, TypeConverter.convert(types[0], value));
 				} catch (Exception e) {
-					if (!skipConvertError)
+					if (skipConvertError == false)
 					throw new RuntimeException(e);
 				}
 			}

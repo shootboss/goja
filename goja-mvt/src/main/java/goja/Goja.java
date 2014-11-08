@@ -21,6 +21,10 @@ import com.jfinal.config.Routes;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.OracleDialect;
+import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
+import com.jfinal.plugin.activerecord.dialect.Sqlite3Dialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
@@ -31,11 +35,6 @@ import com.jfinal.weixin.sdk.api.ApiConfig;
 import freemarker.template.Configuration;
 import goja.annotation.HandlerBind;
 import goja.annotation.PluginBind;
-import goja.db.dialect.DB2Dialect;
-import goja.db.dialect.H2Dialect;
-import goja.db.dialect.OracleDialect;
-import goja.db.dialect.PostgreSqlDialect;
-import goja.db.dialect.Sqlite3Dialect;
 import goja.exceptions.DatabaseException;
 import goja.init.AppLoadEvent;
 import goja.init.InitConst;
@@ -446,10 +445,8 @@ public class Goja extends JFinalConfig {
                     atbp.setDialect(new OracleDialect());
                 } else if (StringUtils.equals(dbtype, JdbcConstants.POSTGRESQL)) {
                     atbp.setDialect(new PostgreSqlDialect());
-                } else if (StringUtils.equals(dbtype, JdbcConstants.DB2)) {
-                    atbp.setDialect(new DB2Dialect());
                 } else if (StringUtils.equals(dbtype, JdbcConstants.H2)) {
-                    atbp.setDialect(new H2Dialect());
+                    atbp.setDialect(new AnsiSqlDialect());
                 } else if (StringUtils.equals(dbtype, "sqlite")) {
                     atbp.setDialect(new Sqlite3Dialect());
                 } else {

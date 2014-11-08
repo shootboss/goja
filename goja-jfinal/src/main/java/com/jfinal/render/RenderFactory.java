@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jfinal.render;
 
 import com.jfinal.config.Constants;
@@ -50,17 +66,35 @@ public class RenderFactory {
         // init Render
         Render.init(constants.getEncoding(), constants.getDevMode());
         initFreeMarkerRender(servletContext);
+//        initVelocityRender(servletContext);
+        initJspRender(servletContext);
         initFileRender(servletContext);
 
         // create mainRenderFactory
         if (mainRenderFactory == null) {
             ViewType defaultViewType = constants.getViewType();
-            if (defaultViewType == ViewType.FREE_MARKER)
-                mainRenderFactory = new FreeMarkerRenderFactory();
-            else if (defaultViewType == ViewType.JSP)
-                mainRenderFactory = new JspRenderFactory();
-            else
-                throw new RuntimeException("View Type can not be null.");
+            /* # edit by sogyf. */
+            /* @description: switch code */
+            switch (defaultViewType) {
+                case FREE_MARKER:
+                    mainRenderFactory = new FreeMarkerRenderFactory();
+                    break;
+                case JSP:
+                    mainRenderFactory = new JspRenderFactory();
+                    break;
+                default:
+                    throw new RuntimeException("View Type can not be null.");
+            }
+
+            //            if (defaultViewType == ViewType.FREE_MARKER)
+            //                mainRenderFactory = new FreeMarkerRenderFactory();
+            //            else if (defaultViewType == ViewType.JSP)
+            //                mainRenderFactory = new JspRenderFactory();
+            //            else if (defaultViewType == ViewType.VELOCITY)
+            //                mainRenderFactory = new VelocityRenderFactory();
+            //            else
+            //                throw new RuntimeException("View Type can not be null.");
+            /* # end edited. */
         }
 
         // create errorRenderFactory
@@ -75,6 +109,25 @@ public class RenderFactory {
             FreeMarkerRender.init(servletContext, Locale.getDefault(), constants.getFreeMarkerTemplateUpdateDelay());
         } catch (ClassNotFoundException e) {
             // System.out.println("freemarker can not be supported!");
+        }
+    }
+    /* # edit by sogyf. */
+    /* @description: remove */
+    //    private void initVelocityRender(ServletContext servletContext) {
+    //        try {
+    //            Class.forName("org.apache.velocity.VelocityContext");
+    //            VelocityRender.init(servletContext);
+    //        } catch (ClassNotFoundException e) {
+    //            // System.out.println("Velocity can not be supported!");
+    //        }
+    //    }
+    /* # end edited. */
+
+    private void initJspRender(ServletContext servletContext) {
+        try {
+            com.jfinal.plugin.activerecord.ModelRecordElResolver.init(servletContext);
+        } catch (Exception e) {
+            // System.out.println("Jsp or JSTL can not be supported!");
         }
     }
 
@@ -108,6 +161,12 @@ public class RenderFactory {
         return new JspRender(view);
     }
 
+	/* # edit by sogyf. */
+    /* @description: remove */
+    //	public Render getVelocityRender(String view) {
+    //		return new VelocityRender(view);
+    //	}
+    /* # end edited. */
 
     public Render getJsonRender() {
         return new JsonRender();
@@ -137,22 +196,23 @@ public class RenderFactory {
         return new TextRender(text, contentType);
     }
 
+    public Render getTextRender(String text, ContentType contentType) {
+        return new TextRender(text, contentType);
+    }
+
     public Render getDefaultRender(String view) {
         ViewType viewType = constants.getViewType();
-        // # edit by sogyf.
-        // @description: If the routing for the index, so the view path adjustment in the name of the view to the current Controller.
+        /* # edit by sogyf. */
+        /* @description: view type ok! */
         switch (viewType) {
             case FREE_MARKER:
-                if (view.endsWith("index")) {
-                    view = view.substring(0, view.lastIndexOf("/index"));
-                }
                 return new FreeMarkerRender(view + constants.getFreeMarkerViewExtension());
             case JSP:
                 return new JspRender(view + constants.getJspViewExtension());
             default:
                 return mainRenderFactory.getRender(view + mainRenderFactory.getViewExtension());
         }
-        // # end edited.
+        /* # end edited. */
     }
 
     public Render getErrorRender(int errorCode, String view) {
@@ -199,6 +259,10 @@ public class RenderFactory {
         return new HtmlRender(htmlText);
     }
 
+    public Render getXmlRender(String view) {
+        return new XmlRender(view);
+    }
+
     // --------
     private static final class FreeMarkerRenderFactory implements IMainRenderFactory {
         public Render getRender(String view) {
@@ -206,7 +270,7 @@ public class RenderFactory {
         }
 
         public String getViewExtension() {
-            return ".html";
+            return ".ftl.html";
         }
     }
 
@@ -220,6 +284,18 @@ public class RenderFactory {
         }
     }
 
+    /* # edit by sogyf. */
+    /* @description: remove */
+    //    private static final class VelocityRenderFactory implements IMainRenderFactory {
+    //        public Render getRender(String view) {
+    //            return new VelocityRender(view);
+    //        }
+    //
+    //        public String getViewExtension() {
+    //            return ".html";
+    //        }
+    //    }
+    /* # end edited. */
 
     private static final class ErrorRenderFactory implements IErrorRenderFactory {
         public Render getRender(int errorCode, String view) {

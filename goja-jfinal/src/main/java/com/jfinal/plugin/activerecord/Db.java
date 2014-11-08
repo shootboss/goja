@@ -1,7 +1,17 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jfinal.plugin.activerecord;
@@ -16,10 +26,10 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class Db {
 	
-	private static DbPro pro = null;
+	private static DbPro dbPro = null;
 	
 	static void init() {
-		pro = DbPro.use();
+		dbPro = DbPro.use();
 	}
 	
 	public static DbPro use(String configName) {
@@ -27,14 +37,14 @@ public class Db {
 	}
 	
 	static <T> List<T> query(Config config, Connection conn, String sql, Object... paras) throws SQLException {
-		return pro.query(config, conn, sql, paras);
+		return dbPro.query(config, conn, sql, paras);
 	}
 	
 	/**
 	 * @see #query(String, String, Object...)
 	 */
 	public static <T> List<T> query(String sql, Object... paras) {
-		return pro.query(sql, paras);
+		return dbPro.query(sql, paras);
 	}
 	
 	/**
@@ -42,7 +52,7 @@ public class Db {
 	 * @param sql an SQL statement
 	 */
 	public static <T> List<T> query(String sql) {
-		return pro.query(sql);
+		return dbPro.query(sql);
 	}
 	
 	/**
@@ -53,7 +63,7 @@ public class Db {
 	 * 			and it return Object if your sql has select only one column.
 	 */
 	public static <T> T queryFirst(String sql, Object... paras) {
-		return pro.queryFirst(sql, paras);
+		return dbPro.queryFirst(sql, paras);
 	}
 	
 	/**
@@ -61,7 +71,7 @@ public class Db {
 	 * @param sql an SQL statement
 	 */
 	public static <T> T queryFirst(String sql) {
-		return pro.queryFirst(sql);
+		return dbPro.queryFirst(sql);
 	}
 	
 	// 26 queryXxx method below -----------------------------------------------
@@ -73,107 +83,107 @@ public class Db {
 	 * @return List<T>
 	 */
 	public static <T> T queryColumn(String sql, Object... paras) {
-		return pro.queryColumn(sql, paras);
+		return dbPro.queryColumn(sql, paras);
 	}
 	
 	public static <T> T queryColumn(String sql) {
-		return pro.queryColumn(sql);
+		return dbPro.queryColumn(sql);
 	}
 	
 	public static String queryStr(String sql, Object... paras) {
-		return pro.queryStr(sql, paras);
+		return dbPro.queryStr(sql, paras);
 	}
 	
 	public static String queryStr(String sql) {
-		return pro.queryStr(sql);
+		return dbPro.queryStr(sql);
 	}
 	
 	public static Integer queryInt(String sql, Object... paras) {
-		return pro.queryInt(sql, paras);
+		return dbPro.queryInt(sql, paras);
 	}
 	
 	public static Integer queryInt(String sql) {
-		return pro.queryInt(sql);
+		return dbPro.queryInt(sql);
 	}
 	
 	public static Long queryLong(String sql, Object... paras) {
-		return pro.queryLong(sql, paras);
+		return dbPro.queryLong(sql, paras);
 	}
 	
 	public static Long queryLong(String sql) {
-		return pro.queryLong(sql);
+		return dbPro.queryLong(sql);
 	}
 	
 	public static Double queryDouble(String sql, Object... paras) {
-		return pro.queryDouble(sql, paras);
+		return dbPro.queryDouble(sql, paras);
 	}
 	
 	public static Double queryDouble(String sql) {
-		return pro.queryDouble(sql);
+		return dbPro.queryDouble(sql);
 	}
 	
 	public static Float queryFloat(String sql, Object... paras) {
-		return pro.queryFloat(sql, paras);
+		return dbPro.queryFloat(sql, paras);
 	}
 	
 	public static Float queryFloat(String sql) {
-		return pro.queryFloat(sql);
+		return dbPro.queryFloat(sql);
 	}
 	
 	public static java.math.BigDecimal queryBigDecimal(String sql, Object... paras) {
-		return pro.queryBigDecimal(sql, paras);
+		return dbPro.queryBigDecimal(sql, paras);
 	}
 	
 	public static java.math.BigDecimal queryBigDecimal(String sql) {
-		return pro.queryBigDecimal(sql);
+		return dbPro.queryBigDecimal(sql);
 	}
 	
 	public static byte[] queryBytes(String sql, Object... paras) {
-		return pro.queryBytes(sql, paras);
+		return dbPro.queryBytes(sql, paras);
 	}
 	
 	public static byte[] queryBytes(String sql) {
-		return pro.queryBytes(sql);
+		return dbPro.queryBytes(sql);
 	}
 	
 	public static java.util.Date queryDate(String sql, Object... paras) {
-		return pro.queryDate(sql, paras);
+		return dbPro.queryDate(sql, paras);
 	}
 	
 	public static java.util.Date queryDate(String sql) {
-		return pro.queryDate(sql);
+		return dbPro.queryDate(sql);
 	}
 	
 	public static java.sql.Time queryTime(String sql, Object... paras) {
-		return pro.queryTime(sql, paras);
+		return dbPro.queryTime(sql, paras);
 	}
 	
 	public static java.sql.Time queryTime(String sql) {
-		return pro.queryTime(sql);
+		return dbPro.queryTime(sql);
 	}
 	
 	public static java.sql.Timestamp queryTimestamp(String sql, Object... paras) {
-		return pro.queryTimestamp(sql, paras);
+		return dbPro.queryTimestamp(sql, paras);
 	}
 	
 	public static java.sql.Timestamp queryTimestamp(String sql) {
-		return pro.queryTimestamp(sql);
+		return dbPro.queryTimestamp(sql);
 	}
 	
 	public static Boolean queryBoolean(String sql, Object... paras) {
-		return pro.queryBoolean(sql, paras);
+		return dbPro.queryBoolean(sql, paras);
 	}
 	
 	public static Boolean queryBoolean(String sql) {
-		return pro.queryBoolean(sql);
+		return dbPro.queryBoolean(sql);
 	}
 	
 	public static Number queryNumber(String sql, Object... paras) {
-		return pro.queryNumber(sql, paras);
+		return dbPro.queryNumber(sql, paras);
 	}
 	
 	public static Number queryNumber(String sql) {
-		return pro.queryNumber(sql);
+		return dbPro.queryNumber(sql);
 	}
 	// 26 queryXxx method under -----------------------------------------------
 	
@@ -181,7 +191,7 @@ public class Db {
 	 * Execute sql update
 	 */
 	static int update(Config config, Connection conn, String sql, Object... paras) throws SQLException {
-		return pro.update(config, conn, sql, paras);
+		return dbPro.update(config, conn, sql, paras);
 	}
 	
 	/**
@@ -193,7 +203,7 @@ public class Db {
      *         that return nothing
 	 */
 	public static int update(String sql, Object... paras) {
-		return pro.update(sql, paras);
+		return dbPro.update(sql, paras);
 	}
 	
 	/**
@@ -201,18 +211,18 @@ public class Db {
 	 * @param sql an SQL statement
 	 */
 	public static int update(String sql) {
-		return pro.update(sql);
+		return dbPro.update(sql);
 	}
 	
 	static List<Record> find(Config config, Connection conn, String sql, Object... paras) throws SQLException {
-		return pro.find(config, conn, sql, paras);
+		return dbPro.find(config, conn, sql, paras);
 	}
 	
 	/**
 	 * @see #find(String, String, Object...)
 	 */
 	public static List<Record> find(String sql, Object... paras) {
-		return pro.find(sql, paras);
+		return dbPro.find(sql, paras);
 	}
 	
 	/**
@@ -220,7 +230,7 @@ public class Db {
 	 * @param sql the sql statement
 	 */
 	public static List<Record> find(String sql) {
-		return pro.find(sql);
+		return dbPro.find(sql);
 	}
 	
 	/**
@@ -230,7 +240,7 @@ public class Db {
 	 * @return the Record object
 	 */
 	public static Record findFirst(String sql, Object... paras) {
-		return pro.findFirst(sql, paras);
+		return dbPro.findFirst(sql, paras);
 	}
 	
 	/**
@@ -238,7 +248,7 @@ public class Db {
 	 * @param sql an SQL statement
 	 */
 	public static Record findFirst(String sql) {
-		return pro.findFirst(sql);
+		return dbPro.findFirst(sql);
 	}
 	
 	/**
@@ -248,7 +258,7 @@ public class Db {
 	 * @param idValue the id value of the record
 	 */
 	public static Record findById(String tableName, Object idValue) {
-		return pro.findById(tableName, idValue);
+		return dbPro.findById(tableName, idValue);
 	}
 	
 	/**
@@ -259,7 +269,7 @@ public class Db {
 	 * @param columns the specific columns separate with comma character ==> ","
 	 */
 	public static Record findById(String tableName, Number idValue, String columns) {
-		return pro.findById(tableName, idValue, columns);
+		return dbPro.findById(tableName, idValue, columns);
 	}
 	
 	/**
@@ -270,7 +280,7 @@ public class Db {
 	 * @param idValue the id value of the record
 	 */
 	public static Record findById(String tableName, String primaryKey, Number idValue) {
-		return pro.findById(tableName, primaryKey, idValue);
+		return dbPro.findById(tableName, primaryKey, idValue);
 	}
 	
 	/**
@@ -282,7 +292,7 @@ public class Db {
 	 * @param columns the specific columns separate with comma character ==> ","
 	 */
 	public static Record findById(String tableName, String primaryKey, Object idValue, String columns) {
-		return pro.findById(tableName, primaryKey, idValue, columns);
+		return dbPro.findById(tableName, primaryKey, idValue, columns);
 	}
 	
 	/**
@@ -293,7 +303,7 @@ public class Db {
 	 * @return true if delete succeed otherwise false
 	 */
 	public static boolean deleteById(String tableName, Object id) {
-		return pro.deleteById(tableName, id);
+		return dbPro.deleteById(tableName, id);
 	}
 	
 	/**
@@ -305,7 +315,7 @@ public class Db {
 	 * @return true if delete succeed otherwise false
 	 */
 	public static boolean deleteById(String tableName, String primaryKey, Object id) {
-		return pro.deleteById(tableName, primaryKey, id);
+		return dbPro.deleteById(tableName, primaryKey, id);
 	}
 	
 	/**
@@ -317,37 +327,37 @@ public class Db {
 	 * @return true if delete succeed otherwise false
 	 */
 	public static boolean delete(String tableName, String primaryKey, Record record) {
-		return pro.delete(tableName, primaryKey, record);
+		return dbPro.delete(tableName, primaryKey, record);
 	}
 	
 	/**
 	 * Example: boolean succeed = Db.delete("user", user);
-	 * @see #delete(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #delete(String, String, Record)
 	 */
 	public static boolean delete(String tableName, Record record) {
-		return pro.delete(tableName, record);
+		return dbPro.delete(tableName, record);
 	}
 	
 	static Page<Record> paginate(Config config, Connection conn, int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) throws SQLException {
-		return pro.paginate(config, conn, pageNumber, pageSize, select, sqlExceptSelect, paras);
+		return dbPro.paginate(config, conn, pageNumber, pageSize, select, sqlExceptSelect, paras);
 	}
 	
 	/**
 	 * @see #paginate(String, int, int, String, String, Object...)
 	 */
 	public static Page<Record> paginate(int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) {
-		return pro.paginate(pageNumber, pageSize, select, sqlExceptSelect, paras);
+		return dbPro.paginate(pageNumber, pageSize, select, sqlExceptSelect, paras);
 	}
 	
 	/**
 	 * @see #paginate(String, int, int, String, String, Object...)
 	 */
 	public static Page<Record> paginate(int pageNumber, int pageSize, String select, String sqlExceptSelect) {
-		return pro.paginate(pageNumber, pageSize, select, sqlExceptSelect);
+		return dbPro.paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
 	static boolean save(Config config, Connection conn, String tableName, String primaryKey, Record record) throws SQLException {
-		return pro.save(config, conn, tableName, primaryKey, record);
+		return dbPro.save(config, conn, tableName, primaryKey, record);
 	}
 	
 	/**
@@ -358,18 +368,18 @@ public class Db {
 	 * @param true if save succeed otherwise false
 	 */
 	public static boolean save(String tableName, String primaryKey, Record record) {
-		return pro.save(tableName, primaryKey, record);
+		return dbPro.save(tableName, primaryKey, record);
 	}
 	
 	/**
-	 * @see #save(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #save(String, String, Record)
 	 */
 	public static boolean save(String tableName, Record record) {
-		return pro.save(tableName, record);
+		return dbPro.save(tableName, record);
 	}
 	
 	static boolean update(Config config, Connection conn, String tableName, String primaryKey, Record record) throws SQLException {
-		return pro.update(config, conn, tableName, primaryKey, record);
+		return dbPro.update(config, conn, tableName, primaryKey, record);
 	}
 	
 	/**
@@ -380,22 +390,22 @@ public class Db {
 	 * @param true if update succeed otherwise false
 	 */
 	public static boolean update(String tableName, String primaryKey, Record record) {
-		return pro.update(tableName, primaryKey, record);
+		return dbPro.update(tableName, primaryKey, record);
 	}
 	
 	/**
 	 * Update Record. The primary key of the table is: "id".
-	 * @see #update(String, String, com.jfinal.plugin.activerecord.Record)
+	 * @see #update(String, String, Record)
 	 */
 	public static boolean update(String tableName, Record record) {
-		return pro.update(tableName, record);
+		return dbPro.update(tableName, record);
 	}
 	
 	/**
-	 * @see #execute(String, com.jfinal.plugin.activerecord.ICallback)
+	 * @see #execute(String, ICallback)
 	 */
 	public static Object execute(ICallback callback) {
-		return pro.execute(callback);
+		return dbPro.execute(callback);
 	}
 	
 	/**
@@ -404,7 +414,7 @@ public class Db {
 	 * @param callback the ICallback interface
 	 */
 	static Object execute(Config config, ICallback callback) {
-		return pro.execute(config, callback);
+		return dbPro.execute(config, callback);
 	}
 	
 	/**
@@ -415,19 +425,19 @@ public class Db {
 	 * @return true if transaction executing succeed otherwise false
 	 */
 	static boolean tx(Config config, int transactionLevel, IAtom atom) {
-		return pro.tx(config, transactionLevel, atom);
+		return dbPro.tx(config, transactionLevel, atom);
 	}
 	
 	public static boolean tx(int transactionLevel, IAtom atom) {
-		return pro.tx(transactionLevel, atom);
+		return dbPro.tx(transactionLevel, atom);
 	}
 	
 	/**
 	 * Execute transaction with default transaction level.
-	 * @see #tx(int, com.jfinal.plugin.activerecord.IAtom)
+	 * @see #tx(int, IAtom)
 	 */
 	public static boolean tx(IAtom atom) {
-		return pro.tx(atom);
+		return dbPro.tx(atom);
 	}
 	
 	/**
@@ -438,14 +448,14 @@ public class Db {
 	 * @return the list of Record
 	 */
 	public static List<Record> findByCache(String cacheName, Object key, String sql, Object... paras) {
-		return pro.findByCache(cacheName, key, sql, paras);
+		return dbPro.findByCache(cacheName, key, sql, paras);
 	}
 	
 	/**
 	 * @see #findByCache(String, Object, String, Object...)
 	 */
 	public static List<Record> findByCache(String cacheName, Object key, String sql) {
-		return pro.findByCache(cacheName, key, sql);
+		return dbPro.findByCache(cacheName, key, sql);
 	}
 	
 	/**
@@ -454,35 +464,35 @@ public class Db {
 	 * @return Page
 	 */
 	public static Page<Record> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) {
-		return pro.paginateByCache(cacheName, key, pageNumber, pageSize, select, sqlExceptSelect, paras);
+		return dbPro.paginateByCache(cacheName, key, pageNumber, pageSize, select, sqlExceptSelect, paras);
 	}
 	
 	/**
 	 * @see #paginateByCache(String, Object, int, int, String, String, Object...)
 	 */
 	public static Page<Record> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select, String sqlExceptSelect) {
-		return pro.paginateByCache(cacheName, key, pageNumber, pageSize, select, sqlExceptSelect);
+		return dbPro.paginateByCache(cacheName, key, pageNumber, pageSize, select, sqlExceptSelect);
 	}
 	
 	/**
 	 * @see #batch(String, String, Object[][], int)
      */
     public static int[] batch(String sql, Object[][] paras, int batchSize) {
-    	return pro.batch(sql, paras, batchSize);
+    	return dbPro.batch(sql, paras, batchSize);
     }
 	
 	/**
-	 * @see #batch(String, String, String, java.util.List, int)
+	 * @see #batch(String, String, String, List, int)
      */
 	public static int[] batch(String sql, String columns, List modelOrRecordList, int batchSize) {
-		return pro.batch(sql, columns, modelOrRecordList, batchSize);
+		return dbPro.batch(sql, columns, modelOrRecordList, batchSize);
 	}
 	
 	/**
-	 * @see #batch(String, java.util.List, int)
+	 * @see #batch(String, List, int)
      */
     public static int[] batch(List<String> sqlList, int batchSize) {
-    	return pro.batch(sqlList, batchSize);
+    	return dbPro.batch(sqlList, batchSize);
     }
 }
 

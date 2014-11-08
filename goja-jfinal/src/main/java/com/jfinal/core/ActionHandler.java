@@ -1,16 +1,26 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+/**
+ * Copyright (c) 2011-2015, James Zhan 詹波 (jfinal@126.com).
  *
- * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.jfinal.core;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.jfinal.config.Constants;
 import com.jfinal.handler.Handler;
+//import com.jfinal.log.Logger;
 import com.jfinal.render.Render;
 import com.jfinal.render.RenderException;
 import com.jfinal.render.RenderFactory;
@@ -22,47 +32,48 @@ import org.slf4j.LoggerFactory;
  */
 final class ActionHandler extends Handler {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActionHandler.class);
+	private final boolean       devMode;
+	private final ActionMapping actionMapping;
 
-    private final boolean       devMode;
-    private final ActionMapping actionMapping;
-    private static final RenderFactory renderFactory = RenderFactory.me();
+	private static final RenderFactory renderFactory = RenderFactory.me();
 
-    public ActionHandler(ActionMapping actionMapping, Constants constants) {
-        this.actionMapping = actionMapping;
-        this.devMode = constants.getDevMode();
-    }
+	private static final Logger log = LoggerFactory.getLogger(ActionHandler.class);
 
-    /**
-     * handle
-     * 1: Action action = actionMapping.getAction(target)
-     * 2: new ActionInvocation(...).invoke()
-     * 3: render(...)
-     */
-    public final void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
-        if (target.contains(".")) {
-            return;
-        }
+	public ActionHandler(ActionMapping actionMapping, Constants constants) {
+		this.actionMapping = actionMapping;
+		this.devMode = constants.getDevMode();
+	}
 
-        isHandled[0] = true;
-        String[] urlPara = {null};
-        Action action = actionMapping.getAction(target, urlPara);
+	/**
+	 * handle
+	 * 1: Action action = actionMapping.getAction(target)
+	 * 2: new ActionInvocation(...).invoke()
+	 * 3: render(...)
+	 */
+	public final void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+		if (target.indexOf('.') != -1) {
+			return;
+		}
 
-        if (action == null) {
-            if (logger.isWarnEnabled()) {
-                String qs = request.getQueryString();
-                logger.warn("404 Action Not Found: " + (qs == null ? target : target + "?" + qs));
-            }
-            renderFactory.getErrorRender(404).setContext(request, response).render();
-            return;
-        }
+		isHandled[0] = true;
+		String[] urlPara = {null};
+		Action action = actionMapping.getAction(target, urlPara);
 
-        try {
-            Controller controller = action.getControllerClass().newInstance();
-            controller.init(request, response, urlPara[0]);
+		if (action == null) {
+			if (log.isWarnEnabled()) {
+				String qs = request.getQueryString();
+				log.warn("404 Action Not Found: " + (qs == null ? target : target + "?" + qs));
+			}
+			renderFactory.getErrorRender(404).setContext(request, response).render();
+			return;
+		}
 
-            if (devMode) {
-                boolean isMultipartRequest = ActionReporter.reportCommonRequest(controller, action);
+		try {
+			Controller controller = action.getControllerClass().newInstance();
+			controller.init(request, response, urlPara[0]);
+
+			if (devMode) {
+				boolean isMultipartRequest = ActionReporter.reportCommonRequest(controller, action);
 				new ActionInvocation(action, controller).invoke();
 				if (isMultipartRequest) ActionReporter.reportMultipartRequest(controller, action);
 			}
@@ -85,35 +96,35 @@ final class ActionHandler extends Handler {
 			render.setContext(request, response, action.getViewPath()).render();
 		}
 		catch (RenderException e) {
-			if (logger.isErrorEnabled()) {
+			if (log.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                logger.error(qs == null ? target : target + "?" + qs, e);
+				log.error(qs == null ? target : target + "?" + qs, e);
 			}
 		}
 		catch (ActionException e) {
 			int errorCode = e.getErrorCode();
-			if (errorCode == 404 && logger.isWarnEnabled()) {
+			if (errorCode == 404 && log.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                logger.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
+				log.warn("404 Not Found: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (errorCode == 401 && logger.isWarnEnabled()) {
+			else if (errorCode == 401 && log.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                logger.warn("401 Unauthorized: " + (qs == null ? target : target + "?" + qs));
+				log.warn("401 Unauthorized: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (errorCode == 403 && logger.isWarnEnabled()) {
+			else if (errorCode == 403 && log.isWarnEnabled()) {
 				String qs = request.getQueryString();
-                logger.warn("403 Forbidden: " + (qs == null ? target : target + "?" + qs));
+				log.warn("403 Forbidden: " + (qs == null ? target : target + "?" + qs));
 			}
-			else if (logger.isErrorEnabled()) {
+			else if (log.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                logger.error(qs == null ? target : target + "?" + qs, e);
+				log.error(qs == null ? target : target + "?" + qs, e);
 			}
 			e.getErrorRender().setContext(request, response).render();
 		}
-		catch (Exception e) {
-			if (logger.isErrorEnabled()) {
+		catch (Throwable t) {
+			if (log.isErrorEnabled()) {
 				String qs = request.getQueryString();
-                logger.error(qs == null ? target : target + "?" + qs, e);
+				log.error(qs == null ? target : target + "?" + qs, t);
 			}
 			renderFactory.getErrorRender(500).setContext(request, response).render();
 		}
