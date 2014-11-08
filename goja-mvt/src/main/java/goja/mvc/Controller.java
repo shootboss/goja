@@ -12,8 +12,11 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.jfinal.core.TypeConverter;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.TableMapping;
 import goja.Goja;
 import goja.Logger;
 import goja.kits.base.DateKit;
@@ -442,6 +445,52 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     /**
+     * According to the table fields to obtain values from the Request and converted to the Model
+     *
+     * @param modelClass The model class.
+     * @param <M>        Generic parameter.
+     * @return The modeal .
+     */
+    protected <M extends Model> Optional<M> getModelByReuest(Class<? extends M> modelClass) {
+        final HttpServletRequest request = getRequest();
+        final Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap.size() > 0) {
+            Table table = TableMapping.me().getTable(modelClass);
+            if (table == null) {
+                Logger.error("the model has note found!");
+            } else {
+                try {
+                    final M model = modelClass.newInstance();
+                    final Map<String, Class<?>> columnTypeMap = table.getColumnTypeMap();
+
+                    for (String label : columnTypeMap.keySet()) {
+                        final String param_value = request.getParameter(label);
+                        final Class<?> column_type = columnTypeMap.get(label);
+                        String[] paraValue = parameterMap.get(label);
+                        try {
+                            // Object value = Converter.convert(colType, paraValue != null ? paraValue[0] : null);
+                            Object value = paraValue[0] != null ? TypeConverter.convert(column_type, param_value) : null;
+                            model.set(label, value);
+                        } catch (Exception ex) {
+                            Logger.warn("Can not convert parameter: {}, {}, {}. ", label, param_value, column_type);
+                            model.set(label, param_value);
+                        }
+                    }
+                    return Optional.of(model);
+                } catch (InstantiationException e) {
+                    Logger.error("instance the model has error!", e);
+                } catch (IllegalAccessException e) {
+                    Logger.error("instance the model has error!", e);
+                }
+
+            }
+        }
+
+
+        return Optional.absent();
+    }
+
+    /**
      * For information on the logged in user.
      * <p/>
      * This access is through the way the Cookie and Session
@@ -491,8 +540,8 @@ public class Controller extends com.jfinal.core.Controller {
     /**
      * JodaTime time request
      *
-     * @param name param.
-     *             the datetime format : yyyy-MM-dd
+     * @param name         param.
+     *                     the datetime format : yyyy-MM-dd
      * @param defaultValue the default value.
      * @return datetime.
      */

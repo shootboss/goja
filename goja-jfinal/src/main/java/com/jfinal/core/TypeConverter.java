@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 /**
  * Convert String to other type object.
  */
-final class TypeConverter {
+public final class TypeConverter {
 	
 	private static final int timeStampLen = "2011-01-18 16:18:18".length();
 	private static final String timeStampPattern = "yyyy-MM-dd HH:mm:ss";

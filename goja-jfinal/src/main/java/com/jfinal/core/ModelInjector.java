@@ -98,7 +98,7 @@ final class ModelInjector {
 					Object value = paraValue[0] != null ? TypeConverter.convert(colType, paraValue[0]) : null;
 					model.set(paraName, value);
 				} catch (Exception ex) {
-					if (skipConvertError == false)
+					if (!skipConvertError)
 						throw new RuntimeException("Can not convert parameter: " + modelNameAndDot + paraName, ex);
 				}
 			}
