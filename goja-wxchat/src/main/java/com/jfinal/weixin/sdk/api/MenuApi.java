@@ -6,15 +6,16 @@
 
 package com.jfinal.weixin.sdk.api;
 
-import com.jfinal.weixin.sdk.kit.HttpKit;
+
+import com.jfinal.kit.HttpKit;
 
 /**
  * menu api
  */
 public class MenuApi {
 	
-	private static String getMenu = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=";
-	private static String createMenu = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";
+	private static final String getMenu = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=";
+	private static final String createMenu = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=";
 	
 	/**
 	 * 查询菜单

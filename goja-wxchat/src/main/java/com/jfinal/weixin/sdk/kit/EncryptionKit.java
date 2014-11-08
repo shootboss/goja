@@ -73,12 +73,6 @@ public class EncryptionKit {
 		return result;
 	}
 	
-	public static void main(String[] args) throws Exception{
-		System.out.println(EncryptionKit.md5Encrypt("qunar"));
-//		Random rd = new Random(System.nanoTime()/new Random().nextInt());
-//		String id = Encrypt.encrypt(Encrypt.algorithms[rd.nextInt()%5],""+rd.nextLong()+Runtime.getRuntime().freeMemory());
-//		System.out.println(Encrypt.md5Encrypt("_input_charset=utf-8&partner=2088701290402889&service=sign_protocol_with_partner1dartv2j7o57zzjwozewwp217pid379o"));
-	}
 }
 
 

@@ -5,6 +5,8 @@
 * 修复 `render('/view.ftl')`时，视图文件路径不正确的问题；
 * 增加对 `user/index` 这样的路由，自动将渲染视图映射为`user.ftl`;
 * 补充 `Controller` 中对`AjaxMessage`的处理；
+* 升级`jFinal`为`1.9`版本；
+* 
 
 ## 0.0.10 (2014-10-01)
 
