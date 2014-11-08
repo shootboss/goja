@@ -156,8 +156,7 @@ public class Goja extends JFinalConfig {
         initlization = true;
 
         // dev_mode
-        final boolean dev_mode = GojaConfig.getPropertyToBoolean(DEV_MODE, false);
-        mode = dev_mode ? Mode.DEV : Mode.PROD;
+        mode =Mode.DEV ;
         Logger.init();
     }
 

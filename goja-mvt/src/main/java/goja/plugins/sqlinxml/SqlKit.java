@@ -52,7 +52,10 @@ public class SqlKit {
         if (Strings.isNullOrEmpty(resource)) {
             throw new NullPointerException("the resources is null.");
         }
-        FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
+        initScanFiles(resource);
+    }
+
+    private static void initScanFiles(String resource) {FluentIterable<File> iterable = Files.fileTreeTraverser().breadthFirstTraversal(new File(resource));
         final List<File> files = Lists.newArrayList();
         for (File f : iterable) {
             if (f.getName().endsWith(CONFIG_SUFFIX)) {
@@ -87,6 +90,16 @@ public class SqlKit {
             // 启动文件监控
             runWatch();
         }
+    }
+
+    static void initWithTest(){
+
+        final String resource = PathKit.getRootClassPath();
+        if (Strings.isNullOrEmpty(resource)) {
+            throw new NullPointerException("the resources is null.");
+        }
+
+        initScanFiles(resource.replace("test-", StringPool.EMPTY));
     }
 
     private static void runWatch() {

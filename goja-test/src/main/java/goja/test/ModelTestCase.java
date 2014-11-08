@@ -10,6 +10,7 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
+import com.jfinal.plugin.activerecord.DbKit;
 import com.jfinal.plugin.activerecord.dialect.AnsiSqlDialect;
 import com.jfinal.plugin.activerecord.dialect.OracleDialect;
 import com.jfinal.plugin.activerecord.dialect.PostgreSqlDialect;
@@ -22,6 +23,7 @@ import goja.init.InitConst;
 import goja.init.ctxbox.ClassFinder;
 import goja.kits.reflect.Reflect;
 import goja.plugins.sqlinxml.SqlInXmlPlugin;
+import goja.plugins.sqlinxml.SqlKit;
 import goja.plugins.tablebind.AutoTableBindPlugin;
 import goja.plugins.tablebind.SimpleNameStyles;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +57,7 @@ public abstract class ModelTestCase {
         GojaConfig.getConfigProps();
         ClassFinder.findWithTest();
         Reflect.on(Goja.class).call("initWithTest");
+
         final Map<String, Properties> dbConfig = GojaConfig.getDbConfig();
         for (String db_config : dbConfig.keySet()) {
             final Properties db_props = dbConfig.get(db_config);
@@ -67,10 +70,10 @@ public abstract class ModelTestCase {
         }
 
 
-        if (GojaConfig.getPropertyToBoolean(DB_SQLINXML, false)) {
-            new SqlInXmlPlugin().start();
-        }
+        if (GojaConfig.getPropertyToBoolean(DB_SQLINXML, true)) {
 
+            Reflect.on(SqlKit.class).call("initWithTest");
+        }
     }
 
     /**
@@ -94,7 +97,6 @@ public abstract class ModelTestCase {
                 , db_password
                 , driverClassName);
 
-        dp.addFilter(new StatFilter());
 
         dp.setInitialSize(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_SIZE, 10));
         dp.setMinIdle(GojaConfig.getPropertyToInt(InitConst.DB_INITIAL_MINIDLE, 10));
@@ -103,6 +105,7 @@ public abstract class ModelTestCase {
         dp.setTimeBetweenEvictionRunsMillis(GojaConfig.getPropertyToInt(InitConst.DB_TIMEBETWEENEVICTIONRUNSMILLIS, 120000));
         dp.setMinEvictableIdleTimeMillis(GojaConfig.getPropertyToInt(InitConst.DB_MINEVICTABLEIDLETIMEMILLIS, 120000));
 
+        dp.addFilter(new StatFilter());
         WallFilter wall = new WallFilter();
         wall.setDbType(dbtype);
         dp.addFilter(wall);
@@ -125,6 +128,7 @@ public abstract class ModelTestCase {
             }
         }
 
+        activeRecord.setShowSql(true);
         activeRecord.start();
 
     }

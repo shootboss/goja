@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
 import goja.StringPool;
+import goja.exceptions.ReflectException;
 import goja.kits.reflect.Reflect;
 import org.apache.commons.lang3.StringUtils;
 
