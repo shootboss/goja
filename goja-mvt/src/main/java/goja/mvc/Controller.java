@@ -453,7 +453,7 @@ public class Controller extends com.jfinal.core.Controller {
      * @param <M>        Generic parameter.
      * @return The modeal .
      */
-    protected <M> Optional<M> getModelByReuest(Class<?> modelClass) {
+    protected <M> Optional<M> getModelByRequest(Class<?> modelClass) {
         final HttpServletRequest request = getRequest();
         final Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap.size() > 0) {
