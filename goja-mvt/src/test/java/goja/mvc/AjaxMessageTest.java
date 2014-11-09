@@ -6,6 +6,9 @@
 
 package goja.mvc;
 
+import goja.StringPool;
+import goja.tuples.Pair;
+import goja.tuples.Tuple;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,18 +19,22 @@ public class AjaxMessageTest {
     public void testOk() throws Exception {
 
         AjaxMessage ok = AjaxMessage.ok();
-        assertEquals(ok.getMessage(), "您好，请求以筋斗云的速度请求成功，恭喜你！");
+        assertEquals(ok.getMessage(), StringPool.EMPTY);
 
     }
 
     @Test
     public void testOk1() throws Exception {
 
+        AjaxMessage ok = AjaxMessage.ok(StringPool.AND);
+        assertEquals(ok.getMessage(), StringPool.AND);
     }
 
     @Test
     public void testOk2() throws Exception {
-
+        Pair<Integer, Integer> data = Pair.with(1,2);
+        AjaxMessage ok = AjaxMessage.ok(data);
+        assertEquals(ok.getMessage(), StringPool.EMPTY);
     }
 
     @Test

@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class AjaxMessage<E> {
 
-    private static final String SUCCESS_MSG   = "Hello, request to somersault cloud speed request is successful, congratulations!";
+    private static final String SUCCESS_MSG   = StringPool.EMPTY;
     /**
      * Don't have permission to access the clues
      */
