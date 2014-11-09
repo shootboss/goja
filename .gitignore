@@ -10,7 +10,7 @@
 *.ipr
 *.iws
 
-out
+# out
 target
 build
 
