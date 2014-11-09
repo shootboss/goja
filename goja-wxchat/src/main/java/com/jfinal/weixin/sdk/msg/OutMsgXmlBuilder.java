@@ -18,6 +18,8 @@ import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.Version;
+import goja.StringPool;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -29,7 +31,7 @@ import java.util.Map;
  */
 public class OutMsgXmlBuilder {
 
-    private static String        encoding = "utf-8";
+    private static String        encoding = StringPool.UTF_8;
     private static Configuration config   = initFreeMarkerConfiguration();
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -54,7 +56,8 @@ public class OutMsgXmlBuilder {
     }
 
     private static Configuration initFreeMarkerConfiguration() {
-        Configuration config = new Configuration(Configuration.VERSION_2_3_21);
+        final Version version = Configuration.getVersion();
+        Configuration config = new Configuration(version);
         StringTemplateLoader stringTemplateLoader = new StringTemplateLoader();
         initStringTemplateLoader(stringTemplateLoader);
         config.setTemplateLoader(stringTemplateLoader);
@@ -67,7 +70,7 @@ public class OutMsgXmlBuilder {
         config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         // - Use beans wrapper (recommmended for most applications)
-        config.setObjectWrapper(new BeansWrapperBuilder(Configuration.VERSION_2_3_21).build());
+        config.setObjectWrapper(new BeansWrapperBuilder(version).build());
         // - Set the default charset of the template files
         config.setDefaultEncoding(encoding);        // config.setDefaultEncoding("ISO-8859-1");
         // - Set the charset of the output. This is actually just a hint, that
