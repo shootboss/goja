@@ -226,6 +226,8 @@ public class Goja extends JFinalConfig {
 
     @Override
     public void configPlugin(Plugins plugins) {
+        // fixed: https://github.com/GojaFramework/goja/issues/4
+        started = true;
 
         if (GojaConfig.getPropertyToBoolean(CACHE, false)) {
             plugins.add(new EhCachePlugin());
@@ -365,7 +367,6 @@ public class Goja extends JFinalConfig {
                 }
             }
         }
-        started = true;
     }
 
     @Override
