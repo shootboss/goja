@@ -40,11 +40,27 @@ public class Freemarkers {
 
     //配置
     private static Configuration appConfig = null;
+    private static Configuration stringConfig = null;
 
     public static final String UPDATE_RESPONSE_TEMPLATE = "__updateResponseTemplate";
 
+
+   private static final  StringTemplateLoader stringLoader = new StringTemplateLoader();
+
     static {
         getAppConfiguration();
+        initStringConfiguration();
+    }
+
+    private static Configuration initStringConfiguration() {
+        if (stringConfig == null) {
+            //从freemarker 视图中获取所有配置
+            stringConfig = (Configuration) FreeMarkerRender.getConfiguration().clone();
+
+            stringLoader.putTemplate(UPDATE_RESPONSE_TEMPLATE, StringPool.EMPTY);
+        }
+        return stringConfig;
+
     }
 
     /**
@@ -100,14 +116,12 @@ public class Freemarkers {
      * @return 字符串形式的渲染结果
      */
     public static String renderStrTemplate(String strTemplat, Map<String, Object> renderParams) {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
-        StringTemplateLoader stringLoader = new StringTemplateLoader();
         stringLoader.putTemplate(UPDATE_RESPONSE_TEMPLATE, strTemplat);
-        cfg.setTemplateLoader(stringLoader);
+        stringConfig.setTemplateLoader(stringLoader);
         Writer out = new StringWriter(2048);
 
         try {
-            Template tpl = cfg.getTemplate(UPDATE_RESPONSE_TEMPLATE, StringPool.UTF_8);
+            Template tpl = stringConfig.getTemplate(UPDATE_RESPONSE_TEMPLATE, StringPool.UTF_8);
             tpl.process(renderParams, out);
         } catch (IOException e) {
             Logger.error("Get update response template occurs error.", e);
