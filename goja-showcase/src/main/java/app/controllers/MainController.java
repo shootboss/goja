@@ -11,6 +11,8 @@ import goja.Logger;
 import goja.mvc.Controller;
 import goja.mvc.security.shiro.Securitys;
 
+import java.util.Map;
+
 /**
  * <p>
  * The url main Controller.
@@ -28,6 +30,8 @@ public class MainController extends Controller {
      */
     public void index() {
         Logger.info("haha");
+        Map<String,String> a = null;
+        a.toString();
         render("/main.ftl");
     }
 

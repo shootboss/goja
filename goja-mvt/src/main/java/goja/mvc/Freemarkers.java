@@ -17,6 +17,7 @@ import freemarker.template.TemplateException;
 import goja.Goja;
 import goja.Logger;
 import goja.StringPool;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,8 @@ import java.util.Map;
  * @since JDK 1.5
  */
 public class Freemarkers {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Freemarkers.class);
 
     //配置
     private static Configuration appConfig = null;
@@ -60,7 +63,7 @@ public class Freemarkers {
                 appConfig.setObjectWrapper(new BeansWrapperBuilder(Configuration.VERSION_2_3_21).build());
 
             } catch (IOException e) {
-                // TODO log
+                logger.error("The Freemarkers has error!", e);
             }
         }
         return appConfig;
