@@ -236,27 +236,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>8.1.8</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-plus</artifactId>
-            <version>8.1.8.v20121106</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-annotations</artifactId>
-            <version>8.1.8.v20121106</version>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
