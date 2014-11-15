@@ -6,9 +6,6 @@
 
 package goja.mvc.render.ftl;
 
-import goja.Func;
-import goja.date.DateFormatter;
-import goja.date.DateProvider;
 import com.google.common.base.Strings;
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
@@ -17,6 +14,7 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import goja.date.DateFormatter;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
