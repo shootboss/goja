@@ -6,6 +6,7 @@
 
 package goja.kits.base;
 
+import goja.date.DateFormatter;
 import goja.date.DateProvider;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -34,17 +35,17 @@ public class DateKit {
             .withZone(DateTimeZone.UTC);
 
     private static final DateTimeFormatter YMDHMS_DASH_DATE_FORMAT = DateTimeFormat
-            .forPattern(DateProvider.YYYY_MM_DD_HH_MM_SS)
+            .forPattern(DateFormatter.YYYY_MM_DD_HH_MM_SS)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
 
     private static final DateTimeFormatter YMD_DASH_DATE_FORMAT = DateTimeFormat
-            .forPattern(DateProvider.YYYY_MM_DD)
+            .forPattern(DateFormatter.YYYY_MM_DD)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
 
     private static final DateTimeFormatter YMDHM_DASH_DATE_FORMAT = DateTimeFormat
-            .forPattern(DateProvider.YYYY_MM_DD_HH_MM)
+            .forPattern(DateFormatter.YYYY_MM_DD_HH_MM)
             .withLocale(Locale.US)
             .withZone(DateTimeZone.UTC);
 

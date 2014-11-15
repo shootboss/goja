@@ -2,11 +2,12 @@
 package goja.castor.castor;
 
 
+import goja.date.DateFormatter;
 import goja.date.DateProvider;
 import goja.lang.Times;
 
 public class Datetime2String extends DateTimeCastor<java.util.Date, String> {
-    private String format = DateProvider.YYYY_MM_DD_HH_MM_SS;
+    private String format = DateFormatter.YYYY_MM_DD_HH_MM_SS;
 
     public String getFormat() {
         return format;
