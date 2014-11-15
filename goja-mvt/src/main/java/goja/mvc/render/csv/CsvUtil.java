@@ -6,8 +6,6 @@
 
 package goja.mvc.render.csv;
 
-import goja.Func;
-import goja.StringPool;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 
@@ -19,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import static goja.StringPool.COMMA;
+import static goja.StringPool.EMPTY;
+import static goja.StringPool.NEWLINE;
+import static goja.StringPool.QUOTE;
+import static goja.date.DateFormatter.DATE_FORMAT_YYYY_MM_DD_HH_MM;
 
 /**
  * 该类是把数据转化成csv字符串做了简要的封装 List headers是显示数据每列的属性，建议使用字符 List data数据，单个元素格式可以为Array，list，map，model，record List columns
@@ -54,17 +58,13 @@ public class CsvUtil {
             Object obj = itr.next(); // 将数据添加到csv字符串
             Class cls = obj.getClass();
             if (cls != null && cls.isArray()) {
-                if (obj != null) {
-                    Object[] objs = (Object[]) obj;
-                    if (objs != null) {
-                        for (Object obj1 : objs) {
-                            createCol(strOut, obj1);
-                            strOut.append(StringPool.COMMA);
-                        }
-                        strOut = strOut.deleteCharAt(strOut.length() - 1); // 去点多余逗号
-                        strOut.append(StringPool.NEWLINE);
-                    }
+                Object[] objs = (Object[]) obj;
+                for (Object obj1 : objs) {
+                    createCol(strOut, obj1);
+                    strOut.append(COMMA);
                 }
+                strOut = strOut.deleteCharAt(strOut.length() - 1); // 去点多余逗号
+                strOut.append(NEWLINE);
             } else if (obj instanceof List) {
                 List objlist = (List) obj;
                 if (null == columns || columns.isEmpty()) { // 如果没有限制，默认全部显示
@@ -72,10 +72,10 @@ public class CsvUtil {
                 } else {
                     for (Object column : columns) {
                         createCol(strOut, objlist.get((Integer) column));
-                        strOut.append(StringPool.COMMA);
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 }
             } else if (obj instanceof Map) {
                 Map objmap = (Map) obj;
@@ -83,17 +83,17 @@ public class CsvUtil {
                     Set keyset = objmap.keySet();
                     for (Object key : keyset) {
                         createCol(strOut, objmap.get(key));
-                        strOut.append(StringPool.COMMA);
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 } else {
                     for (Object column : columns) {
                         createCol(strOut, objmap.get(column));
-                        strOut.append(StringPool.COMMA);
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 }
             } else if (obj instanceof Model) {
                 Model objmodel = (Model) obj;
@@ -101,17 +101,17 @@ public class CsvUtil {
                     Set<Entry<String, Object>> entries = objmodel.getAttrsEntrySet();
                     for (Entry entry : entries) {
                         createCol(strOut, entry.getValue());
-                        strOut.append(StringPool.COMMA);
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 } else {
                     for (Object column : columns) {
-                        createCol(strOut, objmodel.get(column + StringPool.EMPTY));
-                        strOut.append(StringPool.COMMA);
+                        createCol(strOut, objmodel.get(column + EMPTY));
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 }
             } else if (obj instanceof Record) {
                 Record objrecord = (Record) obj;
@@ -120,24 +120,24 @@ public class CsvUtil {
                     Set<String> keys = map.keySet();
                     for (String key : keys) {
                         createCol(strOut, objrecord.get(key));
-                        strOut.append(StringPool.COMMA);
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 } else {
                     for (Object column : columns) {
-                        createCol(strOut, objrecord.get(column + StringPool.EMPTY));
-                        strOut.append(StringPool.COMMA);
+                        createCol(strOut, objrecord.get(column + EMPTY));
+                        strOut.append(COMMA);
                     }
                     strOut = strOut.deleteCharAt(strOut.length() - 1);
-                    strOut.append(StringPool.NEWLINE);
+                    strOut.append(NEWLINE);
                 }
             } else {
                 while (itr.hasNext()) {
                     Object objs = itr.next();
                     if (objs != null) {
                         createCol(strOut, objs);
-                        strOut.append(StringPool.NEWLINE);
+                        strOut.append(NEWLINE);
                     }
                 }
             }
@@ -156,32 +156,32 @@ public class CsvUtil {
         if (null != list && !list.isEmpty()) { // 如果文本不为空则添加到csv字符串中
             for (Object aList : list) {
                 createCol(strOut, aList);
-                strOut.append(StringPool.COMMA);
+                strOut.append(COMMA);
             }
             strOut = strOut.deleteCharAt(strOut.length() - 1);
-            strOut.append(StringPool.NEWLINE);
+            strOut.append(NEWLINE);
         }
     }
 
     // 把单个元素转化
     public static void createCol(StringBuffer strOut, Object obj) {
         if (obj != null) {
-            strOut.append(StringPool.QUOTE);
-            String content = null;
+            strOut.append(QUOTE);
+            String content;
 
             if (obj instanceof Boolean) {
-                content = ((Boolean) obj).toString();
+                content = obj.toString();
             } else if (obj instanceof Calendar) {
-                content = ((Calendar) obj).toString();
+                content = obj.toString();
             } else if (obj instanceof Timestamp) {
-                content = Func.DATE_FORMAT_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
+                content = DATE_FORMAT_YYYY_MM_DD_HH_MM.format(new Date(((Timestamp) obj).getTime()));
             } else if (obj instanceof Date) {
-                content = Func.DATE_FORMAT_YYYY_MM_DD_HH_MM.format((Date) obj);
+                content = DATE_FORMAT_YYYY_MM_DD_HH_MM.format((Date) obj);
             } else {
                 content = write(String.valueOf(obj));
             }
             strOut.append(content);
-            strOut.append(StringPool.QUOTE);
+            strOut.append(QUOTE);
         } else {
             strOut.append("\" \" ");
         }
@@ -245,7 +245,7 @@ public class CsvUtil {
         final int len = pattern.length();
         int found = original.indexOf(pattern);
         if (found > -1) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             int start = 0;
             while (found != -1) {
                 sb.append(original.substring(start, found));

@@ -7,6 +7,7 @@
 package goja.mvc.render.ftl;
 
 import goja.Func;
+import goja.date.DateFormatter;
 import goja.date.DateProvider;
 import com.google.common.base.Strings;
 import freemarker.core.Environment;
@@ -69,7 +70,7 @@ public class PrettyTimeDirective implements TemplateDirectiveModel {
             String time = timeScalar.getAsString();
             String ftime = StringUtils.EMPTY;
             if (!Strings.isNullOrEmpty(time)) {
-                final DateTime p_date = DateTime.parse(time, Func.DATE_TIME_PATTERN_YYYY_MM_DD_HH_MM_SS);
+                final DateTime p_date = DateTime.parse(time, DateFormatter.DATE_TIME_PATTERN_YYYY_MM_DD_HH_MM_SS);
                 final DateTime today = DateTime.now();
                 Days d = Days.daysBetween(p_date, today);
                 int days = d.getDays();
@@ -86,7 +87,7 @@ public class PrettyTimeDirective implements TemplateDirectiveModel {
                 } else if (days > 2 && days <= 10) {
                     ftime = days + "天前";
                 } else {
-                    ftime = p_date.toString(DateProvider.YYYY_MM_DD);
+                    ftime = p_date.toString(DateFormatter.YYYY_MM_DD);
                 }
             }
             Writer out = env.getOut();
