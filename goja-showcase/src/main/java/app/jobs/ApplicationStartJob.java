@@ -22,7 +22,7 @@ import goja.job.Job;
 public class ApplicationStartJob extends Job {
     @Override
     public void doJob() throws Exception {
-        System.out.println("Start Event");
+        System.out.println("The Application Start Event");
         super.doJob();
     }
 }

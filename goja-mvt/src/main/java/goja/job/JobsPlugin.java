@@ -6,6 +6,8 @@
 
 package goja.job;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.jfinal.plugin.IPlugin;
 import goja.Goja;
@@ -25,6 +27,7 @@ import goja.libs.PThreadFactory;
 import goja.libs.Time;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -35,14 +38,29 @@ import java.util.concurrent.TimeUnit;
 
 public class JobsPlugin implements IPlugin {
 
+    public static final Predicate<Class> JOB_CLASS_PREDICATE = new Predicate<Class>() {
+        @Override
+        public boolean apply(Class input) {
+            return Job.class.isAssignableFrom(input);
+        }
+    };
     public static ScheduledThreadPoolExecutor executor;
+
     public static List<Job> scheduledJobs = null;
+
+    private final List<Class> jobClasses;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JobsPlugin.class);
 
     public JobsPlugin() {
         int core = Integer.parseInt(GojaConfig.getProperty(InitConst.JOB_POOL_SIZE, "10"));
         executor = new ScheduledThreadPoolExecutor(core, new PThreadFactory("goja-jobs"), new ThreadPoolExecutor.AbortPolicy());
+        final List<Class> job_classes = ClassBox.getInstance().getClasses(ClassType.JOB);
+        if (Lang.isEmpty(job_classes)) {
+            jobClasses = Lists.newArrayList();
+        } else {
+            jobClasses = Lists.newArrayList(Collections2.filter(job_classes, JOB_CLASS_PREDICATE));
+        }
     }
 
 
@@ -90,19 +108,10 @@ public class JobsPlugin implements IPlugin {
 
     @Override
     public boolean start() {
-        List<Class<?>> jobs = Lists.newArrayList();
         // fixed: If the configuration to start the JOB, but there is no JOB class, not to start.
-        final List<Class> job_classes = ClassBox.getInstance().getClasses(ClassType.JOB);
-        if (Lang.isEmpty(job_classes)) {
-            return false;
-        }
-        for (Class clazz : job_classes) {
-            if (Job.class.isAssignableFrom(clazz)) {
-                jobs.add(clazz);
-            }
-        }
+
         scheduledJobs = Lists.newArrayList();
-        for (final Class<?> clazz : jobs) {
+        for (final Class<?> clazz : jobClasses) {
             // @OnApplicationStart
             if (clazz.isAnnotationPresent(OnApplicationStart.class)) {
                 //check if we're going to run the job sync or async
@@ -185,11 +194,11 @@ public class JobsPlugin implements IPlugin {
     @Override
     public boolean stop() {
 
-        List<Class> jobs = ClassBox.getInstance().getClasses(ClassType.JOB);
         if (scheduledJobs == null) {
             scheduledJobs = Lists.newArrayList();
         }
-        for (final Class clazz : jobs) {
+
+        for (final Class clazz : jobClasses) {
             // @OnApplicationStop
             if (clazz.isAnnotationPresent(OnApplicationStop.class)) {
                 try {
