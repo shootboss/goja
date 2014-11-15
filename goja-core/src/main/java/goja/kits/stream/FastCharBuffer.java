@@ -4,7 +4,7 @@
  * Copyright (c) 2013-2014 sagyf Yang. The Four Group.
  */
 
-package goja.kits.io;
+package goja.kits.stream;
 
 /**
  * Fast, fast <code>char</code> buffer with some additional features.

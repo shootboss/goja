@@ -9,6 +9,7 @@ package goja.kits.io;
 import goja.StringPool;
 import goja.kits.base.CharKit;
 import goja.kits.base.Wildcard;
+import goja.kits.stream.StreamUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 

@@ -21,8 +21,8 @@ public class SerializableKit {
     /**
      * 将对象序列化为byte[]
      *
-     * @param obj
-     * @return
+     * @param obj serializable object
+     * @return byte.
      */
     public static byte[] toByteArray(Serializable obj) {
         byte[] bytes = null;
@@ -51,8 +51,8 @@ public class SerializableKit {
     /**
      * 将byte[]反序列化为Object
      *
-     * @param bytes
-     * @return
+     * @param bytes byte .
+     * @return objcet.
      */
     public static Serializable toObject(byte[] bytes) {
         Serializable obj = null;

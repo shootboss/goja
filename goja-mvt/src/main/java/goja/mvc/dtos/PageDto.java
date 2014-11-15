@@ -9,7 +9,6 @@ package goja.mvc.dtos;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.primitives.Ints;
 import goja.GojaConfig;
 import goja.StringPool;
 import goja.db.DaoKit;
@@ -34,10 +33,18 @@ public class PageDto {
     public static final String P = "p";
     public static final String S = "s";
 
-    public static final Integer DEFAULT_PAGE_SIZE = Ints.tryParse(GojaConfig.getProperty(InitConst.PAGE_SIZE, "15"));
+    public static final Integer DEFAULT_PAGE_SIZE = GojaConfig.getPropertyToInt(InitConst.PAGE_SIZE, 10);
 
-    public final int page;
-    public final int pageSize;
+    public static final String APP_PAGE_ORDER = GojaConfig.getProperty("app.page.order", "direction");
+    public static final String APP_PAGE       = GojaConfig.getProperty("app.page", P);
+    public static final String APP_PAGE_SIZE  = GojaConfig.getProperty("app.page.size", S);
+    public static final String APP_PAGE_SORT  = GojaConfig.getProperty("app.page.sort", "sort");
+
+    public final  int       page;
+    public final  int       pageSize;
+    private final String    sort;
+    private final Direction direction;
+    private final boolean   hasSort;
 
     public final List<ReqParam> params = Lists.newArrayListWithCapacity(3);
 
@@ -49,11 +56,18 @@ public class PageDto {
 
 
     public static PageDto create(com.jfinal.core.Controller controller) {
-        final Enumeration<String> paraNames = controller.getParaNames();
-        final int current_page = controller.getParaToInt(P, 1);
-        final int page_size = controller.getParaToInt(S, DEFAULT_PAGE_SIZE);
-        final PageDto pageDto = new PageDto(current_page, page_size);
 
+        String dir = controller.getPara(APP_PAGE_ORDER, "desc").toUpperCase();
+        final Direction direction = Direction.valueOf(dir);
+
+        final Enumeration<String> paraNames = controller.getParaNames();
+        // exmaple add app.page.size=pager.pageSize into application.conf
+        final int current_page = controller.getParaToInt(APP_PAGE, 1);
+        // pager.pageNo
+        final int page_size = controller.getParaToInt(APP_PAGE_SIZE, DEFAULT_PAGE_SIZE);
+
+        String sort = controller.getPara(APP_PAGE_SORT);
+        PageDto pageDto = Strings.isNullOrEmpty(sort) ? new PageDto(current_page, page_size) : new PageDto(current_page, page_size, sort, direction);
         while (paraNames.hasMoreElements()) {
             String p_key = paraNames.nextElement();
             if (!Strings.isNullOrEmpty(p_key) && StringUtils.startsWith(p_key, "s-")) {
@@ -71,7 +85,6 @@ public class PageDto {
                         } else {
                             pageDto.put(name, req_val, condition);
                         }
-
                     }
                 }
 
@@ -80,9 +93,22 @@ public class PageDto {
         return pageDto;
     }
 
+    private PageDto(int pageNo, int pageSize,
+                    String sort,
+                    Direction direction) {
+        this.page = pageNo;
+        this.pageSize = pageSize;
+        this.sort = sort;
+        this.direction = direction;
+        hasSort = true;
+    }
+
     private PageDto(int page, int pageSize) {
         this.page = page;
         this.pageSize = pageSize;
+        this.sort = StringPool.EMPTY;
+        this.direction = Direction.DESC;
+        hasSort = false;
     }
 
     public void put(String key, String value, String condition) {
@@ -143,6 +169,19 @@ public class PageDto {
         return query_params;
     }
 
+    public String getSort() {
+        return sort;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public boolean isHasSort() {
+        return hasSort;
+    }
+
+
     public static class ReqParam {
         public final String    key;
         public final Condition condition;
@@ -164,6 +203,11 @@ public class PageDto {
         }
     }
 
+    public static enum Direction {
+        ASC,
+        DESC
+    }
+
     public static enum Condition {
         LIKE(" LIKE "),
         EQ(" = "),
@@ -178,7 +222,6 @@ public class PageDto {
         Condition(String condition) {
             this.condition = condition;
         }
-
 
     }
 }

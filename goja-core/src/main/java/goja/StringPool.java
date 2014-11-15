@@ -23,7 +23,7 @@ package goja;
  * @since JDK 1.6
  */
 public interface StringPool {
-    String JFINAL_APP        = "jfinal-app";
+
     String AMPERSAND         = "&";
     String AND               = "and";
     String AT                = "@";

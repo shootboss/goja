@@ -25,10 +25,6 @@ public class GojaConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(GojaConfig.class);
 
-    public static final String REDIS_PREFIX = "redis";
-    public static final String MONGO_PREFIX = "mongo";
-    public static final String DB_PREFIX    = "db";
-
     private static final String APPLICATION_PROP = "application.conf";
 
     private static final ThreadLocal<Properties> configProps = new ThreadLocal<Properties>();

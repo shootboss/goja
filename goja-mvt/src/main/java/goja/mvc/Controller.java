@@ -24,6 +24,7 @@ import goja.kits.base.DateKit;
 import goja.mvc.datatables.core.DataSet;
 import goja.mvc.datatables.core.DatatablesCriterias;
 import goja.mvc.datatables.core.DatatablesResponse;
+import goja.mvc.dtos.PageDto;
 import goja.mvc.kit.Requests;
 import goja.mvc.render.BadRequest;
 import goja.mvc.render.CaptchaRender;
@@ -484,17 +485,17 @@ public class Controller extends com.jfinal.core.Controller {
                             db_model.set(label, param_value);
                         }
                     }
-                    return Optional.of((M)db_model);
+                    return Optional.of((M) db_model);
                 }
             } else {
                 Method[] methods = modelClass.getMethods();
                 for (Method method : methods) {
                     String methodName = method.getName();
-                    if (!methodName.startsWith("set"))	// only setter method
+                    if (!methodName.startsWith("set"))    // only setter method
                         continue;
 
                     Class<?>[] types = method.getParameterTypes();
-                    if (types.length != 1)						// only one parameter
+                    if (types.length != 1)                        // only one parameter
                         continue;
 
                     String attrName = methodName.substring(3);
@@ -503,11 +504,11 @@ public class Controller extends com.jfinal.core.Controller {
                         try {
                             method.invoke(model, TypeConverter.convert(types[0], value));
                         } catch (Exception e) {
-                                throw new RuntimeException(e);
+                            throw new RuntimeException(e);
                         }
                     }
                 }
-                return Optional.of((M)model);
+                return Optional.of((M) model);
             }
 
         }
@@ -549,6 +550,16 @@ public class Controller extends com.jfinal.core.Controller {
             return Optional.of(appUser);
         }
         return Optional.absent();
+    }
+
+
+    /**
+     * To get custom paging object.
+     *
+     * @return To get custom paging object
+     */
+    protected PageDto getPage() {
+        return PageDto.create(this);
     }
 
 

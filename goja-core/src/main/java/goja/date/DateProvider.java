@@ -3,25 +3,33 @@ package goja.date;
 import java.util.Date;
 
 /**
- * 日期提供者，使用它而不是直接取得系统时间，方便测试。
+ * Date provider, use it rather than directly obtain the system time.
  *
  * @author calvin
  */
 public interface DateProvider {
 
-    String YYYY_MM_DD       = "yyyy-MM-dd";
-    String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
-
-    String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-
+    /**
+     * default implementation
+     */
     static final DateProvider DEFAULT = new DefaultDateProvider();
 
+    /**
+     * Gets the current time.
+     *
+     * @return the current time.
+     */
     Date getCurrentDate();
 
+    /**
+     * The current time of milliseconds.
+     *
+     * @return The current time of milliseconds.
+     */
     long getCurrentTimeInMillis();
 
     /**
-     * 默认时间提供者，返回当前的时间，线程安全。
+     * The default time provider, returns the current time, thread safety.
      */
     public static class DefaultDateProvider implements DateProvider {
 
@@ -33,53 +41,6 @@ public interface DateProvider {
         @Override
         public long getCurrentTimeInMillis() {
             return System.currentTimeMillis();
-        }
-    }
-
-    /**
-     * 可配置的时间提供者，用于测试.
-     */
-    public static class MockedDateProvider implements DateProvider {
-
-        private long time;
-
-        public MockedDateProvider(Date date) {
-            this.time = date.getTime();
-        }
-
-        public MockedDateProvider(long time) {
-            this.time = time;
-        }
-
-        @Override
-        public Date getCurrentDate() {
-            return new Date(time);
-        }
-
-        @Override
-        public long getCurrentTimeInMillis() {
-            return time;
-        }
-
-        /**
-         * 重新设置时间。
-         */
-        public void update(Date newDate) {
-            time = newDate.getTime();
-        }
-
-        /**
-         * 重新设置时间。
-         */
-        public void update(long newTime) {
-            this.time = newTime;
-        }
-
-        /**
-         * 增加时间戳.
-         */
-        public void incrementTime(int millis) {
-            time += millis;
         }
     }
 

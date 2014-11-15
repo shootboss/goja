@@ -6,13 +6,8 @@
 
 package goja;
 
-import goja.date.DateProvider;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.text.SimpleDateFormat;
 
 /**
  * <p>
@@ -25,9 +20,14 @@ import java.text.SimpleDateFormat;
  */
 public interface Func {
 
+    /**
+     * Will be set into a comma separated string.
+     */
     Joiner COMMA_JOINER = Joiner.on(StringPool.COMMA).skipNulls();
 
-
+    /**
+     * Comma-separated string into a collection of instances.
+     */
     Splitter COMMA_SPLITTER = Splitter.on(StringPool.COMMA).trimResults().omitEmptyStrings();
 
     Joiner DOT_JOINER = Joiner.on(StringPool.DOT).skipNulls();
@@ -42,45 +42,9 @@ public interface Func {
 
 
     /**
-     * 日期格式化方法
-     * <pre>
-     *     yyyy-MM-dd HH:mm
-     * </pre>
-     */
-    SimpleDateFormat DATE_FORMAT_YYYY_MM_DD_HH_MM = new SimpleDateFormat(DateProvider.YYYY_MM_DD_HH_MM);
-
-    /**
-     * 日期格式化方法
-     * <pre>
-     *     yyyy-MM-dd HH:mm:ss
-     * </pre>
-     */
-    SimpleDateFormat DATE_FORMAT_YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat(DateProvider.YYYY_MM_DD_HH_MM_SS);
-
-    /**
-     * Joda的日期格式化方法
-     * <pre>
-     *     yyyy-MM-dd HH:mm:ss
-     * </pre>
-     */
-    DateTimeFormatter DATE_TIME_PATTERN_YYYY_MM_DD_HH_MM_SS = DateTimeFormat.forPattern(DateProvider.YYYY_MM_DD_HH_MM_SS);
-    /**
-     * Joda的日期格式化方法
-     * <pre>
-     *     yyyy-MM-dd HH:mm
-     * </pre>
-     */
-    DateTimeFormatter DATE_TIME_PATTERN_YYYY_MM_DD_HH_MM    = DateTimeFormat.forPattern(DateProvider.YYYY_MM_DD_HH_MM);
-    /**
-     * Joda的日期格式化方法
-     * <pre>
-     *     yyyy-MM-dd
-     * </pre>
-     */
-    DateTimeFormatter DATE_TIME_PATTERN_YYYY_MM_DD          = DateTimeFormat.forPattern(DateProvider.YYYY_MM_DD);
-
-    /**
-     * 默认的数据库主键
+     * The default database main key.
+     *
+     * @deprecated plase use {@link StringPool#PK_COLUMN}
      */
     String TABLE_PK_COLUMN = StringPool.PK_COLUMN;
 

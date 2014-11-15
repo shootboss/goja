@@ -34,6 +34,7 @@ import java.util.List;
  */
 public class DaoKit {
     private static final Logger logger             = LoggerFactory.getLogger(DaoKit.class);
+
     public static final  String SQL_PIRFIX_WHERE   = ".where";
     public static final  String SQL_PIRFIX_COLUMNS = ".column";
     public static final  String SQL_PIRFIX_ORDERS  = ".order";
@@ -46,7 +47,7 @@ public class DaoKit {
      * @return 如果为新构成的则返回true
      */
     public static <M extends Model> boolean isNew(M m) {
-        return isNew(m, Func.TABLE_PK_COLUMN);
+        return isNew(m, StringPool.PK_COLUMN);
     }
 
 
@@ -170,7 +171,6 @@ public class DaoKit {
             for (PageDto.ReqParam param : pageDto.params) {
                 where += param.toSql();
             }
-
 
             return Db.paginate(start, pageSize, sql_columns, where + default_order, query_params.toArray());
         }
