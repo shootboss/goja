@@ -41,9 +41,19 @@
 
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/sogyf/goja/issues</url>
+        <url>https://github.com/GojaFramework/goja/issues</url>
     </issueManagement>
 
+    <modules>
+        <module>goja-jfinal</module>
+        <module>goja-core</module>
+        <module>goja-test</module>
+        <module>goja-lucene</module>
+        <module>goja-qrcode</module>
+        <module>goja-mvt</module>
+        <module>goja-wxchat</module>
+        <!--<module>goja-jetty</module>-->
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -111,17 +121,7 @@
         <jetty.version>9.2.5.v20141112</jetty.version>
     </properties>
 
-    <modules>
-        <module>goja-jfinal</module>
-        <module>goja-core</module>
-        <module>goja-test</module>
-        <module>goja-lucene</module>
-        <module>goja-qrcode</module>
-        <module>goja-mvt</module>
-        <module>goja-wxchat</module>
-        <!--<module>goja-jetty</module>-->
-        <module>goja-showcase</module>
-    </modules>
+
     <build>
         <finalName>goja</finalName>
 
